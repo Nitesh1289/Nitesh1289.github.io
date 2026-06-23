@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nitesh Takarker | Geospatial Analyst & Remote Pilot</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --earth: #0a1628;
+    --forest: #0d2347;
+    --leaf: #1a4a8a;
+    --radar: #00d4ff;
+    --radar-dim: rgba(0,212,255,0.12);
+    --radar-glow: rgba(0,212,255,0.4);
+    --sand: #a3c8e8;
+    --sky: #e0f4ff;
+    --white: #eef4ff;
+    --muted: #7a99c0;
+    --card-bg: rgba(13, 35, 71, 0.4);
+    --border: rgba(0,212,255,0.2);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--earth);
+    color: var(--white);
+    font-family: 'Space Grotesk', sans-serif;
+    overflow-x: hidden;
+  }
+
+  nav, .hero, section, footer { position: relative; z-index: 1; }
+
+  /* ── SPACE CANVAS ── */
+  #space-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.02); }
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 20px 40px;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(26,46,26,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--radar);
+    letter-spacing: 2px;
+  }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--radar); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 120px 40px 80px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .hero-content { max-width: 680px; }
+
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--radar);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    width: 32px; height: 1px;
+    background: var(--radar);
+  }
+
+  .hero h1 {
+    font-size: clamp(42px, 6vw, 72px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    margin-bottom: 12px;
+  }
+  .hero h1 .highlight {
+    color: transparent;
+    -webkit-text-stroke: 1px var(--radar);
+  }
+
+  .hero-subtitle {
+    font-size: 18px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 24px 0 40px;
+    max-width: 520px;
+  }
+
+  .hero-stats {
+    display: flex; gap: 40px;
+    margin-bottom: 48px;
+    flex-wrap: wrap;
+  }
+  .stat-item { }
+  .stat-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--radar);
+    display: block;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+  }
+
+  .hero-cta {
+    display: flex; gap: 16px; flex-wrap: wrap;
+  }
+  .btn-primary {
+    padding: 14px 32px;
+    background: var(--radar);
+    color: var(--earth);
+    border: none; border-radius: 4px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px; font-weight: 600;
+    cursor: pointer; text-decoration: none;
+    letter-spacing: 0.5px;
+    transition: all 0.2s;
+  }
+  .btn-primary:hover {
+    background: #00cc6e;
+    transform: translateY(-1px);
+  }
+  .btn-secondary {
+    padding: 14px 32px;
+    background: transparent;
+    color: var(--radar);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px; font-weight: 500;
+    cursor: pointer; text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover {
+    border-color: var(--radar);
+    background: var(--radar-dim);
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 100px 40px;
+  }
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--radar);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1; height: 1px;
+    background: var(--border);
+  }
+  .section-title {
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin-bottom: 60px;
+    line-height: 1.1;
+  }
+  .section-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0;
+  }
+
+  /* ── ABOUT / SKILLS ── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+  .about-text {
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+  .about-text strong { color: var(--white); }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .skill-tag {
+    padding: 10px 14px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--white);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .skill-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--radar);
+    flex-shrink: 0;
+  }
+
+  /* ── EXPERIENCE TIMELINE ── */
+  .timeline { position: relative; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 8px; bottom: 8px;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--radar), transparent);
+  }
+  .timeline-item {
+    padding-left: 32px;
+    margin-bottom: 52px;
+    position: relative;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -4px; top: 8px;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--radar);
+    box-shadow: 0 0 12px var(--radar-glow);
+  }
+  .timeline-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--radar);
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .timeline-role {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .timeline-org {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .timeline-points {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .timeline-points li {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+    padding-left: 16px;
+    position: relative;
+  }
+  .timeline-points li::before {
+    content: '→';
+    position: absolute; left: 0;
+    color: var(--radar);
+    font-size: 12px;
+  }
+
+  /* ── PROJECTS ── */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+  }
+  .project-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 32px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--radar), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .project-card:hover {
+    border-color: rgba(0,255,136,0.4);
+    transform: translateY(-4px);
+    background: rgba(45,90,39,0.2);
+  }
+  .project-card:hover::before { opacity: 1; }
+
+  .project-icon {
+    font-size: 28px;
+    margin-bottom: 16px;
+  }
+  .project-tag {
+    display: inline-block;
+    padding: 4px 10px;
+    background: var(--radar-dim);
+    border: 1px solid rgba(0,255,136,0.3);
+    border-radius: 2px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--radar);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .project-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+  .project-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+  .project-tech {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .tech-chip {
+    padding: 4px 10px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 2px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .project-wip {
+    margin-top: 16px;
+    padding: 8px 12px;
+    background: rgba(0,255,136,0.06);
+    border-left: 2px solid var(--radar);
+    font-size: 12px;
+    color: var(--radar);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ── MAP SECTION ── */
+  .map-container {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    height: 420px;
+    position: relative;
+  }
+  .map-container iframe {
+    width: 100%; height: 100%;
+    border: none;
+    filter: saturate(0.7) brightness(0.85);
+  }
+  .map-overlay {
+    position: absolute;
+    top: 16px; left: 16px;
+    background: rgba(26,46,26,0.9);
+    border: 1px solid var(--border);
+    padding: 12px 16px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--radar);
+    pointer-events: none;
+  }
+  .map-caption {
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  /* ── CERTIFICATIONS ── */
+  .cert-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+  .cert-card {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 24px;
+    background: var(--card-bg);
+    display: flex; gap: 16px; align-items: flex-start;
+  }
+  .cert-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .cert-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  .cert-body { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .cert-valid {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 3px 8px;
+    background: var(--radar-dim);
+    border-radius: 2px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--radar);
+  }
+
+  /* ── CONTACT ── */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+  .contact-text {
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+  .contact-links { display: flex; flex-direction: column; gap: 16px; }
+  .contact-link {
+    display: flex; align-items: center; gap: 16px;
+    padding: 16px 20px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--white);
+    transition: all 0.2s;
+    background: var(--card-bg);
+  }
+  .contact-link:hover {
+    border-color: var(--radar);
+    background: var(--radar-dim);
+    transform: translateX(4px);
+  }
+  .contact-link-icon { font-size: 20px; }
+  .contact-link-text { font-size: 14px; }
+  .contact-link-label { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 16px;
+  }
+  .footer-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .footer-radar {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--radar);
+  }
+
+  /* ── SCROLL ANIMATIONS ── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 16px 20px; }
+    .nav-links { display: none; }
+    .hero, section { padding: 80px 20px; }
+    .hero { padding-top: 100px; }
+    .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+    .hero-stats { gap: 24px; }
+    footer { padding: 24px 20px; flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="space-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">NT_GEO</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#fieldwork">Field Work</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">Geospatial Analyst & Remote Pilot</div>
+    <h1>
+      Nitesh<br>
+      <span class="highlight">Takarker</span>
+    </h1>
+    <p class="hero-subtitle">
+      Turning satellite data, SAR imagery, and drone flights into decisions that shape agriculture across Madhya Pradesh & Rajasthan. Currently building AI tools for crop monitoring at MPCST, Bhopal.
+    </p>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-num">5+</span>
+        <span class="stat-label">Years Experience</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">2034</span>
+        <span class="stat-label">DGCA Pilot Valid</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">MP+RJ</span>
+        <span class="stat-label">Field Coverage</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">1</span>
+        <span class="stat-label">Publication</span>
+      </div>
+    </div>
+    <div class="hero-cta">
+      <a href="#projects" class="btn-primary">View Projects</a>
+      <a href="mailto:takarkernitesh@gmail.com" class="btn-secondary">Get In Touch</a>
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">About</div>
+  <div class="about-grid fade-up">
+    <div>
+      <h2 class="section-title">Earth observation<br>meets ground truth</h2>
+      <p class="about-text">
+        I'm a geospatial analyst specializing in <strong>SAR data processing</strong>, <strong>AI-assisted crop mapping</strong>, and <strong>drone-based field data collection</strong>. My work at MPCST directly supports agricultural yield estimation across Rabi and Kharif seasons in Madhya Pradesh.<br><br>
+        Before joining MPCST, I built experience across 3D city modeling at Genesys International, fiber optic network planning at Amdocs, and landscape AI analysis at Attentive Solutions — giving me a rare cross-domain view of spatial data.
+      </p>
+    </div>
+    <div>
+      <div class="skills-grid">
+        <div class="skill-tag"><div class="skill-dot"></div>ArcGIS Pro</div>
+        <div class="skill-tag"><div class="skill-dot"></div>QGIS 3.26</div>
+        <div class="skill-tag"><div class="skill-dot"></div>Google Earth Engine</div>
+        <div class="skill-tag"><div class="skill-dot"></div>ERDAS Imagine</div>
+        <div class="skill-tag"><div class="skill-dot"></div>SNAP (SAR)</div>
+        <div class="skill-tag"><div class="skill-dot"></div>Python</div>
+        <div class="skill-tag"><div class="skill-dot"></div>Machine Learning</div>
+        <div class="skill-tag"><div class="skill-dot"></div>Drone Operations</div>
+        <div class="skill-tag"><div class="skill-dot"></div>Remote Sensing</div>
+        <div class="skill-tag"><div class="skill-dot"></div>Rhinoceros 3D</div>
+        <div class="skill-tag"><div class="skill-dot"></div>Adobe Photoshop</div>
+        <div class="skill-tag"><div class="skill-dot"></div>MapInfo</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label">Experience</div>
+  <h2 class="section-title">Career timeline</h2>
+  <div class="timeline fade-up">
+
+    <div class="timeline-item">
+      <div class="timeline-date">APR 2024 — PRESENT</div>
+      <div class="timeline-role">Junior Analyst</div>
+      <div class="timeline-org">Madhya Pradesh Council of Science & Technology (MPCST), Bhopal</div>
+      <ul class="timeline-points">
+        <li>Processing and analyzing SAR data for agricultural area monitoring across MP</li>
+        <li>Developed AI tool for Rabi & Kharif crop mapping using ML classification</li>
+        <li>Preprocessing satellite imagery using ERDAS Imagine, ArcGIS Pro, and GEE for yield estimation</li>
+        <li>Field data collection and calibration for crop yield models across Madhya Pradesh & Rajasthan</li>
+        <li>Spatial analysis to identify crop growth patterns and yield variability</li>
+      </ul>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">SEPT 2022 — MAR 2024</div>
+      <div class="timeline-role">Project Fellow</div>
+      <div class="timeline-org">Madhya Pradesh Council of Science & Technology (MPCST), Bhopal</div>
+      <ul class="timeline-points">
+        <li>Prepared Non-Agriculture layers using ArcGIS Pro and QGIS</li>
+        <li>Field data collection for Rabi and Kharif crops using Bhuvan Fasal and Unnati (MP)</li>
+        <li>Data preparation pipeline for crop yield estimation models</li>
+      </ul>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">APR 2022 — SEPT 2022</div>
+      <div class="timeline-role">Radio Frequency Engineer</div>
+      <div class="timeline-org">Amdocs</div>
+      <ul class="timeline-points">
+        <li>Planned and designed FTTH/FTTP fiber optic network expansions in Wisconsin & Texas</li>
+        <li>Used ARAMIS and Google Earth for network layout strategy and fiber route optimization</li>
+      </ul>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">SEPT 2021 — MAR 2022</div>
+      <div class="timeline-role">GIS Executive</div>
+      <div class="timeline-org">Genesys International Corporation</div>
+      <ul class="timeline-points">
+        <li>Built a highly accurate 3D city model of Jaipur integrating panorama, ortho images, and point cloud</li>
+        <li>Created detailed urban infrastructure models using Rhinoceros, QGIS, and Adobe Photoshop</li>
+      </ul>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">JAN 2021 — SEPT 2021</div>
+      <div class="timeline-role">GIS Executive</div>
+      <div class="timeline-org">Attentive Solutions Pvt Ltd</div>
+      <ul class="timeline-points">
+        <li>Landscape property analysis using Falcon, QGIS, and ArcGIS — lawns, pavements, parking analysis</li>
+        <li>Web annotation and spatial data management for US market clients</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-label">Projects</div>
+  <h2 class="section-title">Featured work</h2>
+  <div class="projects-grid fade-up">
+
+    <div class="project-card">
+      <div class="project-icon">🌾</div>
+      <div class="project-tag">AI · Crop Mapping</div>
+      <div class="project-title">AI Tool for Rabi & Kharif Crop Mapping — MPCST</div>
+      <p class="project-desc">Developed an AI-assisted classification tool for seasonal crop mapping across Madhya Pradesh using SAR and multispectral imagery. Integrated with GEE for scalable analysis.</p>
+      <div class="project-tech">
+        <span class="tech-chip">SAR</span>
+        <span class="tech-chip">Google Earth Engine</span>
+        <span class="tech-chip">Machine Learning</span>
+        <span class="tech-chip">ArcGIS Pro</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-icon">🏙️</div>
+      <div class="project-tag">3D Modeling · Urban GIS</div>
+      <div class="project-title">3D City Model — Jaipur</div>
+      <p class="project-desc">Highly accurate 3D model of Jaipur city integrating aerial panorama views, ortho images, and LiDAR point cloud. Used for urban planning and infrastructure visualization.</p>
+      <div class="project-tech">
+        <span class="tech-chip">Rhinoceros 3D</span>
+        <span class="tech-chip">QGIS</span>
+        <span class="tech-chip">Point Cloud</span>
+        <span class="tech-chip">Photoshop</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-icon">🌊</div>
+      <div class="project-tag">Research · Thesis</div>
+      <div class="project-title">Watershed Prioritization — Selu Pani, Uttarakhand</div>
+      <p class="project-desc">M.Sc. thesis applying GIScience for morphometric analysis and watershed prioritization in the Selu Pani watershed from 2000–2014. Published by NIRDPR Hyderabad.</p>
+      <div class="project-tech">
+        <span class="tech-chip">ArcGIS</span>
+        <span class="tech-chip">Remote Sensing</span>
+        <span class="tech-chip">DEM Analysis</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-icon">📡</div>
+      <div class="project-tag">Network · RF Planning</div>
+      <div class="project-title">FTTH/FTTP Network Design — Wisconsin & Texas</div>
+      <p class="project-desc">Fiber optic route planning for broadband expansion in US markets. Optimized layouts using spatial analysis tools to maximize coverage and minimize costs.</p>
+      <div class="project-tech">
+        <span class="tech-chip">ARAMIS</span>
+        <span class="tech-chip">Google Earth</span>
+        <span class="tech-chip">Network GIS</span>
+      </div>
+    </div>
+
+    <div class="project-card" style="border-style: dashed; border-color: rgba(0,255,136,0.25);">
+      <div class="project-icon">🛰️</div>
+      <div class="project-tag">Coming Soon</div>
+      <div class="project-title">Crop Monitoring Dashboard</div>
+      <p class="project-desc">Interactive web dashboard for real-time crop health monitoring using GEE NDVI time series, SAR backscatter, and yield prediction models for MP districts.</p>
+      <div class="project-tech">
+        <span class="tech-chip">Python</span>
+        <span class="tech-chip">Streamlit</span>
+        <span class="tech-chip">GEE API</span>
+        <span class="tech-chip">NDVI</span>
+      </div>
+      <div class="project-wip">// In development — Phase 2</div>
+    </div>
+
+    <div class="project-card" style="border-style: dashed; border-color: rgba(0,255,136,0.25);">
+      <div class="project-icon">🤖</div>
+      <div class="project-tag">Coming Soon</div>
+      <div class="project-title">SAR Preprocessing Automation Tool</div>
+      <p class="project-desc">Python pipeline to automate Sentinel-1 SAR data download, preprocessing (speckle filter, terrain correction), and export — reducing manual SNAP workflow time.</p>
+      <div class="project-tech">
+        <span class="tech-chip">Python</span>
+        <span class="tech-chip">SNAP API</span>
+        <span class="tech-chip">Sentinel-1</span>
+      </div>
+      <div class="project-wip">// In development — Phase 3</div>
+    </div>
+
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- FIELD WORK MAP -->
+<section id="fieldwork">
+  <div class="section-label">Field Coverage</div>
+  <h2 class="section-title">Where I've worked</h2>
+  <div class="map-container fade-up">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3666.4!2d77.4126!3d23.2599!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x397c428f8fd68fbd%3A0x2155716d572d4f8!2sBhopal%2C%20Madhya%20Pradesh!5e1!3m2!1sen!2sin!4v1620000000000!5m2!1sen!2sin"
+      allowfullscreen=""
+      loading="lazy">
+    </iframe>
+    <div class="map-overlay">📍 MPCST · Bhopal, MP &amp; Rajasthan</div>
+  </div>
+  <p class="map-caption">Field data collection across Madhya Pradesh & Rajasthan for Rabi & Kharif crop monitoring seasons</p>
+</section>
+
+<hr class="section-divider">
+
+<!-- CERTIFICATIONS -->
+<section>
+  <div class="section-label">Credentials</div>
+  <h2 class="section-title">Certifications & Education</h2>
+  <div class="cert-grid fade-up">
+    <div class="cert-card">
+      <div class="cert-icon">🚁</div>
+      <div>
+        <div class="cert-title">DGCA Approved Remote Pilot</div>
+        <div class="cert-body">Credential ID: PC08240000969<br>Licensed for commercial drone operations across India</div>
+        <span class="cert-valid">VALID UNTIL AUG 2034</span>
+      </div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-icon">🎓</div>
+      <div>
+        <div class="cert-title">M.Sc. Remote Sensing & GIS</div>
+        <div class="cert-body">Kumaun University, Nainital, Uttarakhand<br>2018 – 2020</div>
+        <span class="cert-valid">POSTGRADUATE</span>
+      </div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-icon">📄</div>
+      <div>
+        <div class="cert-title">Peer-Reviewed Publication</div>
+        <div class="cert-body">Land use/cover dynamics — Haldwani, Nainital (28-year study)<br>Co-authored with Dwivedi, Joshi et al.</div>
+        <span class="cert-valid">PUBLISHED</span>
+      </div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-icon">🏛️</div>
+      <div>
+        <div class="cert-title">B.A. (Hons.) Geography</div>
+        <div class="cert-body">Institute for Excellence in Higher Education<br>Bhopal, MP · 2015 – 2018</div>
+        <span class="cert-valid">UNDERGRADUATE</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label">Contact</div>
+  <div class="contact-grid fade-up">
+    <div>
+      <h2 class="section-title">Open to new<br>opportunities</h2>
+      <p class="contact-text">
+        Looking for roles in geospatial analysis, satellite data processing, precision agriculture, or drone-based surveying. Available for full-time positions, consulting, and collaborative research projects.
+      </p>
+    </div>
+    <div class="contact-links">
+      <a href="mailto:takarkernitesh@gmail.com" class="contact-link">
+        <span class="contact-link-icon">✉️</span>
+        <div>
+          <div class="contact-link-text">takarkernitesh@gmail.com</div>
+          <div class="contact-link-label">Email — best way to reach me</div>
+        </div>
+      </a>
+      <a href="https://linkedin.com/in/nitesh-takarker-geo" target="_blank" class="contact-link">
+        <span class="contact-link-icon">💼</span>
+        <div>
+          <div class="contact-link-text">linkedin.com/in/nitesh-takarker-geo</div>
+          <div class="contact-link-label">LinkedIn Profile</div>
+        </div>
+      </a>
+      <a href="tel:+918962142721" class="contact-link">
+        <span class="contact-link-icon">📱</span>
+        <div>
+          <div class="contact-link-text">+91 89621 42721</div>
+          <div class="contact-link-label">Phone / WhatsApp</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-text">© 2025 Nitesh Takarker · Bhopal, Madhya Pradesh</span>
+  <span class="footer-radar">Geospatial Analyst · Remote Pilot · AI/ML for Agriculture</span>
+</footer>
+
+<script>
+  // ── SPACE CANVAS: Stars + Satellite + Agriculture ──
+  const canvas = document.getElementById('space-canvas');
+  const ctx = canvas.getContext('2d');
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Stars
+  const stars = Array.from({ length: 160 }, () => ({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    r: Math.random() * 1.2 + 0.2,
+    alpha: Math.random() * 0.6 + 0.2,
+    twinkleSpeed: Math.random() * 0.015 + 0.005,
+    twinkleDir: Math.random() > 0.5 ? 1 : -1
+  }));
+
+  // Satellite object
+  const sat = {
+    orbitCx: 0, orbitCy: 0,
+    orbitRx: 0, orbitRy: 0,
+    angle: Math.random() * Math.PI * 2,
+    speed: 0.004,
+    trail: [],
+    maxTrail: 38,
+  };
+
+  function updateOrbit() {
+    sat.orbitCx = canvas.width * 0.72;
+    sat.orbitCy = canvas.height * 0.38;
+    sat.orbitRx = canvas.width * 0.22;
+    sat.orbitRy = canvas.height * 0.18;
+  }
+  updateOrbit();
+  window.addEventListener('resize', updateOrbit);
+
+  function getSatPos(angle) {
+    return {
+      x: sat.orbitCx + Math.cos(angle) * sat.orbitRx,
+      y: sat.orbitCy + Math.sin(angle) * sat.orbitRy
+    };
+  }
+
+  function drawSatellite(x, y) {
+    ctx.save();
+    ctx.translate(x, y);
+
+    // Glow
+    const glow = ctx.createRadialGradient(0, 0, 2, 0, 0, 22);
+    glow.addColorStop(0, 'rgba(0,212,255,0.35)');
+    glow.addColorStop(1, 'rgba(0,212,255,0)');
+    ctx.beginPath();
+    ctx.arc(0, 0, 22, 0, Math.PI * 2);
+    ctx.fillStyle = glow;
+    ctx.fill();
+
+    // Body
+    ctx.fillStyle = '#c8e8ff';
+    ctx.strokeStyle = '#00d4ff';
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.roundRect(-9, -5, 18, 10, 2);
+    ctx.fill();
+    ctx.stroke();
+
+    // Solar panels LEFT
+    ctx.fillStyle = '#1a5fa8';
+    ctx.strokeStyle = '#00d4ff';
+    ctx.lineWidth = 0.8;
+    ctx.beginPath();
+    ctx.rect(-30, -6, 18, 12);
+    ctx.fill();
+    ctx.stroke();
+    // Panel lines
+    ctx.strokeStyle = 'rgba(0,212,255,0.5)';
+    for (let i = 1; i < 4; i++) {
+      ctx.beginPath();
+      ctx.moveTo(-30 + i * 4.5, -6);
+      ctx.lineTo(-30 + i * 4.5, 6);
+      ctx.stroke();
+    }
+    // Connector left
+    ctx.strokeStyle = '#00d4ff';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(-9, 0);
+    ctx.lineTo(-12, 0);
+    ctx.stroke();
+
+    // Solar panels RIGHT
+    ctx.fillStyle = '#1a5fa8';
+    ctx.strokeStyle = '#00d4ff';
+    ctx.lineWidth = 0.8;
+    ctx.beginPath();
+    ctx.rect(12, -6, 18, 12);
+    ctx.fill();
+    ctx.stroke();
+    ctx.strokeStyle = 'rgba(0,212,255,0.5)';
+    for (let i = 1; i < 4; i++) {
+      ctx.beginPath();
+      ctx.moveTo(12 + i * 4.5, -6);
+      ctx.lineTo(12 + i * 4.5, 6);
+      ctx.stroke();
+    }
+    ctx.strokeStyle = '#00d4ff';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(9, 0);
+    ctx.lineTo(12, 0);
+    ctx.stroke();
+
+    // Antenna
+    ctx.strokeStyle = '#00d4ff';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(0, -5);
+    ctx.lineTo(0, -13);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(0, -14, 2, 0, Math.PI * 2);
+    ctx.fillStyle = '#00d4ff';
+    ctx.fill();
+
+    // Beam down (scan line)
+    const beam = ctx.createLinearGradient(0, 5, 0, 40);
+    beam.addColorStop(0, 'rgba(0,212,255,0.5)');
+    beam.addColorStop(1, 'rgba(0,212,255,0)');
+    ctx.beginPath();
+    ctx.moveTo(-6, 5);
+    ctx.lineTo(-14, 40);
+    ctx.lineTo(14, 40);
+    ctx.lineTo(6, 5);
+    ctx.closePath();
+    ctx.fillStyle = beam;
+    ctx.fill();
+
+    ctx.restore();
+  }
+
+  function drawOrbitPath() {
+    ctx.save();
+    ctx.strokeStyle = 'rgba(0,212,255,0.1)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([6, 10]);
+    ctx.beginPath();
+    ctx.ellipse(sat.orbitCx, sat.orbitCy, sat.orbitRx, sat.orbitRy, 0, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+  }
+
+  function drawTrail() {
+    if (sat.trail.length < 2) return;
+    for (let i = 1; i < sat.trail.length; i++) {
+      const alpha = (i / sat.trail.length) * 0.5;
+      ctx.beginPath();
+      ctx.moveTo(sat.trail[i - 1].x, sat.trail[i - 1].y);
+      ctx.lineTo(sat.trail[i].x, sat.trail[i].y);
+      ctx.strokeStyle = `rgba(0,212,255,${alpha})`;
+      ctx.lineWidth = 1.5 * (i / sat.trail.length);
+      ctx.stroke();
+    }
+  }
+
+  // ── AGRICULTURAL FIELD GRID ──
+  function drawFieldGrid() {
+    const cols = 18, rows = 12;
+    const cw = canvas.width / cols;
+    const ch = canvas.height / rows;
+    const fieldColors = [
+      'rgba(34,100,40,0.07)',
+      'rgba(80,160,50,0.06)',
+      'rgba(20,80,30,0.08)',
+      'rgba(60,130,40,0.05)',
+      'rgba(100,170,60,0.04)',
+    ];
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const color = fieldColors[(r * cols + c) % fieldColors.length];
+        ctx.fillStyle = color;
+        ctx.fillRect(c * cw + 1, r * ch + 1, cw - 2, ch - 2);
+      }
+    }
+    // Grid lines (like field boundaries)
+    ctx.strokeStyle = 'rgba(0,212,255,0.04)';
+    ctx.lineWidth = 0.5;
+    for (let c = 0; c <= cols; c++) {
+      ctx.beginPath();
+      ctx.moveTo(c * cw, 0);
+      ctx.lineTo(c * cw, canvas.height);
+      ctx.stroke();
+    }
+    for (let r = 0; r <= rows; r++) {
+      ctx.beginPath();
+      ctx.moveTo(0, r * ch);
+      ctx.lineTo(canvas.width, r * ch);
+      ctx.stroke();
+    }
+  }
+
+  // ── SCAN LINE (SAR sweep) ──
+  let scanY = 0;
+  let scanDir = 1;
+  function drawScanLine() {
+    scanY += 0.6 * scanDir;
+    if (scanY > canvas.height) scanDir = -1;
+    if (scanY < 0) scanDir = 1;
+
+    const grad = ctx.createLinearGradient(0, scanY - 18, 0, scanY + 18);
+    grad.addColorStop(0, 'rgba(0,212,255,0)');
+    grad.addColorStop(0.5, 'rgba(0,212,255,0.06)');
+    grad.addColorStop(1, 'rgba(0,212,255,0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, scanY - 18, canvas.width, 36);
+  }
+
+  // ── FLOATING CROP ICONS ──
+  const cropIcons = ['🌾', '🌽', '🌿', '🛰️', '📡', '🌱'];
+  const floaters = Array.from({ length: 7 }, (_, i) => ({
+    icon: cropIcons[i % cropIcons.length],
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: (Math.random() - 0.5) * 0.3,
+    size: Math.random() * 10 + 12,
+    alpha: Math.random() * 0.2 + 0.08,
+  }));
+
+  function drawFloaters() {
+    floaters.forEach(f => {
+      f.x += f.vx;
+      f.y += f.vy;
+      if (f.x < -30) f.x = canvas.width + 30;
+      if (f.x > canvas.width + 30) f.x = -30;
+      if (f.y < -30) f.y = canvas.height + 30;
+      if (f.y > canvas.height + 30) f.y = -30;
+      ctx.save();
+      ctx.globalAlpha = f.alpha;
+      ctx.font = `${f.size}px serif`;
+      ctx.fillText(f.icon, f.x, f.y);
+      ctx.restore();
+    });
+  }
+
+  // ── NDVI PULSE CIRCLES (simulating crop health ping) ──
+  const ndviPings = [
+    { x: 0.62, y: 0.55, color: '80,200,80' },
+    { x: 0.78, y: 0.42, color: '0,212,255' },
+    { x: 0.55, y: 0.68, color: '120,220,60' },
+  ];
+  let pingPhase = 0;
+
+  function drawNDVIPings() {
+    pingPhase += 0.025;
+    ndviPings.forEach((p, i) => {
+      const px = p.x * canvas.width;
+      const py = p.y * canvas.height;
+      const phase = (pingPhase + i * 1.1) % (Math.PI * 2);
+      const wave = Math.sin(phase);
+      const r = Math.max(1, 12 + wave * 22);
+      const alpha = (1 - wave * 0.5) * 0.18;
+
+      // Outer ring
+      ctx.beginPath();
+      ctx.arc(px, py, r, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(${p.color},${alpha})`;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Inner dot
+      ctx.beginPath();
+      ctx.arc(px, py, 4, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${p.color},0.5)`;
+      ctx.fill();
+    });
+  }
+
+  // ── EARTH GLOBE ──
+  const globe = {
+    cx: 0, cy: 0, r: 0,
+    rotation: 0,
+    rotSpeed: 0.0015,
+  };
+
+  function updateGlobe() {
+    globe.cx = canvas.width * 0.72;
+    globe.cy = canvas.height * 0.42;
+    globe.r = Math.min(canvas.width, canvas.height) * 0.16;
+    // Update orbit to match globe
+    sat.orbitCx = globe.cx;
+    sat.orbitCy = globe.cy;
+    sat.orbitRx = globe.r * 1.55;
+    sat.orbitRy = globe.r * 0.55;
+  }
+  updateGlobe();
+  window.addEventListener('resize', updateGlobe);
+
+  // Land patches: [angleOffset, latOffset, widthAngle, heightAngle, color]
+  const landPatches = [
+    // Ocean base is drawn first, these are land masses
+    { a: 0.2,  b: -0.3, w: 0.5, h: 0.35, c: '#1a5c28' },   // landmass 1
+    { a: 0.9,  b:  0.1, w: 0.4, h: 0.28, c: '#236b32' },   // landmass 2
+    { a: 1.6,  b: -0.1, w: 0.35, h: 0.3, c: '#1e6030' },   // landmass 3
+    { a: 2.3,  b:  0.2, w: 0.45, h: 0.25, c: '#2a7a3a' },  // landmass 4
+    { a: 3.1,  b: -0.2, w: 0.3,  h: 0.32, c: '#1a5c28' },  // landmass 5
+    { a: 3.8,  b:  0.05, w: 0.5, h: 0.28, c: '#236b32' },  // landmass 6
+    { a: 4.6,  b: -0.15, w: 0.4, h: 0.3, c: '#1e6030' },   // landmass 7
+    { a: 5.3,  b:  0.15, w: 0.35,h: 0.25, c: '#2a7a3a' },  // landmass 8
+  ];
+
+  // Agricultural field patches on land (brighter green squares)
+  const fieldPatches = [
+    { a: 0.25, b: -0.25, w: 0.12, h: 0.1, c: '#3dba50' },
+    { a: 0.40, b: -0.10, w: 0.10, h: 0.08, c: '#56c45e' },
+    { a: 0.95, b:  0.15, w: 0.13, h: 0.09, c: '#4ab84e' },
+    { a: 1.65, b: -0.05, w: 0.11, h: 0.10, c: '#3dba50' },
+    { a: 2.35, b:  0.18, w: 0.12, h: 0.08, c: '#56c45e' },
+    { a: 3.15, b: -0.15, w: 0.10, h: 0.09, c: '#4ab84e' },
+    { a: 3.85, b:  0.08, w: 0.13, h: 0.10, c: '#3dba50' },
+    { a: 4.65, b: -0.10, w: 0.11, h: 0.08, c: '#56c45e' },
+    { a: 5.35, b:  0.12, w: 0.12, h: 0.09, c: '#4ab84e' },
+    // MP & Rajasthan highlight
+    { a: 1.10, b: -0.08, w: 0.16, h: 0.12, c: '#7aee6a' },
+    { a: 1.28, b:  0.05, w: 0.14, h: 0.10, c: '#6de060' },
+  ];
+
+  function drawGlobe() {
+    const { cx, cy, r } = globe;
+    globe.rotation += globe.rotSpeed;
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.clip();
+
+    // Ocean
+    const ocean = ctx.createRadialGradient(cx - r * 0.3, cy - r * 0.3, r * 0.1, cx, cy, r);
+    ocean.addColorStop(0, '#1a4a8a');
+    ocean.addColorStop(0.5, '#0d2d5e');
+    ocean.addColorStop(1, '#071628');
+    ctx.fillStyle = ocean;
+    ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
+
+    // Land patches (scrolling with rotation)
+    const rot = globe.rotation;
+    [...landPatches, ...fieldPatches].forEach(p => {
+      const ax = ((p.a + rot) % (Math.PI * 2));
+      // Map angle to x position on globe
+      const px = cx + Math.cos(ax) * r * 0.95;
+      const py = cy + p.b * r;
+      const rx = p.w * r * Math.abs(Math.cos(ax - Math.PI / 2) + 0.3);
+      const ry = p.h * r;
+      if (rx < 2) return; // behind globe
+      ctx.beginPath();
+      ctx.ellipse(px, py, rx, ry, 0, 0, Math.PI * 2);
+      ctx.fillStyle = p.c;
+      ctx.globalAlpha = 0.75 * Math.max(0, Math.cos(ax - Math.PI / 2) + 0.2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    });
+
+    // Latitude lines
+    ctx.strokeStyle = 'rgba(0,212,255,0.08)';
+    ctx.lineWidth = 0.6;
+    for (let lat = -3; lat <= 3; lat++) {
+      const ly = cy + (lat / 4) * r;
+      const lw = Math.sqrt(Math.max(0, r * r - (ly - cy) ** 2));
+      if (lw < 1) continue;
+      const lh = Math.max(0.5, lw * 0.18);
+      ctx.beginPath();
+      ctx.ellipse(cx, ly, lw, lh, 0, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    ctx.restore();
+
+    // Globe border + glow
+    const glow = ctx.createRadialGradient(cx - r * 0.35, cy - r * 0.35, r * 0.1, cx, cy, r * 1.2);
+    glow.addColorStop(0, 'rgba(0,212,255,0)');
+    glow.addColorStop(0.7, 'rgba(0,212,255,0)');
+    glow.addColorStop(1, 'rgba(0,212,255,0.18)');
+    ctx.beginPath();
+    ctx.arc(cx, cy, r * 1.2, 0, Math.PI * 2);
+    ctx.fillStyle = glow;
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(0,212,255,0.35)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Atmosphere shimmer
+    const atmo = ctx.createRadialGradient(cx, cy, r * 0.92, cx, cy, r * 1.08);
+    atmo.addColorStop(0, 'rgba(0,180,255,0.0)');
+    atmo.addColorStop(0.5, 'rgba(0,180,255,0.12)');
+    atmo.addColorStop(1, 'rgba(0,180,255,0.0)');
+    ctx.beginPath();
+    ctx.arc(cx, cy, r * 1.08, 0, Math.PI * 2);
+    ctx.fillStyle = atmo;
+    ctx.fill();
+
+    // Specular highlight
+    const spec = ctx.createRadialGradient(cx - r * 0.3, cy - r * 0.3, 0, cx - r * 0.3, cy - r * 0.3, r * 0.55);
+    spec.addColorStop(0, 'rgba(255,255,255,0.12)');
+    spec.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.clip();
+    ctx.fillStyle = spec;
+    ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
+    ctx.restore();
+  }
+
+  // ── NDVI DATA LINES (satellite to ground) ──
+  let ndviPhase = 0;
+  function drawDataLines(satX, satY) {
+    ndviPhase += 0.02;
+    const targets = [
+      { x: globe.cx - globe.r * 0.1, y: globe.cy + globe.r * 0.2 },
+      { x: globe.cx + globe.r * 0.25, y: globe.cy - globe.r * 0.1 },
+    ];
+    targets.forEach((t, i) => {
+      const progress = ((ndviPhase + i * 1.5) % 3) / 3;
+      const px = satX + (t.x - satX) * progress;
+      const py = satY + (t.y - satY) * progress;
+      // Dash dot travelling along line
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(px, py, 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(122,238,106,${0.6 - progress * 0.4})`;
+      ctx.fill();
+      // Faint line
+      ctx.beginPath();
+      ctx.moveTo(satX, satY);
+      ctx.lineTo(t.x, t.y);
+      ctx.strokeStyle = `rgba(122,238,106,0.07)`;
+      ctx.lineWidth = 0.8;
+      ctx.setLineDash([4, 8]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.restore();
+    });
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Layer 1: Subtle field grid (very faint)
+    drawFieldGrid();
+
+    // Layer 2: SAR scan line
+    drawScanLine();
+
+    // Layer 3: Stars
+    stars.forEach(s => {
+      s.alpha += s.twinkleSpeed * s.twinkleDir;
+      if (s.alpha > 0.85 || s.alpha < 0.1) s.twinkleDir *= -1;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(200,230,255,${s.alpha})`;
+      ctx.fill();
+    });
+
+    // Layer 4: Earth Globe
+    drawGlobe();
+
+    // Layer 5: NDVI pings
+    drawNDVIPings();
+
+    // Layer 6: Orbit path
+    drawOrbitPath();
+
+    // Layer 7: Satellite
+    sat.angle += sat.speed;
+    const pos = getSatPos(sat.angle);
+    sat.trail.push({ x: pos.x, y: pos.y });
+    if (sat.trail.length > sat.maxTrail) sat.trail.shift();
+    drawTrail();
+    drawSatellite(pos.x, pos.y);
+
+    // Layer 8: Data lines from satellite to Earth
+    drawDataLines(pos.x, pos.y);
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+
+  // ── SCROLL ANIMATIONS ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // ── SMOOTH SCROLL ──
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+
+</body>
+</html>
