@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agri Intelligence Platform | Nitesh Takarker</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<style>
+:root{
+  --bg:#f4f6f8;
+  --panel:#ffffff;
+  --card:#f9fafb;
+  --lift:#f0f4f8;
+  --border:#e2e8f0;
+  --border2:#cbd5e1;
+  --accent:#16a34a;
+  --accent2:#22c55e;
+  --teal:#0891b2;
+  --wheat:#d97706;
+  --orange:#ea580c;
+  --text:#1e293b;
+  --muted:#64748b;
+  --high:#16a34a;
+  --med:#d97706;
+  --low:#dc2626;
+  --shadow:0 1px 3px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:0 4px 6px rgba(0,0,0,0.07),0 2px 4px rgba(0,0,0,0.05);
+  --mono:'IBM Plex Mono',monospace;
+  --sans:'Inter',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--sans);}
+.shell{display:grid;grid-template-rows:52px 1fr;grid-template-columns:280px 1fr 300px;height:100vh;overflow:visible;}
+
+/* ── TOPBAR ── */
+.topbar{
+  grid-column:1/-1;
+  background:var(--panel);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;padding:0 18px;gap:14px;
+  box-shadow:var(--shadow);
+  position:relative;z-index:1000;
+  overflow:visible;
+}
+.brand{
+  font-family:var(--mono);font-size:13px;font-weight:600;
+  color:var(--accent);letter-spacing:1.5px;
+  display:flex;align-items:center;gap:8px;
+}
+.brand-dot{
+  width:8px;height:8px;border-radius:50%;background:var(--accent);
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.6;transform:scale(0.85)}}
+.sep{width:1px;height:26px;background:var(--border);}
+.crumb-row{display:flex;align-items:center;gap:5px;font-size:12px;position:relative;z-index:1001;overflow:visible;}
+.crumb{
+  padding:4px 10px;border-radius:5px;cursor:pointer;
+  border:1px solid transparent;transition:all 0.15s;color:var(--muted);font-weight:500;
+}
+.crumb.active{color:var(--accent);border-color:rgba(22,163,74,0.25);background:rgba(22,163,74,0.06);font-weight:600;}
+.crumb:hover:not(.active){background:var(--lift);color:var(--text);}
+.crumb-arr{color:var(--border2);font-size:14px;}
+.tr{margin-left:auto;display:flex;align-items:center;gap:10px;}
+.chip{
+  display:flex;align-items:center;gap:5px;
+  font-family:var(--mono);font-size:10px;letter-spacing:0.5px;
+  padding:4px 10px;border-radius:20px;font-weight:500;
+}
+.chip-g{color:#15803d;border:1px solid #bbf7d0;background:#f0fdf4;}
+.chip-b{color:#0369a1;border:1px solid #bae6fd;background:#f0f9ff;}
+.chip-y{color:#92400e;border:1px solid #fde68a;background:#fffbeb;}
+.live-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:pulse 1.3s infinite;}
+.state-tabs{display:flex;gap:4px;margin-left:8px;}
+.state-tab{
+  padding:5px 14px;border-radius:5px;border:1px solid var(--border);
+  background:var(--lift);color:var(--muted);font-size:12px;font-weight:500;
+  cursor:pointer;transition:all 0.15s;
+}
+.state-tab.active{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 1px 3px rgba(22,163,74,0.3);}
+.state-tab:hover:not(.active){background:var(--border);color:var(--text);}
+
+/* ── LEFT ── */
+.left{
+  background:var(--panel);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.phd{
+  padding:12px 14px 8px;font-size:10px;font-weight:600;color:var(--muted);
+  letter-spacing:1.5px;text-transform:uppercase;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.dist-count{
+  font-family:var(--mono);font-size:10px;color:var(--accent);
+  background:rgba(22,163,74,0.08);padding:2px 7px;border-radius:10px;
+}
+.search-wrap{padding:10px 12px;border-bottom:1px solid var(--border);}
+.sinput{
+  width:100%;background:var(--lift);border:1px solid var(--border);
+  border-radius:7px;padding:7px 11px;color:var(--text);
+  font-family:var(--sans);font-size:12px;outline:none;transition:all 0.15s;
+}
+.sinput:focus{border-color:var(--accent);background:#fff;box-shadow:0 0 0 3px rgba(22,163,74,0.1);}
+.sinput::placeholder{color:var(--muted);}
+.dlist{flex:1;overflow-y:auto;}
+.dlist::-webkit-scrollbar{width:3px;}
+.dlist::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+.ditem{
+  display:flex;align-items:center;gap:9px;padding:8px 14px;cursor:pointer;
+  border-left:3px solid transparent;transition:all 0.12s;
+}
+.ditem:hover{background:var(--lift);border-left-color:var(--border2);}
+.ditem.active{background:rgba(22,163,74,0.06);border-left-color:var(--accent);}
+.ddot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.dname{font-size:12px;flex:1;font-weight:500;}
+.dstate-tag{
+  font-size:9px;padding:1px 5px;border-radius:3px;
+  background:var(--lift);color:var(--muted);font-weight:500;
+}
+.dndvi{font-family:var(--mono);font-size:10px;color:var(--muted);}
+.dbadge{font-size:9px;padding:2px 6px;border-radius:10px;font-weight:600;}
+.bh{background:#dcfce7;color:#15803d;}
+.bm{background:#fef3c7;color:#92400e;}
+.bl{background:#fee2e2;color:#dc2626;}
+.lstats{
+  padding:10px 14px;border-top:1px solid var(--border);
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;
+  background:var(--lift);
+}
+.lstat{background:var(--panel);border-radius:7px;padding:8px 10px;border:1px solid var(--border);}
+.lsval{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--accent);}
+.lslbl{font-size:9px;color:var(--muted);letter-spacing:0.5px;margin-top:2px;font-weight:500;}
+
+/* ── MAP ── */
+.map-wrap{position:relative;}
+#map{width:100%;height:100%;}
+.mhier{
+  position:absolute;top:12px;left:12px;z-index:500;
+  display:flex;flex-direction:column;gap:5px;
+}
+.hbtn{
+  background:#fff;border:1px solid var(--border);padding:6px 13px;border-radius:7px;
+  font-size:11px;font-weight:500;color:var(--muted);cursor:pointer;transition:all 0.15s;
+  display:flex;align-items:center;gap:6px;box-shadow:var(--shadow);
+}
+.hbtn.active{color:var(--accent);border-color:rgba(22,163,74,0.4);background:rgba(22,163,74,0.05);}
+.hbtn:hover:not(.active){background:var(--lift);}
+.mbadge{
+  position:absolute;bottom:12px;left:12px;z-index:1000;
+  background:#fff;border:1px solid var(--border);
+  padding:10px 14px;border-radius:9px;
+  font-size:11px;box-shadow:var(--shadow-md);min-width:190px;
+}
+.mb-t{color:var(--accent);font-weight:700;font-size:12px;margin-bottom:5px;}
+.mb-r{display:flex;justify-content:space-between;gap:16px;margin-top:3px;font-size:11px;}
+.mb-k{color:var(--muted);}
+.mleg{
+  position:absolute;bottom:12px;right:12px;z-index:1000;
+  background:#fff;border:1px solid var(--border);
+  padding:10px 13px;border-radius:9px;box-shadow:var(--shadow-md);
+}
+.mleg-t{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:6px;font-weight:600;}
+.mleg-bar{
+  height:8px;border-radius:4px;
+  background:linear-gradient(to right,#dc2626,#d97706,#16a34a,#0891b2);
+  margin-bottom:4px;
+}
+.mleg-lbl{display:flex;justify-content:space-between;font-family:var(--mono);font-size:8px;color:var(--muted);}
+
+/* ── RIGHT ── */
+.right{
+  background:var(--panel);border-left:1px solid var(--border);
+  overflow-y:auto;display:flex;flex-direction:column;
+}
+.right::-webkit-scrollbar{width:4px;}
+.right::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+.kgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px;}
+.kcard{
+  background:var(--card);border-radius:9px;padding:12px 14px;
+  border:1px solid var(--border);position:relative;overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.kcard::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:9px 9px 0 0;
+}
+.kcard.c1::after{background:linear-gradient(90deg,#16a34a,#22c55e);}
+.kcard.c2::after{background:linear-gradient(90deg,#0891b2,#22d3ee);}
+.kcard.c3::after{background:linear-gradient(90deg,#d97706,#f59e0b);}
+.kcard.c4::after{background:linear-gradient(90deg,#dc2626,#f87171);}
+.klbl{font-size:9px;font-weight:600;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;}
+.kval{font-family:var(--mono);font-size:20px;font-weight:700;line-height:1;margin-bottom:2px;}
+.kcard.c1 .kval{color:#15803d;}
+.kcard.c2 .kval{color:#0369a1;}
+.kcard.c3 .kval{color:#92400e;}
+.kcard.c4 .kval{color:#b91c1c;}
+.ksub{font-size:9px;color:var(--muted);}
+
+.cp{padding:12px 14px;border-bottom:1px solid var(--border);}
+.ch{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.ct{font-size:12px;font-weight:600;color:var(--text);}
+.tag{font-size:9px;padding:3px 8px;border-radius:10px;font-weight:600;letter-spacing:0.5px;}
+.tg{background:#dcfce7;color:#15803d;}
+.ts{background:#e0f2fe;color:#0369a1;}
+.ty{background:#fef3c7;color:#92400e;}
+.to{background:#fff7ed;color:#c2410c;}
+canvas{max-height:148px;}
+
+.crop-btn{
+  padding:5px 10px;border-radius:6px;border:1px solid var(--border);
+  background:var(--lift);color:var(--muted);font-family:var(--sans);
+  font-size:10px;font-weight:500;cursor:pointer;transition:all 0.15s;
+}
+.crop-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 1px 3px rgba(22,163,74,0.3);}
+.crop-btn:hover:not(.active){background:var(--border);color:var(--text);}
+
+.crop-kpi{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border);border-bottom:1px solid var(--border);}
+.ck{background:var(--panel);padding:10px 12px;}
+.ckv{font-family:var(--mono);font-size:17px;font-weight:700;}
+.ckl{font-size:9px;color:var(--muted);letter-spacing:0.5px;margin-top:2px;font-weight:500;}
+
+.ctable{width:100%;border-collapse:collapse;}
+.ctable thead th{
+  font-size:9px;font-weight:600;color:var(--muted);letter-spacing:1px;
+  text-transform:uppercase;padding:8px 10px;text-align:left;
+  border-bottom:2px solid var(--border);background:var(--lift);
+}
+.ctable tbody tr{border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.1s;}
+.ctable tbody tr:hover{background:rgba(22,163,74,0.04);}
+.ctable tbody td{padding:7px 10px;font-size:11px;}
+.tdm{font-family:var(--mono);font-size:10px;font-weight:500;}
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700;}
+
+.back-btn{
+  background:var(--lift);border:1px solid var(--border);color:var(--accent);
+  font-size:11px;font-weight:500;padding:5px 12px;border-radius:6px;
+  cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:5px;
+}
+.back-btn:hover{background:rgba(22,163,74,0.08);border-color:var(--accent);}
+
+.hbar-bg{height:10px;background:var(--lift);border-radius:5px;overflow:hidden;border:1px solid var(--border);}
+.hbar-fill{height:100%;border-radius:5px;transition:width 0.6s ease;}
+
+.crop3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:12px;border-bottom:1px solid var(--border);}
+.c3box{
+  background:var(--card);border-radius:8px;padding:10px 8px;text-align:center;
+  border:1px solid var(--border);box-shadow:var(--shadow);
+}
+.c3icon{font-size:18px;margin-bottom:4px;}
+.c3val{font-family:var(--mono);font-size:16px;font-weight:700;}
+.c3lbl{font-size:8px;color:var(--muted);margin-top:3px;font-weight:500;letter-spacing:0.5px;}
+
+.section-divider{
+  padding:8px 14px;background:var(--lift);border-bottom:1px solid var(--border);
+  font-size:10px;font-weight:600;color:var(--muted);letter-spacing:1px;text-transform:uppercase;
+}
+
+/* ── DROPDOWN ── */
+.dd-wrap{position:relative;display:inline-block;}
+.dd-btn{
+  display:flex;align-items:center;gap:6px;
+  padding:5px 12px;border-radius:6px;border:1px solid var(--border);
+  background:var(--lift);color:var(--text);font-size:12px;font-weight:500;
+  cursor:pointer;transition:all 0.15s;white-space:nowrap;
+  font-family:var(--sans);
+}
+.dd-btn.active{
+  border-color:rgba(22,163,74,0.4);
+  background:rgba(22,163,74,0.06);
+  color:var(--accent);
+}
+.dd-btn:hover:not(:disabled){background:var(--border);}
+.dd-btn:disabled{opacity:0.45;cursor:not-allowed;}
+.dd-arr{font-size:10px;color:var(--muted);}
+.dd-menu{
+  position:absolute;top:calc(100% + 5px);left:0;z-index:2000;
+  background:#fff;border:1px solid var(--border);border-radius:8px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.12);min-width:170px;
+  display:none;overflow:hidden;
+}
+.dd-menu.open{display:block;}
+.dd-menu-tall{max-height:320px;overflow-y:auto;}
+.dd-menu-tall::-webkit-scrollbar{width:3px;}
+.dd-menu-tall::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+.dd-item{
+  padding:9px 14px;font-size:12px;font-weight:500;
+  cursor:pointer;transition:background 0.1s;color:var(--text);
+  border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;
+}
+.dd-item:last-child{border-bottom:none;}
+.dd-item:hover{background:rgba(22,163,74,0.06);color:var(--accent);}
+.dd-item.selected{background:rgba(22,163,74,0.08);color:var(--accent);font-weight:600;}
+.dd-item-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.dd-search{
+  padding:8px 10px;border-bottom:1px solid var(--border);
+}
+.dd-search input{
+  width:100%;border:1px solid var(--border);border-radius:5px;
+  padding:5px 9px;font-size:11px;outline:none;color:var(--text);
+  background:var(--lift);font-family:var(--sans);
+}
+.dd-search input:focus{border-color:var(--accent);}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="brand"><div class="brand-dot"></div>AGRI INTEL</div>
+  <div class="sep"></div>
+  <div class="crumb-row">
+    <!-- India -->
+    <div class="dd-wrap">
+      <button class="dd-btn active" id="crumb-india" onclick="gotoIndia()">
+        🇮🇳 India <span class="dd-arr">▾</span>
+      </button>
+    </div>
+    <span class="crumb-arr">›</span>
+
+    <!-- State Dropdown -->
+    <div class="dd-wrap" id="state-dd-wrap">
+      <button class="dd-btn active" id="crumb-state" onclick="toggleDD('state-menu')">
+        <span id="state-dd-label">Select State</span> <span class="dd-arr">▾</span>
+      </button>
+      <div class="dd-menu" id="state-menu">
+        <div class="dd-item" onclick="selectState('RJ')">🏜️ Rajasthan</div>
+        <div class="dd-item" onclick="selectState('MP')">🌿 Madhya Pradesh</div>
+      </div>
+    </div>
+    <span class="crumb-arr" id="dist-arrow" style="opacity:0.3;">›</span>
+
+    <!-- District Dropdown -->
+    <div class="dd-wrap" id="dist-dd-wrap">
+      <button class="dd-btn" id="crumb-dist" onclick="toggleDD('dist-menu')" disabled>
+        <span id="dist-dd-label">Select District</span> <span class="dd-arr">▾</span>
+      </button>
+      <div class="dd-menu dd-menu-tall" id="dist-menu" style="min-width:200px;">
+        <div id="dist-menu-items"></div>
+      </div>
+    </div>
+  </div>
+  <div class="tr">
+    <span class="chip chip-y">🌾 Rabi 2025-26</span>
+    <span class="chip chip-g"><span class="live-dot"></span>Sentinel-2 · MODIS</span>
+  </div>
+</header>
+
+<!-- LEFT -->
+<aside class="left">
+  <div class="phd">
+    <span id="dist-panel-label">Districts</span>
+    <span class="dist-count" id="dist-panel-count">33</span>
+  </div>
+  <div class="search-wrap">
+    <input class="sinput" type="text" placeholder="🔍 Search district..." oninput="filterList(this.value)">
+  </div>
+  <div class="dlist" id="dlist"></div>
+  <div class="lstats">
+    <div class="lstat"><div class="lsval" id="ls-high">—</div><div class="lslbl">HIGH NDVI</div></div>
+    <div class="lstat"><div class="lsval" id="ls-low" style="color:#dc2626">—</div><div class="lslbl">STRESS</div></div>
+    <div class="lstat"><div class="lsval" id="ls-avg" style="color:#d97706">—</div><div class="lslbl">AVG NDVI</div></div>
+    <div class="lstat"><div class="lsval" id="ls-yield" style="color:#0891b2">—</div><div class="lslbl">AVG YIELD</div></div>
+  </div>
+</aside>
+
+<!-- MAP -->
+<main class="map-wrap">
+  <div id="map"></div>
+  <div class="mhier">
+    <div class="hbtn active" id="hb-india" onclick="gotoIndia()">🏠 Home</div>
+    <div class="hbtn" id="hb-state" onclick="gotoState()">📍 State</div>
+    <div class="hbtn" id="hb-dist">🔍 District</div>
+  </div>
+  <div class="mbadge" id="mbadge">
+    <div class="mb-t" id="mb-title">SELECT A STATE</div>
+    <div class="mb-r"><span class="mb-k">Season</span><span>Rabi 2025-26</span></div>
+    <div class="mb-r"><span class="mb-k">Data</span><span>MODIS + VCI-FASAL</span></div>
+    <div class="mb-r"><span class="mb-k">Click marker</span><span style="color:var(--accent)">→ detail</span></div>
+  </div>
+  <div class="mleg">
+    <div class="mleg-t">NDVI SCALE</div>
+    <div class="mleg-bar"></div>
+    <div class="mleg-lbl"><span>0.1 Low</span><span>0.4</span><span>0.7+ High</span></div>
+  </div>
+</main>
+
+<!-- RIGHT -->
+<aside class="right">
+
+  <!-- STATE VIEW -->
+  <div id="stateView">
+    <div class="kgrid">
+      <div class="kcard c1"><div class="klbl">Districts</div><div class="kval" id="kpi-dist">—</div><div class="ksub" id="kpi-state-name">—</div></div>
+      <div class="kcard c2"><div class="klbl">Avg NDVI</div><div class="kval" id="kpi-ndvi">—</div><div class="ksub">Season mean</div></div>
+      <div class="kcard c3"><div class="klbl">Avg Yield</div><div class="kval" id="kpi-yield">—</div><div class="ksub">VCI-FASAL</div></div>
+      <div class="kcard c4"><div class="klbl">Stress Zones</div><div class="kval" id="kpi-stress">—</div><div class="ksub">LOW NDVI</div></div>
+    </div>
+
+    <div class="cp">
+      <div class="ch"><div class="ct">NDVI Time Series — Rabi 2025-26</div><span class="tag tg">NDVI</span></div>
+      <canvas id="stateNDVI"></canvas>
+    </div>
+
+    <div class="crop-kpi">
+      <div class="ck" style="border-top:3px solid #16a34a">
+        <div class="ckv" style="color:#16a34a" id="ck-wheat">—</div><div class="ckl">🌾 WHEAT AVG</div>
+      </div>
+      <div class="ck" style="border-top:3px solid #d97706">
+        <div class="ckv" style="color:#d97706" id="ck-gram">—</div><div class="ckl">🟡 GRAM AVG</div>
+      </div>
+      <div class="ck" style="border-top:3px solid #ea580c">
+        <div class="ckv" style="color:#ea580c" id="ck-mustard">—</div><div class="ckl">🟠 MUSTARD AVG</div>
+      </div>
+    </div>
+
+    <div class="cp" style="padding-bottom:10px;">
+      <div class="ch" style="margin-bottom:8px;"><div class="ct">Top Districts — Crop Yield</div><span class="tag ty">YIELD</span></div>
+      <div style="display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap;">
+        <button class="crop-btn active" onclick="setCrop('all',this)">All Crops</button>
+        <button class="crop-btn" onclick="setCrop('wheat',this)">🌾 Wheat</button>
+        <button class="crop-btn" onclick="setCrop('gram',this)">🟡 Gram</button>
+        <button class="crop-btn" onclick="setCrop('mustard',this)">🟠 Mustard</button>
+      </div>
+      <canvas id="yieldChart"></canvas>
+    </div>
+
+    <div class="cp">
+      <div class="ch"><div class="ct">Crop Health Distribution</div><span class="tag ts">STATUS</span></div>
+      <canvas id="statusChart"></canvas>
+    </div>
+
+    <div class="cp">
+      <div class="ch"><div class="ct">All Districts — Crop Yield (T/ha)</div></div>
+      <table class="ctable">
+        <thead><tr>
+          <th>District</th><th>State</th>
+          <th style="color:#16a34a">🌾Wheat</th>
+          <th style="color:#d97706">🟡Gram</th>
+          <th style="color:#ea580c">🟠Must.</th>
+          <th>Status</th>
+        </tr></thead>
+        <tbody id="distTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- DISTRICT VIEW -->
+  <div id="distView" style="display:none;">
+    <div style="padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;background:var(--lift);">
+      <button class="back-btn" onclick="gotoState()">← Back</button>
+      <span style="font-size:11px;color:var(--muted);font-weight:500;" id="dv-crumb">State › District</span>
+    </div>
+    <div style="padding:14px;border-bottom:1px solid var(--border);">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+        <div style="font-size:16px;font-weight:700;color:var(--text);" id="dv-name">—</div>
+        <span class="badge" id="dv-badge">—</span>
+      </div>
+      <div style="font-size:10px;color:var(--muted);font-weight:500;">Rabi 2025-26 · VCI-FASAL · Sentinel-2</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border-bottom:1px solid var(--border);">
+      <div style="background:var(--panel);padding:12px 14px;">
+        <div class="klbl">NDVI MEAN</div>
+        <div style="font-family:var(--mono);font-size:22px;font-weight:700;color:#15803d;" id="dv-ndvi">—</div>
+        <div class="ksub">Sentinel-2</div>
+      </div>
+      <div style="background:var(--panel);padding:12px 14px;">
+        <div class="klbl">VCI SCORE</div>
+        <div style="font-family:var(--mono);font-size:22px;font-weight:700;color:#0369a1;" id="dv-vci">—</div>
+        <div class="ksub">FASAL baseline</div>
+      </div>
+    </div>
+    <div class="crop3">
+      <div class="c3box" style="border-top:3px solid #16a34a;">
+        <div class="c3icon">🌾</div>
+        <div class="c3val" style="color:#15803d;" id="dv-wheat">—</div>
+        <div class="c3lbl">WHEAT T/ha</div>
+      </div>
+      <div class="c3box" style="border-top:3px solid #d97706;">
+        <div class="c3icon">🟡</div>
+        <div class="c3val" style="color:#92400e;" id="dv-gram">—</div>
+        <div class="c3lbl">GRAM T/ha</div>
+      </div>
+      <div class="c3box" style="border-top:3px solid #ea580c;">
+        <div class="c3icon">🟠</div>
+        <div class="c3val" style="color:#c2410c;" id="dv-mustard">—</div>
+        <div class="c3lbl">MUSTARD T/ha</div>
+      </div>
+    </div>
+    <div class="cp">
+      <div class="ch"><div class="ct" id="dv-ndvi-title">NDVI Time Series</div><span class="tag tg">NDVI</span></div>
+      <canvas id="distNDVI"></canvas>
+    </div>
+    <div class="cp">
+      <div class="ch"><div class="ct">Crop Yield vs State Average</div><span class="tag ty">COMPARE</span></div>
+      <canvas id="distCrop"></canvas>
+    </div>
+    <div class="cp">
+      <div class="ch"><div class="ct">Crop Share Distribution</div><span class="tag to">PIE</span></div>
+      <canvas id="distPie" style="max-height:160px;"></canvas>
+    </div>
+    <div class="cp">
+      <div class="ch"><div class="ct">NDVI Health Indicator</div></div>
+      <div style="margin-top:6px;">
+        <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-bottom:5px;font-weight:500;">
+          <span>0.0 — Bare/Desert</span>
+          <span id="dv-hbar-label" style="color:var(--accent);font-weight:700;">—</span>
+          <span>0.7+ — Dense Crop</span>
+        </div>
+        <div class="hbar-bg"><div class="hbar-fill" id="dv-hbar"></div></div>
+      </div>
+    </div>
+  </div>
+</aside>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>if(typeof L==='undefined'){document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"><\/script>');}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js" crossorigin=""></script>
+<script>
+// Wait for all scripts to load before init
+function waitForLibs(cb, tries=0){
+  if(typeof L !== 'undefined' && typeof Chart !== 'undefined'){
+    cb();
+  } else if(tries < 50){
+    setTimeout(()=>waitForLibs(cb, tries+1), 100);
+  } else {
+    console.error('Libraries failed to load');
+  }
+}
+// ── DATA ──
+const DATA = {
+  RJ: {
+    name: 'Rajasthan', shortName: 'RJ',
+    center: [27.0, 74.0], zoom: 7,
+    months: ['Oct-25','Nov-25','Dec-25','Jan-26','Feb-26','Mar-26','Apr-26'],
+    avgNDVI: [0.36,0.38,0.42,0.44,0.42,0.39,0.30],
+    districts: [
+      {n:"Bharatpur",  ndvi:0.467,vci:58.9,yield:2.87,status:"HIGH",  lat:27.22,lng:77.49,wheat:2.87,gram:1.45,mustard:2.20},
+      {n:"Dhaulpur",   ndvi:0.463,vci:58.0,yield:2.85,status:"HIGH",  lat:26.70,lng:77.89,wheat:2.85,gram:1.40,mustard:2.15},
+      {n:"Kota",       ndvi:0.470,vci:59.1,yield:2.88,status:"HIGH",  lat:25.18,lng:75.84,wheat:2.88,gram:1.80,mustard:1.90},
+      {n:"Baran",      ndvi:0.469,vci:59.1,yield:2.88,status:"HIGH",  lat:25.10,lng:76.51,wheat:2.88,gram:1.75,mustard:1.85},
+      {n:"Jaipur",     ndvi:0.414,vci:49.1,yield:2.60,status:"MEDIUM",lat:26.91,lng:75.79,wheat:2.60,gram:1.55,mustard:2.30},
+      {n:"Udaipur",    ndvi:0.495,vci:63.6,yield:3.01,status:"HIGH",  lat:24.58,lng:73.69,wheat:2.20,gram:1.90,mustard:1.40},
+      {n:"Dausa",      ndvi:0.470,vci:59.2,yield:2.89,status:"HIGH",  lat:26.88,lng:76.33,wheat:2.89,gram:1.60,mustard:2.25},
+      {n:"Rajsamand",  ndvi:0.457,vci:56.8,yield:2.82,status:"HIGH",  lat:25.07,lng:73.88,wheat:2.10,gram:1.70,mustard:1.35},
+      {n:"Sawai Madhopur",ndvi:0.465,vci:58.4,yield:2.86,status:"HIGH",lat:26.02,lng:76.36,wheat:2.86,gram:1.65,mustard:1.95},
+      {n:"Karauli",    ndvi:0.458,vci:57.0,yield:2.82,status:"HIGH",  lat:26.50,lng:77.02,wheat:2.82,gram:1.55,mustard:2.00},
+      {n:"Ganganagar", ndvi:0.361,vci:39.8,yield:2.34,status:"MEDIUM",lat:29.92,lng:73.88,wheat:2.34,gram:1.10,mustard:2.45},
+      {n:"Hanumangarh",ndvi:0.377,vci:42.6,yield:2.41,status:"MEDIUM",lat:29.58,lng:74.33,wheat:2.41,gram:1.15,mustard:2.50},
+      {n:"Ajmer",      ndvi:0.412,vci:48.9,yield:2.59,status:"MEDIUM",lat:26.45,lng:74.64,wheat:2.10,gram:1.50,mustard:2.35},
+      {n:"Alwar",      ndvi:0.478,vci:60.6,yield:2.93,status:"HIGH",  lat:27.56,lng:76.63,wheat:2.93,gram:1.45,mustard:2.60},
+      {n:"Banswara",   ndvi:0.476,vci:60.2,yield:2.91,status:"HIGH",  lat:23.54,lng:74.44,wheat:2.00,gram:1.85,mustard:1.20},
+      {n:"Barmer",     ndvi:0.253,vci:20.6,yield:1.79,status:"LOW",   lat:25.75,lng:71.39,wheat:0.80,gram:1.20,mustard:1.79},
+      {n:"Bhilwara",   ndvi:0.463,vci:57.9,yield:2.85,status:"HIGH",  lat:25.35,lng:74.63,wheat:2.20,gram:1.65,mustard:1.45},
+      {n:"Bikaner",    ndvi:0.218,vci:14.3,yield:1.61,status:"LOW",   lat:28.02,lng:73.31,wheat:0.90,gram:1.05,mustard:1.61},
+      {n:"Bundi",      ndvi:0.465,vci:58.4,yield:2.87,status:"HIGH",  lat:25.44,lng:75.65,wheat:2.87,gram:1.70,mustard:1.80},
+      {n:"Chittaurgarh",ndvi:0.475,vci:60.0,yield:2.91,status:"HIGH", lat:24.89,lng:74.63,wheat:2.40,gram:1.80,mustard:1.50},
+      {n:"Churu",      ndvi:0.293,vci:27.7,yield:1.99,status:"LOW",   lat:28.30,lng:74.96,wheat:1.20,gram:1.10,mustard:1.99},
+      {n:"Dungarpur",  ndvi:0.491,vci:63.0,yield:2.99,status:"HIGH",  lat:23.84,lng:73.72,wheat:1.90,gram:1.95,mustard:1.25},
+      {n:"Jaisalmer",  ndvi:0.175,vci:6.6, yield:1.39,status:"LOW",   lat:26.91,lng:70.91,wheat:0.50,gram:0.85,mustard:1.39},
+      {n:"Jalor",      ndvi:0.346,vci:37.1,yield:2.26,status:"MEDIUM",lat:25.34,lng:72.62,wheat:1.40,gram:1.35,mustard:2.26},
+      {n:"Jhalawar",   ndvi:0.457,vci:56.9,yield:2.82,status:"HIGH",  lat:24.60,lng:76.17,wheat:2.82,gram:1.75,mustard:1.70},
+      {n:"Jhunjhunun", ndvi:0.400,vci:46.7,yield:2.53,status:"MEDIUM",lat:28.13,lng:75.40,wheat:2.10,gram:1.30,mustard:2.53},
+      {n:"Jodhpur",    ndvi:0.268,vci:23.3,yield:1.86,status:"LOW",   lat:26.29,lng:73.02,wheat:0.95,gram:1.20,mustard:1.86},
+      {n:"Nagaur",     ndvi:0.322,vci:32.9,yield:2.14,status:"MEDIUM",lat:27.20,lng:73.73,wheat:1.50,gram:1.25,mustard:2.14},
+      {n:"Pali",       ndvi:0.410,vci:48.4,yield:2.58,status:"MEDIUM",lat:25.78,lng:73.33,wheat:1.80,gram:1.55,mustard:2.10},
+      {n:"Sikar",      ndvi:0.385,vci:44.0,yield:2.45,status:"MEDIUM",lat:27.61,lng:75.14,wheat:2.10,gram:1.30,mustard:2.45},
+      {n:"Sirohi",     ndvi:0.456,vci:56.7,yield:2.82,status:"HIGH",  lat:24.88,lng:72.86,wheat:1.75,gram:1.70,mustard:1.55},
+      {n:"Tonk",       ndvi:0.452,vci:55.9,yield:2.79,status:"HIGH",  lat:26.16,lng:75.79,wheat:2.79,gram:1.60,mustard:2.05},
+      {n:"Pratapgarh", ndvi:0.475,vci:60.0,yield:2.90,status:"HIGH",  lat:24.03,lng:74.78,wheat:2.20,gram:1.80,mustard:1.40},
+    ]
+  },
+  MP: {
+    name: 'Madhya Pradesh', shortName: 'MP',
+    center: [23.5, 78.5], zoom: 7,
+    months: ['Oct-25','Nov-25','Dec-25','Jan-26','Feb-26','Mar-26','Apr-26'],
+    avgNDVI: [0.34,0.40,0.48,0.52,0.50,0.44,0.32],
+    districts: [
+      {n:"Hoshangabad",  ndvi:0.520,vci:68.2,yield:3.14,status:"HIGH",  lat:22.75,lng:77.72,wheat:3.14,gram:1.90,mustard:2.10},
+      {n:"Vidisha",      ndvi:0.498,vci:64.8,yield:3.05,status:"HIGH",  lat:23.52,lng:77.81,wheat:3.05,gram:1.80,mustard:2.00},
+      {n:"Sehore",       ndvi:0.482,vci:61.9,yield:2.96,status:"HIGH",  lat:23.20,lng:77.08,wheat:2.96,gram:1.75,mustard:1.95},
+      {n:"Raisen",       ndvi:0.465,vci:58.9,yield:2.88,status:"HIGH",  lat:23.33,lng:77.79,wheat:2.88,gram:1.65,mustard:1.85},
+      {n:"Bhopal",       ndvi:0.430,vci:52.5,yield:2.70,status:"HIGH",  lat:23.26,lng:77.41,wheat:2.70,gram:1.55,mustard:2.20},
+      {n:"Indore",       ndvi:0.418,vci:50.2,yield:2.63,status:"HIGH",  lat:22.72,lng:75.86,wheat:2.63,gram:1.50,mustard:2.15},
+      {n:"Ujjain",       ndvi:0.445,vci:55.6,yield:2.78,status:"HIGH",  lat:23.18,lng:75.78,wheat:2.78,gram:1.60,mustard:2.25},
+      {n:"Dewas",        ndvi:0.438,vci:54.2,yield:2.75,status:"HIGH",  lat:22.97,lng:76.05,wheat:2.75,gram:1.58,mustard:2.18},
+      {n:"Shajapur",     ndvi:0.452,vci:56.8,yield:2.82,status:"HIGH",  lat:23.43,lng:76.28,wheat:2.82,gram:1.62,mustard:2.22},
+      {n:"Ratlam",       ndvi:0.420,vci:50.6,yield:2.64,status:"HIGH",  lat:23.33,lng:75.04,wheat:2.64,gram:1.48,mustard:2.10},
+      {n:"Mandsaur",     ndvi:0.415,vci:49.7,yield:2.62,status:"MEDIUM",lat:24.07,lng:75.07,wheat:2.62,gram:1.45,mustard:2.08},
+      {n:"Neemuch",      ndvi:0.408,vci:48.4,yield:2.58,status:"MEDIUM",lat:24.47,lng:74.87,wheat:2.58,gram:1.42,mustard:2.05},
+      {n:"Guna",         ndvi:0.460,vci:58.0,yield:2.85,status:"HIGH",  lat:24.65,lng:77.31,wheat:2.85,gram:1.68,mustard:1.92},
+      {n:"Shivpuri",     ndvi:0.442,vci:54.8,yield:2.76,status:"HIGH",  lat:25.43,lng:77.66,wheat:2.76,gram:1.58,mustard:1.88},
+      {n:"Datia",        ndvi:0.448,vci:55.9,yield:2.79,status:"HIGH",  lat:25.67,lng:78.46,wheat:2.79,gram:1.60,mustard:1.90},
+      {n:"Gwalior",      ndvi:0.435,vci:53.5,yield:2.72,status:"HIGH",  lat:26.22,lng:78.18,wheat:2.72,gram:1.55,mustard:1.85},
+      {n:"Morena",       ndvi:0.458,vci:57.5,yield:2.84,status:"HIGH",  lat:26.50,lng:78.00,wheat:2.84,gram:1.65,mustard:1.95},
+      {n:"Bhind",        ndvi:0.445,vci:55.3,yield:2.78,status:"HIGH",  lat:26.56,lng:78.79,wheat:2.78,gram:1.60,mustard:1.88},
+      {n:"Sagar",        ndvi:0.470,vci:59.5,yield:2.90,status:"HIGH",  lat:23.84,lng:78.74,wheat:2.90,gram:1.72,mustard:1.80},
+      {n:"Damoh",        ndvi:0.448,vci:55.9,yield:2.79,status:"HIGH",  lat:23.83,lng:79.44,wheat:2.79,gram:1.62,mustard:1.75},
+      {n:"Panna",        ndvi:0.388,vci:44.8,yield:2.48,status:"MEDIUM",lat:24.72,lng:80.19,wheat:2.48,gram:1.40,mustard:1.65},
+      {n:"Tikamgarh",    ndvi:0.420,vci:50.5,yield:2.64,status:"HIGH",  lat:24.74,lng:78.83,wheat:2.64,gram:1.50,mustard:1.72},
+      {n:"Chhatarpur",   ndvi:0.405,vci:47.8,yield:2.56,status:"MEDIUM",lat:24.91,lng:79.58,wheat:2.56,gram:1.44,mustard:1.68},
+      {n:"Satna",        ndvi:0.392,vci:45.5,yield:2.50,status:"MEDIUM",lat:24.60,lng:80.83,wheat:2.50,gram:1.42,mustard:1.60},
+      {n:"Rewa",         ndvi:0.378,vci:42.8,yield:2.42,status:"MEDIUM",lat:24.53,lng:81.30,wheat:2.42,gram:1.38,mustard:1.55},
+      {n:"Sidhi",        ndvi:0.355,vci:38.6,yield:2.30,status:"MEDIUM",lat:24.42,lng:81.88,wheat:2.30,gram:1.32,mustard:1.48},
+      {n:"Singrauli",    ndvi:0.332,vci:34.2,yield:2.18,status:"MEDIUM",lat:24.20,lng:82.67,wheat:2.18,gram:1.25,mustard:1.40},
+      {n:"Jabalpur",     ndvi:0.455,vci:57.0,yield:2.82,status:"HIGH",  lat:23.18,lng:79.95,wheat:2.82,gram:1.65,mustard:1.78},
+      {n:"Narsinghpur",  ndvi:0.488,vci:63.2,yield:3.00,status:"HIGH",  lat:22.95,lng:79.19,wheat:3.00,gram:1.80,mustard:1.92},
+      {n:"Chhindwara",   ndvi:0.415,vci:49.5,yield:2.61,status:"MEDIUM",lat:22.06,lng:78.93,wheat:2.61,gram:1.48,mustard:1.62},
+      {n:"Seoni",        ndvi:0.398,vci:46.5,yield:2.52,status:"MEDIUM",lat:22.09,lng:79.54,wheat:2.52,gram:1.44,mustard:1.58},
+      {n:"Mandla",       ndvi:0.372,vci:41.5,yield:2.38,status:"MEDIUM",lat:22.60,lng:80.38,wheat:2.38,gram:1.36,mustard:1.50},
+      {n:"Dindori",      ndvi:0.340,vci:35.0,yield:2.20,status:"MEDIUM",lat:22.95,lng:81.08,wheat:2.20,gram:1.28,mustard:1.42},
+      {n:"Balaghat",     ndvi:0.362,vci:39.0,yield:2.31,status:"MEDIUM",lat:21.81,lng:80.19,wheat:2.31,gram:1.34,mustard:1.50},
+      {n:"Betul",        ndvi:0.388,vci:44.5,yield:2.47,status:"MEDIUM",lat:21.90,lng:77.90,wheat:2.47,gram:1.40,mustard:1.62},
+      {n:"Harda",        ndvi:0.472,vci:60.0,yield:2.91,status:"HIGH",  lat:22.34,lng:77.10,wheat:2.91,gram:1.72,mustard:1.85},
+      {n:"Khandwa",      ndvi:0.432,vci:53.0,yield:2.71,status:"HIGH",  lat:21.83,lng:76.35,wheat:2.71,gram:1.55,mustard:1.80},
+      {n:"Burhanpur",    ndvi:0.418,vci:50.2,yield:2.63,status:"HIGH",  lat:21.31,lng:76.23,wheat:2.63,gram:1.50,mustard:1.75},
+      {n:"Khargone",     ndvi:0.445,vci:55.3,yield:2.78,status:"HIGH",  lat:21.82,lng:75.62,wheat:2.78,gram:1.60,mustard:1.82},
+      {n:"Barwani",      ndvi:0.420,vci:50.5,yield:2.64,status:"HIGH",  lat:22.03,lng:74.90,wheat:2.64,gram:1.52,mustard:1.76},
+      {n:"Dhar",         ndvi:0.435,vci:53.5,yield:2.72,status:"HIGH",  lat:22.60,lng:75.30,wheat:2.72,gram:1.56,mustard:1.80},
+      {n:"Jhabua",       ndvi:0.355,vci:38.5,yield:2.30,status:"MEDIUM",lat:22.77,lng:74.59,wheat:2.30,gram:1.32,mustard:1.55},
+      {n:"Alirajpur",    ndvi:0.330,vci:33.5,yield:2.15,status:"MEDIUM",lat:22.31,lng:74.36,wheat:2.15,gram:1.25,mustard:1.45},
+      {n:"Sheopur",      ndvi:0.425,vci:51.5,yield:2.67,status:"HIGH",  lat:25.67,lng:76.70,wheat:2.67,gram:1.52,mustard:1.85},
+      {n:"Ashoknagar",   ndvi:0.440,vci:54.5,yield:2.75,status:"HIGH",  lat:24.58,lng:77.73,wheat:2.75,gram:1.58,mustard:1.90},
+      {n:"Rajgarh",      ndvi:0.435,vci:53.5,yield:2.72,status:"HIGH",  lat:23.84,lng:76.73,wheat:2.72,gram:1.56,mustard:1.88},
+      {n:"Agar Malwa",   ndvi:0.428,vci:52.0,yield:2.68,status:"HIGH",  lat:23.71,lng:76.02,wheat:2.68,gram:1.54,mustard:1.86},
+      {n:"Niwari",       ndvi:0.410,vci:48.5,yield:2.58,status:"MEDIUM",lat:25.00,lng:78.67,wheat:2.58,gram:1.46,mustard:1.70},
+      {n:"Katni",        ndvi:0.398,vci:46.2,yield:2.52,status:"MEDIUM",lat:23.83,lng:80.40,wheat:2.52,gram:1.44,mustard:1.62},
+      {n:"Umaria",       ndvi:0.362,vci:39.2,yield:2.32,status:"MEDIUM",lat:23.52,lng:80.84,wheat:2.32,gram:1.34,mustard:1.52},
+      {n:"Shahdol",      ndvi:0.345,vci:36.0,yield:2.22,status:"MEDIUM",lat:23.30,lng:81.36,wheat:2.22,gram:1.29,mustard:1.45},
+      {n:"Anuppur",      ndvi:0.328,vci:32.8,yield:2.13,status:"MEDIUM",lat:23.10,lng:81.69,wheat:2.13,gram:1.24,mustard:1.40},
+      {n:"Maihar",       ndvi:0.385,vci:44.2,yield:2.46,status:"MEDIUM",lat:24.26,lng:80.77,wheat:2.46,gram:1.40,mustard:1.60},
+      {n:"Mauganj",      ndvi:0.370,vci:41.0,yield:2.37,status:"MEDIUM",lat:24.68,lng:81.45,wheat:2.37,gram:1.35,mustard:1.52},
+      {n:"Pandhurna",    ndvi:0.382,vci:43.5,yield:2.44,status:"MEDIUM",lat:21.60,lng:78.52,wheat:2.44,gram:1.38,mustard:1.58},
+    ]
+  }
+};
+
+const MONTHLY_DIST = {
+  "Jaipur":      [0.40,0.42,0.45,0.43,0.39,0.38,0.30],
+  "Kota":        [0.43,0.45,0.47,0.46,0.43,0.41,0.32],
+  "Jodhpur":     [0.35,0.34,0.32,0.30,0.28,0.26,0.21],
+  "Bikaner":     [0.22,0.22,0.21,0.22,0.20,0.20,0.17],
+  "Udaipur":     [0.50,0.51,0.52,0.51,0.49,0.46,0.38],
+  "Bharatpur":   [0.33,0.41,0.47,0.49,0.48,0.45,0.35],
+  "Bhopal":      [0.38,0.44,0.50,0.54,0.52,0.46,0.34],
+  "Indore":      [0.36,0.42,0.49,0.52,0.50,0.44,0.32],
+  "Hoshangabad": [0.42,0.50,0.58,0.62,0.60,0.52,0.38],
+  "Jabalpur":    [0.40,0.47,0.54,0.58,0.56,0.49,0.36],
+  "Ujjain":      [0.39,0.46,0.52,0.56,0.54,0.48,0.35],
+  "Gwalior":     [0.38,0.44,0.51,0.54,0.52,0.46,0.33],
+};
+
+// ── STATE ──
+let currentState = 'RJ';
+let map, markers = {};
+let yC=null, stateNC=null, statusC=null, distNC=null, distCropC=null, distPieC=null;
+
+// ── HELPERS ──
+function ndviCol(v){
+  return v>=0.55?'#15803d':v>=0.42?'#16a34a':v>=0.32?'#d97706':v>=0.22?'#ea580c':'#dc2626';
+}
+function sCol(s){ return s==='HIGH'?'#15803d':s==='MEDIUM'?'#92400e':'#b91c1c'; }
+function sbClass(s){ return s==='HIGH'?'bh':s==='MEDIUM'?'bm':'bl'; }
+
+// ── MAP ──
+function initMap(){
+  map=L.map('map',{zoomControl:false,attributionControl:false}).setView([23,80],5);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',{maxZoom:18}).addTo(map);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png',{maxZoom:18,pane:'shadowPane'}).addTo(map);
+  L.control.zoom({position:'topright'}).addTo(map);
+  loadBoundary();
+  // NO markers on init — user must select state first
+}
+
+async function loadBoundary(){
+  try{
+    const r=await fetch('https://raw.githubusercontent.com/geohacker/india/master/state/india_state.geojson');
+    const d=await r.json();
+    L.geoJSON(d,{
+      style:f=>{
+        const nm=f.properties.NAME_1||f.properties.ST_NM||'';
+        if(nm==='Rajasthan') return{color:'#16a34a',weight:2,fillColor:'rgba(22,163,74,0.06)',fillOpacity:1};
+        if(nm==='Madhya Pradesh') return{color:'#0891b2',weight:2,fillColor:'rgba(8,145,178,0.06)',fillOpacity:1};
+        return{color:'#cbd5e1',weight:0.8,fillColor:'rgba(0,0,0,0.01)',fillOpacity:1};
+      }
+    }).addTo(map);
+  }catch(e){}
+}
+
+function renderMarkers(){
+  Object.values(markers).forEach(m=>map.removeLayer(m));
+  markers={};
+  const sd=DATA[currentState];
+  sd.districts.forEach(dist=>{
+    const col=ndviCol(dist.ndvi);
+    const r=dist.status==='HIGH'?10:dist.status==='MEDIUM'?8:7;
+    const m=L.circleMarker([dist.lat,dist.lng],{
+      radius:r,color:'#fff',weight:1.5,fillColor:col,fillOpacity:0.88
+    }).addTo(map);
+    m.bindTooltip(`
+      <div style="font-family:'IBM Plex Mono';font-size:10px;background:#fff;
+        color:#1e293b;padding:9px 11px;border:1px solid #e2e8f0;
+        border-radius:8px;line-height:1.7;min-width:160px;box-shadow:0 4px 6px rgba(0,0,0,0.07);">
+        <b style="color:${col};font-size:12px">${dist.n}</b>
+        <div style="color:#64748b;font-size:9px;margin-bottom:4px;">${sd.name}</div>
+        NDVI: <b>${dist.ndvi.toFixed(3)}</b> &nbsp; VCI: <b>${dist.vci.toFixed(1)}%</b><br>
+        🌾 ${dist.wheat}T &nbsp; 🟡 ${dist.gram}T &nbsp; 🟠 ${dist.mustard}T<br>
+        <span style="color:${sCol(dist.status)};font-weight:700;font-size:10px;">${dist.status}</span>
+      </div>`,{permanent:false,direction:'top',opacity:1});
+    m.on('click',()=>openDistrict(dist.n));
+    markers[dist.n]=m;
+  });
+}
+
+// ── SWITCH STATE ──
+function switchState(state, btn){
+  currentState=state;
+  document.querySelectorAll('.state-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const sd=DATA[state];
+  map.setView(sd.center, sd.zoom);
+  renderMarkers();
+  buildList();
+  buildTable();
+  updateStateKPIs();
+  rebuildStateCharts();
+  gotoState();
+  setText('crumb-state', sd.shortName);
+  setText('mb-title', sd.name.toUpperCase());
+  setText('dist-panel-label', sd.name+' Districts');
+  setText('dist-panel-count', sd.districts.length);
+}
+
+// ── NAV ──
+function gotoIndia(){
+  showWelcome();
+}
+function showWelcome(){
+  // Clear all markers
+  Object.values(markers).forEach(m=>{ if(map) map.removeLayer(m); });
+  markers={};
+  if(map) map.setView([23,80],5);
+  setCrumbs('india');
+  const sv=document.getElementById('stateView');
+  const dv=document.getElementById('distView');
+  const hbS=document.getElementById('hb-state');
+  const hbD=document.getElementById('hb-dist');
+  if(sv) sv.style.display='none';
+  if(dv) dv.style.display='none';
+  if(hbS) hbS.classList.remove('active');
+  if(hbD) hbD.classList.remove('active');
+  // Reset dropdowns
+  setText('state-dd-label','Select State');
+  setText('dist-dd-label','Select District');
+  const distBtn=document.getElementById('crumb-dist');
+  if(distBtn) distBtn.disabled=true;
+  const da=document.getElementById('dist-arrow');
+  if(da) da.style.opacity='0.3';
+  // Show welcome badge
+  setHTML('mbadge',`
+    <div class="mb-t">🌾 AGRI INTEL</div>
+    <div class="mb-r"><span class="mb-k">States</span><span>RJ + MP</span></div>
+    <div class="mb-r"><span class="mb-k">Districts</span><span>88 total</span></div>
+    <div style="margin-top:8px;font-size:10px;color:var(--accent);font-weight:600;">
+      👆 Select State to begin
+    </div>`);
+  // Show welcome in right panel
+  const right=document.getElementById('rightPanel');
+  if(right){
+    const existing=document.getElementById('welcomePanel');
+    if(!existing){
+      const wp=document.createElement('div');
+      wp.id='welcomePanel';
+      wp.style.cssText='display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:40px 24px;text-align:center;gap:16px;';
+      wp.innerHTML=`
+        <div style="font-size:48px;">🌾</div>
+        <div style="font-size:16px;font-weight:700;color:var(--text);">Agri Intelligence Platform</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.7;">
+          Covering <b>88 districts</b> across<br>Rajasthan & Madhya Pradesh<br>
+          Rabi Season 2025-26
+        </div>
+        <div style="margin-top:8px;padding:12px 20px;background:rgba(22,163,74,0.08);border:1px solid rgba(22,163,74,0.2);border-radius:8px;font-size:12px;color:var(--accent);font-weight:600;">
+          👆 Select State from dropdown<br>to begin analysis
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:8px;">
+          Data: Sentinel-2 · MODIS · VCI-FASAL
+        </div>`;
+      right.appendChild(wp);
+    } else {
+      existing.style.display='flex';
+    }
+  }
+}
+function gotoState(){
+  const sd=DATA[currentState];
+  if(map) map.setView(sd.center,sd.zoom);
+  setCrumbs('state');
+  const sv=document.getElementById('stateView');
+  const dv=document.getElementById('distView');
+  const hbD=document.getElementById('hb-dist');
+  if(sv) sv.style.display='block';
+  if(dv) dv.style.display='none';
+  if(hbD) hbD.classList.remove('active');
+  resetMarkers();
+  setMapBadge(null);
+}
+function setCrumbs(level){
+  const indiaBtn=document.getElementById('crumb-india');
+  const stateBtn=document.getElementById('crumb-state');
+  const distBtn=document.getElementById('crumb-dist');
+  if(indiaBtn) indiaBtn.classList.add('active');
+  if(stateBtn) stateBtn.classList.toggle('active', level==='state'||level==='district');
+  if(distBtn)  distBtn.classList.toggle('active',  level==='district');
+}
+function resetMarkers(){
+  const sd=DATA[currentState];
+  Object.entries(markers).forEach(([n,m])=>{
+    const dist=sd.districts.find(d=>d.n===n);
+    if(dist) m.setStyle({radius:dist.status==='HIGH'?10:dist.status==='MEDIUM'?8:7,fillOpacity:0.88,weight:1.5,color:'#fff'});
+  });
+  document.querySelectorAll('.ditem').forEach(el=>el.classList.remove('active'));
+}
+
+// ── OPEN DISTRICT ──
+function openDistrict(name){
+  const sd=DATA[currentState];
+  const dist=sd.districts.find(d=>d.n===name);
+  if(!dist)return;
+  const sv=document.getElementById('stateView');
+  const dv=document.getElementById('distView');
+  const hbD=document.getElementById('hb-dist');
+  if(sv) sv.style.display='none';
+  if(dv) dv.style.display='block';
+  if(hbD) hbD.classList.add('active');
+  setCrumbs('district');
+  setText('dist-dd-label', name);
+  if(map) map.setView([dist.lat,dist.lng],11);
+  Object.entries(markers).forEach(([n,m])=>{
+    m.setStyle({radius:n===name?14:5,fillOpacity:n===name?1:0.15,weight:n===name?2.5:1,color:n===name?'#15803d':'#fff'});
+  });
+  document.querySelectorAll('.ditem').forEach(el=>el.classList.toggle('active',el.dataset.n===name));
+  setMapBadge(dist);
+
+  // Fill district view safely
+  const col=ndviCol(dist.ndvi);
+  setText('dv-crumb', sd.shortName+' › '+name);
+  setText('dv-name', '📍 '+name);
+  const badge=document.getElementById('dv-badge');
+  if(badge){ badge.className='badge '+sbClass(dist.status); badge.textContent=dist.status; }
+  setText('dv-ndvi', dist.ndvi.toFixed(3));
+  setText('dv-vci',  dist.vci.toFixed(1)+'%');
+  setText('dv-wheat', dist.wheat+'T');
+  setText('dv-gram',  dist.gram+'T');
+  setText('dv-mustard', dist.mustard+'T');
+  setText('dv-ndvi-title', name+' — NDVI Time Series');
+  const pct=Math.round(dist.ndvi/0.7*100);
+  setStyle('dv-hbar','width',Math.min(pct,100)+'%');
+  setStyle('dv-hbar','background',col);
+  setText('dv-hbar-label', dist.ndvi.toFixed(3));
+
+  const monthly=MONTHLY_DIST[name]||sd.avgNDVI;
+  if(distNC) distNC.destroy();
+  distNC=new Chart(document.getElementById('distNDVI'),{
+    type:'line',
+    data:{labels:sd.months,datasets:[
+      {label:name,data:monthly,borderColor:col,backgroundColor:col+'18',fill:true,tension:0.4,pointRadius:4,pointBackgroundColor:col,borderWidth:2},
+      {label:'State Avg',data:sd.avgNDVI,borderColor:'#cbd5e1',fill:false,tension:0.4,pointRadius:0,borderWidth:1.5,borderDash:[5,5]}
+    ]},
+    options:cOpts('NDVI',0,0.7)
+  });
+
+  const rjW=(sd.districts.reduce((s,d)=>s+d.wheat,0)/sd.districts.length).toFixed(2);
+  const rjG=(sd.districts.reduce((s,d)=>s+d.gram,0)/sd.districts.length).toFixed(2);
+  const rjM=(sd.districts.reduce((s,d)=>s+d.mustard,0)/sd.districts.length).toFixed(2);
+  if(distCropC) distCropC.destroy();
+  distCropC=new Chart(document.getElementById('distCrop'),{
+    type:'bar',
+    data:{
+      labels:['🌾 Wheat','🟡 Gram','🟠 Mustard'],
+      datasets:[
+        {label:name,data:[dist.wheat,dist.gram,dist.mustard],
+         backgroundColor:['rgba(22,163,74,0.85)','rgba(217,119,6,0.85)','rgba(234,88,12,0.85)'],
+         borderRadius:4,borderWidth:0},
+        {label:'State Avg',data:[+rjW,+rjG,+rjM],
+         backgroundColor:['rgba(22,163,74,0.15)','rgba(217,119,6,0.15)','rgba(234,88,12,0.15)'],
+         borderRadius:4,borderWidth:1.5,
+         borderColor:['rgba(22,163,74,0.5)','rgba(217,119,6,0.5)','rgba(234,88,12,0.5)']}
+      ]
+    },
+    options:cOpts('T/ha',0,3.5)
+  });
+
+  const total=dist.wheat+dist.gram+dist.mustard;
+  if(distPieC) distPieC.destroy();
+  distPieC=new Chart(document.getElementById('distPie'),{
+    type:'pie',
+    data:{
+      labels:[`🌾 Wheat ${((dist.wheat/total)*100).toFixed(0)}%`,
+              `🟡 Gram ${((dist.gram/total)*100).toFixed(0)}%`,
+              `🟠 Mustard ${((dist.mustard/total)*100).toFixed(0)}%`],
+      datasets:[{
+        data:[dist.wheat,dist.gram,dist.mustard],
+        backgroundColor:['rgba(22,163,74,0.85)','rgba(217,119,6,0.85)','rgba(234,88,12,0.85)'],
+        borderColor:['#15803d','#b45309','#c2410c'],borderWidth:1.5,hoverOffset:8
+      }]
+    },
+    options:{responsive:true,maintainAspectRatio:true,
+      plugins:{legend:{position:'right',labels:{font:{family:'IBM Plex Mono',size:9},boxWidth:10,padding:10}}}}
+  });
+}
+
+// ── MAP BADGE ──
+function setMapBadge(dist){
+  const sd=DATA[currentState];
+  if(!dist){
+    setHTML('mbadge',`<div class="mb-t">${sd.name.toUpperCase()}</div>
+      <div class="mb-r"><span class="mb-k">Districts</span><span>${sd.districts.length}</span></div>
+      <div class="mb-r"><span class="mb-k">Season</span><span>Rabi 2025-26</span></div>
+      <div class="mb-r"><span class="mb-k">Click marker</span><span style="color:var(--accent)">→ detail</span></div>`);
+  } else {
+    const col=ndviCol(dist.ndvi);
+    setHTML('mbadge',`<div class="mb-t" style="color:${col}">${dist.n.toUpperCase()}</div>
+      <div class="mb-r"><span class="mb-k">NDVI</span><b>${dist.ndvi.toFixed(3)}</b></div>
+      <div class="mb-r"><span class="mb-k">VCI</span><b>${dist.vci.toFixed(1)}%</b></div>
+      <div class="mb-r"><span class="mb-k">🌾</span><b style="color:#15803d">${dist.wheat}T</b></div>
+      <div class="mb-r"><span class="mb-k">🟡</span><b style="color:#92400e">${dist.gram}T</b></div>
+      <div class="mb-r"><span class="mb-k">🟠</span><b style="color:#c2410c">${dist.mustard}T</b></div>
+      <div class="mb-r"><span class="mb-k">Status</span><b style="color:${sCol(dist.status)}">${dist.status}</b></div>`);
+  }
+}
+
+// ── CHART OPTIONS ──
+function cOpts(yLabel,mn,mx){
+  return{responsive:true,maintainAspectRatio:true,
+    plugins:{legend:{labels:{font:{family:'IBM Plex Mono',size:9},boxWidth:8,padding:6,color:'#64748b'}}},
+    scales:{
+      x:{ticks:{color:'#94a3b8',font:{family:'IBM Plex Mono',size:8}},grid:{color:'#f1f5f9'}},
+      y:{ticks:{color:'#94a3b8',font:{family:'IBM Plex Mono',size:8}},grid:{color:'#f1f5f9'},
+         min:mn,max:mx,title:{display:true,text:yLabel,color:'#94a3b8',font:{family:'IBM Plex Mono',size:8}}}
+    }
+  };
+}
+
+// ── SAFE SET ──
+function setText(id, val){
+  const el=document.getElementById(id);
+  if(el) el.textContent=val;
+}
+function setHTML(id, val){
+  const el=document.getElementById(id);
+  if(el) el.innerHTML=val;
+}
+function setStyle(id, prop, val){
+  const el=document.getElementById(id);
+  if(el) el.style[prop]=val;
+}
+
+// ── STATE KPIs ──
+function updateStateKPIs(){
+  const sd=DATA[currentState];
+  const dists=sd.districts;
+  const avgN=(dists.reduce((s,d)=>s+d.ndvi,0)/dists.length).toFixed(3);
+  const avgY=(dists.reduce((s,d)=>s+d.yield,0)/dists.length).toFixed(2);
+  setText('kpi-dist', dists.length);
+  setText('kpi-state-name', sd.name);
+  setText('kpi-ndvi', avgN);
+  setText('kpi-yield', avgY+'T');
+  setText('kpi-stress', dists.filter(d=>d.status==='LOW').length);
+  setText('ck-wheat', (dists.reduce((s,d)=>s+d.wheat,0)/dists.length).toFixed(2)+'T');
+  setText('ck-gram',  (dists.reduce((s,d)=>s+d.gram,0)/dists.length).toFixed(2)+'T');
+  setText('ck-mustard',(dists.reduce((s,d)=>s+d.mustard,0)/dists.length).toFixed(2)+'T');
+  setText('ls-high',  dists.filter(d=>d.status==='HIGH').length);
+  setText('ls-low',   dists.filter(d=>d.status==='LOW').length);
+  setText('ls-avg',   avgN);
+  setText('ls-yield', avgY+'T');
+}
+
+// ── STATE CHARTS ──
+function rebuildStateCharts(){
+  const sd=DATA[currentState];
+  const dists=sd.districts;
+
+  if(stateNC) stateNC.destroy();
+  stateNC=new Chart(document.getElementById('stateNDVI'),{
+    type:'line',
+    data:{labels:sd.months,datasets:[{
+      label:sd.name+' Avg',data:sd.avgNDVI,
+      borderColor:'#16a34a',backgroundColor:'rgba(22,163,74,0.08)',
+      fill:true,tension:0.4,pointRadius:4,pointBackgroundColor:'#16a34a',borderWidth:2
+    }]},
+    options:cOpts('NDVI',0,0.7)
+  });
+
+  const top=Math.min(10,dists.length);
+  const top10=[...dists].sort((a,b)=>b.wheat-a.wheat).slice(0,top);
+  if(yC) yC.destroy();
+  yC=new Chart(document.getElementById('yieldChart'),{
+    type:'bar',
+    data:{
+      labels:top10.map(d=>d.n.substring(0,7)),
+      datasets:[
+        {label:'🌾 Wheat',  data:top10.map(d=>d.wheat),  backgroundColor:'rgba(22,163,74,0.82)', borderRadius:3,borderWidth:0},
+        {label:'🟡 Gram',   data:top10.map(d=>d.gram),   backgroundColor:'rgba(217,119,6,0.82)', borderRadius:3,borderWidth:0},
+        {label:'🟠 Mustard',data:top10.map(d=>d.mustard),backgroundColor:'rgba(234,88,12,0.82)', borderRadius:3,borderWidth:0},
+      ]
+    },
+    options:{...cOpts('T/ha',0,3.5),plugins:{legend:{labels:{font:{family:'IBM Plex Mono',size:8},boxWidth:8,padding:5,color:'#64748b'}}}}
+  });
+
+  const high=dists.filter(d=>d.status==='HIGH').length;
+  const med=dists.filter(d=>d.status==='MEDIUM').length;
+  const low=dists.filter(d=>d.status==='LOW').length;
+  if(statusC) statusC.destroy();
+  statusC=new Chart(document.getElementById('statusChart'),{
+    type:'doughnut',
+    data:{labels:[`HIGH (${high})`,`MEDIUM (${med})`,`LOW (${low})`],
+      datasets:[{data:[high,med,low],
+        backgroundColor:['rgba(22,163,74,0.85)','rgba(217,119,6,0.85)','rgba(220,38,38,0.85)'],
+        borderColor:['#15803d','#b45309','#b91c1c'],borderWidth:1.5,hoverOffset:5}]},
+    options:{responsive:true,maintainAspectRatio:true,cutout:'62%',
+      plugins:{legend:{position:'right',labels:{font:{family:'IBM Plex Mono',size:9},boxWidth:10,padding:8}}}}
+  });
+}
+
+// ── CROP TOGGLE ──
+function setCrop(crop,btn){
+  document.querySelectorAll('.crop-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const sd=DATA[currentState];
+  const dists=sd.districts;
+  const top=Math.min(10,dists.length);
+  let sorted,ds;
+  if(crop==='wheat'){
+    sorted=[...dists].sort((a,b)=>b.wheat-a.wheat).slice(0,top);
+    ds=[{label:'🌾 Wheat',data:sorted.map(d=>d.wheat),backgroundColor:'rgba(22,163,74,0.85)',borderRadius:3,borderWidth:0}];
+  }else if(crop==='gram'){
+    sorted=[...dists].sort((a,b)=>b.gram-a.gram).slice(0,top);
+    ds=[{label:'🟡 Gram',data:sorted.map(d=>d.gram),backgroundColor:'rgba(217,119,6,0.85)',borderRadius:3,borderWidth:0}];
+  }else if(crop==='mustard'){
+    sorted=[...dists].sort((a,b)=>b.mustard-a.mustard).slice(0,top);
+    ds=[{label:'🟠 Mustard',data:sorted.map(d=>d.mustard),backgroundColor:'rgba(234,88,12,0.85)',borderRadius:3,borderWidth:0}];
+  }else{
+    sorted=[...dists].sort((a,b)=>b.wheat-a.wheat).slice(0,top);
+    ds=[
+      {label:'🌾 Wheat',  data:sorted.map(d=>d.wheat),  backgroundColor:'rgba(22,163,74,0.82)',borderRadius:3,borderWidth:0},
+      {label:'🟡 Gram',   data:sorted.map(d=>d.gram),   backgroundColor:'rgba(217,119,6,0.82)',borderRadius:3,borderWidth:0},
+      {label:'🟠 Mustard',data:sorted.map(d=>d.mustard),backgroundColor:'rgba(234,88,12,0.82)',borderRadius:3,borderWidth:0},
+    ];
+  }
+  yC.data.labels=sorted.map(d=>d.n.substring(0,7));
+  yC.data.datasets=ds;
+  yC.update();
+}
+
+// ── LIST ──
+function buildList(){
+  const el=document.getElementById('dlist');
+  el.innerHTML='';
+  const sd=DATA[currentState];
+  [...sd.districts].sort((a,b)=>b.ndvi-a.ndvi).forEach(d=>{
+    const col=ndviCol(d.ndvi);
+    const bc=sbClass(d.status);
+    const item=document.createElement('div');
+    item.className='ditem';item.dataset.n=d.n;
+    item.innerHTML=`<div class="ddot" style="background:${col}"></div>
+      <span class="dname">${d.n}</span>
+      <span class="dstate-tag">${sd.shortName}</span>
+      <span class="dndvi">${d.ndvi.toFixed(2)}</span>
+      <span class="dbadge ${bc}">${d.status.substring(0,3)}</span>`;
+    item.onclick=()=>openDistrict(d.n);
+    el.appendChild(item);
+  });
+}
+
+// ── TABLE ──
+function buildTable(){
+  const tb=document.getElementById('distTable');
+  tb.innerHTML='';
+  const sd=DATA[currentState];
+  [...sd.districts].sort((a,b)=>b.wheat-a.wheat).forEach(d=>{
+    const wc=d.wheat>=2.5?'#15803d':d.wheat>=1.5?'#16a34a':'#dc2626';
+    const gc=d.gram>=1.6?'#92400e':d.gram>=1.2?'#d97706':'#dc2626';
+    const mc=d.mustard>=2.0?'#c2410c':d.mustard>=1.5?'#ea580c':'#dc2626';
+    const bc=sbClass(d.status);
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td style="font-weight:600;font-size:11px;">${d.n}</td>
+      <td><span class="dstate-tag">${sd.shortName}</span></td>
+      <td class="tdm" style="color:${wc}">${d.wheat}</td>
+      <td class="tdm" style="color:${gc}">${d.gram}</td>
+      <td class="tdm" style="color:${mc}">${d.mustard}</td>
+      <td><span class="badge ${bc}">${d.status}</span></td>`;
+    tr.onclick=()=>openDistrict(d.n);
+    tb.appendChild(tr);
+  });
+}
+
+// ── SEARCH ──
+function filterList(q){
+  q=q.toLowerCase();
+  document.querySelectorAll('.ditem').forEach(el=>{
+    el.style.display=el.dataset.n.toLowerCase().includes(q)?'flex':'none';
+  });
+}
+
+// ── DROPDOWN FUNCTIONS ──
+function toggleDD(menuId){
+  const menu=document.getElementById(menuId);
+  if(!menu) return;
+  const isOpen=menu.classList.contains('open');
+  // Close all menus first
+  document.querySelectorAll('.dd-menu').forEach(m=>m.classList.remove('open'));
+  if(!isOpen) menu.classList.add('open');
+}
+
+// Close dropdowns when clicking outside
+document.addEventListener('click', e=>{
+  if(!e.target.closest('.dd-wrap')){
+    document.querySelectorAll('.dd-menu').forEach(m=>m.classList.remove('open'));
+  }
+});
+
+function selectState(stateCode){
+  // Close state menu
+  document.getElementById('state-menu').classList.remove('open');
+
+  // Update state label
+  const sd=DATA[stateCode];
+  const label=stateCode==='RJ'?'🏜️ Rajasthan':'🌿 Madhya Pradesh';
+  setText('state-dd-label', label);
+
+  // Activate state button
+  const stateBtn=document.getElementById('crumb-state');
+  if(stateBtn) stateBtn.classList.add('active');
+
+  // Enable district dropdown
+  const distBtn=document.getElementById('crumb-dist');
+  if(distBtn) distBtn.disabled=false;
+  document.getElementById('dist-arrow').style.opacity='1';
+
+  // Populate district dropdown
+  const container=document.getElementById('dist-menu-items');
+  if(container){
+    container.innerHTML=`
+      <div class="dd-search">
+        <input type="text" placeholder="🔍 Search..." oninput="filterDDList(this.value)" id="dd-dist-search">
+      </div>`;
+    [...sd.districts].sort((a,b)=>a.n.localeCompare(b.n)).forEach(dist=>{
+      const col=ndviCol(dist.ndvi);
+      const bc=dist.status==='HIGH'?'#16a34a':dist.status==='MEDIUM'?'#d97706':'#dc2626';
+      const div=document.createElement('div');
+      div.className='dd-item';
+      div.dataset.name=dist.n;
+      div.innerHTML=`<div class="dd-item-dot" style="background:${col}"></div>
+        <span style="flex:1">${dist.n}</span>
+        <span style="font-family:var(--mono);font-size:9px;color:${bc};font-weight:600">${dist.status.substring(0,3)}</span>`;
+      div.onclick=()=>selectDistrictDD(dist.n, stateCode);
+      container.appendChild(div);
+    });
+  }
+
+  // Hide welcome panel
+  const wp=document.getElementById('welcomePanel');
+  if(wp) wp.style.display='none';
+  // Show state view
+  const sv=document.getElementById('stateView');
+  if(sv) sv.style.display='block';
+  const dv=document.getElementById('distView');
+  if(dv) dv.style.display='none';
+
+  // Switch state data
+  currentState=stateCode;
+  const tab=document.getElementById(stateCode==='RJ'?'tab-rj':'tab-mp');
+  if(tab){
+    document.querySelectorAll('.state-tab').forEach(b=>b.classList.remove('active'));
+    // If tabs still exist
+  }
+  if(map) map.setView(sd.center, sd.zoom);
+  renderMarkers();
+  buildList();
+  buildTable();
+  updateStateKPIs();
+  rebuildStateCharts();
+  gotoState();
+  setText('mb-title', sd.name.toUpperCase());
+  setText('dist-panel-label', sd.name+' Districts');
+  setText('dist-panel-count', sd.districts.length);
+  setText('dist-dd-label', 'Select District');
+}
+
+function selectDistrictDD(name, stateCode){
+  // Close menu
+  document.getElementById('dist-menu').classList.remove('open');
+  // Update label
+  setText('dist-dd-label', name);
+  // Mark selected
+  document.querySelectorAll('#dist-menu-items .dd-item').forEach(el=>{
+    el.classList.toggle('selected', el.dataset.name===name);
+  });
+  // Open district
+  if(stateCode && currentState!==stateCode){ currentState=stateCode; }
+  openDistrict(name);
+}
+
+function filterDDList(q){
+  q=q.toLowerCase();
+  document.querySelectorAll('#dist-menu-items .dd-item').forEach(el=>{
+    el.style.display=el.dataset.name&&el.dataset.name.toLowerCase().includes(q)?'flex':'none';
+  });
+}
+
+// ── INIT ──
+window.addEventListener('load',()=>{
+  waitForLibs(()=>{
+    initMap();
+    showWelcome();
+  });
+});
+</script>
+</body>
+</html>
