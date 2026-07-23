@@ -16,247 +16,238 @@
   --txt:#1e293b;--mut:#64748b;
   --sh:0 1px 4px rgba(0,0,0,0.08);--sh2:0 4px 12px rgba(0,0,0,0.10);
 }
-html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--txt);font-family:"Inter",sans-serif;}
-.shell{display:grid;grid-template-rows:52px 1fr;grid-template-columns:250px 1fr 290px;height:100vh;}
-
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--txt);font-family:"Inter",sans-serif;font-size:13px;}
+.shell{display:grid;grid-template-rows:52px 1fr;grid-template-columns:250px 1fr 292px;height:100vh;}
 /* TOPBAR */
 .topbar{grid-column:1/-1;background:var(--panel);border-bottom:2px solid var(--grn3);
-  display:flex;align-items:center;padding:0 14px;gap:8px;box-shadow:var(--sh);z-index:500;}
+  display:flex;align-items:center;padding:0 12px;gap:7px;box-shadow:var(--sh);z-index:500;}
 .brand{font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:700;color:var(--grn);
   letter-spacing:1px;display:flex;align-items:center;gap:6px;white-space:nowrap;}
-.brand-dot{width:7px;height:7px;border-radius:50%;background:var(--grn);animation:blink 1.5s infinite;}
+.bdot{width:7px;height:7px;border-radius:50%;background:var(--grn);animation:blink 1.5s infinite;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
-.divider{width:1px;height:26px;background:var(--bdr);flex-shrink:0;}
-.nav-sel{padding:5px 9px;border-radius:6px;border:1px solid var(--bdr);background:var(--lift);
+.div{width:1px;height:26px;background:var(--bdr);flex-shrink:0;}
+.nsel{padding:5px 8px;border-radius:6px;border:1px solid var(--bdr);background:var(--lift);
   color:var(--txt);font-size:12px;font-weight:500;cursor:pointer;outline:none;font-family:"Inter",sans-serif;}
-.nav-sel:focus{border-color:var(--grn);}
-.nav-sel:disabled{opacity:0.4;cursor:not-allowed;}
-.nav-arr{color:var(--bdr2);font-size:13px;flex-shrink:0;}
-.nav-arr.dim{opacity:0.25;}
-.top-right{margin-left:auto;display:flex;align-items:center;gap:8px;flex-shrink:0;}
-.season-sel{padding:5px 9px;border-radius:20px;border:1px solid #fde68a;background:#fffbeb;
-  color:#92400e;font-size:11px;font-weight:600;cursor:pointer;outline:none;}
-.live-chip{display:flex;align-items:center;gap:4px;padding:4px 9px;border-radius:20px;
+.nsel:focus{border-color:var(--grn);}
+.nsel:disabled{opacity:0.4;cursor:not-allowed;}
+.narr{color:var(--bdr2);font-size:13px;flex-shrink:0;}
+.narr.dim{opacity:0.25;}
+.tr{margin-left:auto;display:flex;align-items:center;gap:7px;flex-shrink:0;}
+.ssel{padding:5px 9px;border-radius:20px;border:1px solid #fde68a;background:#fffbeb;
+  color:#92400e;font-size:11px;font-weight:600;cursor:pointer;outline:none;font-family:"Inter",sans-serif;}
+.lchip{display:flex;align-items:center;gap:4px;padding:4px 9px;border-radius:20px;
   border:1px solid var(--grn3);background:var(--grn2);color:#15803d;font-size:10px;font-weight:600;}
-.live-dot{width:5px;height:5px;border-radius:50%;background:#15803d;animation:blink 1.3s infinite;}
-.tehsil-chip{display:none;padding:3px 8px;border-radius:10px;background:#dbeafe;
+.ldot{width:5px;height:5px;border-radius:50%;background:#15803d;animation:blink 1.3s infinite;}
+.tchip{display:none;padding:3px 7px;border-radius:10px;background:#dbeafe;
   color:#1d4ed8;font-size:10px;font-weight:700;border:1px solid #bfdbfe;}
-.tehsil-chip.show{display:inline-block;}
-
+.tchip.on{display:inline-block;}
 /* LEFT */
 .left{background:var(--panel);border-right:1px solid var(--bdr);display:flex;flex-direction:column;overflow:hidden;}
 .phd{padding:9px 12px;font-size:10px;font-weight:700;color:var(--mut);letter-spacing:1.5px;
-  text-transform:uppercase;border-bottom:1px solid var(--bdr);
-  display:flex;align-items:center;justify-content:space-between;}
+  text-transform:uppercase;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;}
 .pcnt{font-size:11px;color:var(--grn);background:var(--grn2);padding:2px 7px;border-radius:10px;font-weight:700;}
-.sw{padding:8px 10px;border-bottom:1px solid var(--bdr);}
+.sw{padding:7px 10px;border-bottom:1px solid var(--bdr);}
 .sinp{width:100%;background:var(--lift);border:1px solid var(--bdr);border-radius:7px;
-  padding:5px 9px;color:var(--txt);font-size:12px;outline:none;}
-.sinp:focus{border-color:var(--grn);}
-.sinp::placeholder{color:var(--mut);}
+  padding:5px 9px;color:var(--txt);font-size:12px;outline:none;font-family:"Inter",sans-serif;}
+.sinp:focus{border-color:var(--grn);}.sinp::placeholder{color:var(--mut);}
 .dlist{flex:1;overflow-y:auto;}
 .dlist::-webkit-scrollbar{width:3px;}
-.dlist::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:2px;}
+.dlist::-webkit-scrollbar-thumb{background:var(--bdr2);}
 .ditem{display:flex;align-items:center;gap:7px;padding:6px 12px;cursor:pointer;
   border-left:3px solid transparent;transition:all 0.12s;}
 .ditem:hover{background:var(--lift);border-left-color:var(--bdr2);}
-.ditem.active{background:var(--grn2);border-left-color:var(--grn);}
-.ditem.tehsil-item{padding-left:24px;background:#f8fafc;}
-.ditem.tehsil-item:hover{background:#eff6ff;border-left-color:#0891b2;}
-.ditem.tehsil-item.active{background:#dbeafe;border-left-color:#1d4ed8;}
+.ditem.sel{background:var(--grn2);border-left-color:var(--grn);}
+.ditem.ti{padding-left:22px;background:#fafafa;}
+.ditem.ti:hover{background:#eff6ff;border-left-color:#0891b2;}
+.ditem.ti.sel{background:#dbeafe;border-left-color:#1d4ed8;}
 .ddot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-.dname{font-size:12px;flex:1;font-weight:500;}
-.dlevel{font-size:8px;padding:1px 5px;border-radius:3px;font-weight:700;flex-shrink:0;}
-.dlevel.dist{background:var(--grn2);color:#15803d;}
-.dlevel.teh{background:#dbeafe;color:#1d4ed8;}
-.dndvi{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--mut);}
-.dbadge{font-size:9px;padding:2px 6px;border-radius:10px;font-weight:700;}
+.dn{font-size:12px;flex:1;font-weight:500;}
+.dlv{font-size:8px;padding:1px 5px;border-radius:3px;font-weight:700;flex-shrink:0;}
+.dlv.d{background:var(--grn2);color:#15803d;}.dlv.t{background:#dbeafe;color:#1d4ed8;}
+.dndv{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--mut);}
+.dbg{font-size:9px;padding:2px 6px;border-radius:10px;font-weight:700;}
 .bh{background:#dcfce7;color:#15803d;}.bm{background:#fef3c7;color:#92400e;}.bl{background:#fee2e2;color:#dc2626;}
 .lstats{padding:8px 11px;border-top:1px solid var(--bdr);display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--lift);}
 .lstat{background:var(--panel);border-radius:7px;padding:6px 9px;border:1px solid var(--bdr);}
-.lsval{font-family:"IBM Plex Mono",monospace;font-size:15px;font-weight:700;color:var(--grn);}
-.lslbl{font-size:9px;color:var(--mut);letter-spacing:0.5px;margin-top:2px;font-weight:500;}
-
+.lsv{font-family:"IBM Plex Mono",monospace;font-size:15px;font-weight:700;color:var(--grn);}
+.lsl{font-size:9px;color:var(--mut);letter-spacing:0.5px;margin-top:2px;font-weight:500;}
 /* MAP */
-.map-wrap{position:relative;background:#e8f0e8;}
+.mapw{position:relative;background:#e8f0e8;}
 #map{width:100%;height:100%;}
 .mbtns{position:absolute;top:10px;left:10px;z-index:400;display:flex;flex-direction:column;gap:5px;}
-.mbtn{background:#fff;border:1px solid var(--bdr);padding:5px 11px;border-radius:7px;
+.mb{background:#fff;border:1px solid var(--bdr);padding:5px 11px;border-radius:7px;
   font-size:11px;font-weight:600;color:var(--mut);cursor:pointer;box-shadow:var(--sh);
   display:flex;align-items:center;gap:5px;transition:all 0.15s;}
-.mbtn:hover,.mbtn.active{background:var(--grn2);border-color:var(--grn3);color:var(--grn);}
+.mb:hover,.mb.on{background:var(--grn2);border-color:var(--grn3);color:var(--grn);}
 .minfo{position:absolute;bottom:10px;left:10px;z-index:400;background:#fff;
-  border:1px solid var(--bdr);padding:9px 12px;border-radius:9px;font-size:11px;box-shadow:var(--sh2);min-width:175px;}
+  border:1px solid var(--bdr);padding:9px 12px;border-radius:9px;font-size:11px;
+  box-shadow:var(--sh2);min-width:175px;}
 .mit{color:var(--grn);font-weight:700;font-size:12px;margin-bottom:4px;}
-.mir{display:flex;justify-content:space-between;gap:12px;margin-top:3px;font-size:11px;}
+.mir{display:flex;justify-content:space-between;gap:10px;margin-top:3px;font-size:11px;}
 .mik{color:var(--mut);}
 .mleg{position:absolute;bottom:10px;right:10px;z-index:400;background:#fff;
   border:1px solid var(--bdr);padding:9px 12px;border-radius:9px;box-shadow:var(--sh2);}
 .mlt{font-size:9px;font-weight:700;color:var(--mut);letter-spacing:1px;margin-bottom:5px;text-transform:uppercase;}
 .mlb{height:7px;border-radius:4px;background:linear-gradient(to right,#dc2626,#d97706,#16a34a,#0891b2);margin-bottom:3px;}
 .mll{display:flex;justify-content:space-between;font-size:8px;color:var(--mut);}
-
 /* RIGHT */
 .right{background:var(--panel);border-left:1px solid var(--bdr);overflow-y:auto;display:flex;flex-direction:column;}
 .right::-webkit-scrollbar{width:4px;}
 .right::-webkit-scrollbar-thumb{background:var(--bdr2);}
 .welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;
   padding:28px 18px;text-align:center;gap:12px;}
-.wicon{font-size:44px;}.wtitle{font-size:15px;font-weight:700;}
-.wdesc{font-size:12px;color:var(--mut);line-height:1.7;}
+.wi{font-size:44px;}.wt{font-size:15px;font-weight:700;}
+.wd{font-size:12px;color:var(--mut);line-height:1.7;}
 .wcta{padding:11px 16px;background:var(--grn2);border:1px solid var(--grn3);border-radius:9px;
   font-size:12px;color:var(--grn);font-weight:600;line-height:1.6;}
-
 /* KPI */
-.kgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:11px;}
-.kcard{background:var(--card);border-radius:9px;padding:11px 13px;border:1px solid var(--bdr);
+.kg{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:11px;}
+.kc{background:var(--card);border-radius:9px;padding:11px 13px;border:1px solid var(--bdr);
   box-shadow:var(--sh);position:relative;overflow:hidden;}
-.kcard::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;border-radius:9px 9px 0 0;}
-.kc1::before{background:linear-gradient(90deg,#16a34a,#22c55e);}
-.kc2::before{background:linear-gradient(90deg,#0891b2,#38bdf8);}
-.kc3::before{background:linear-gradient(90deg,#d97706,#fbbf24);}
-.kc4::before{background:linear-gradient(90deg,#dc2626,#f87171);}
+.kc::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;border-radius:9px 9px 0 0;}
+.k1::before{background:linear-gradient(90deg,#16a34a,#22c55e);}
+.k2::before{background:linear-gradient(90deg,#0891b2,#38bdf8);}
+.k3::before{background:linear-gradient(90deg,#6366f1,#a78bfa);}
+.k4::before{background:linear-gradient(90deg,#dc2626,#f87171);}
 .klbl{font-size:9px;font-weight:700;color:var(--mut);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
-.kval{font-family:"IBM Plex Mono",monospace;font-size:18px;font-weight:700;line-height:1;margin-bottom:2px;}
-.kc1 .kval{color:#15803d;}.kc2 .kval{color:#0369a1;}.kc3 .kval{color:#92400e;}.kc4 .kval{color:#b91c1c;}
-.ksub{font-size:9px;color:var(--mut);}
-
-/* CHART PANELS */
-.cp{padding:11px 13px;border-bottom:1px solid var(--bdr);}
-.ch{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;}
+.kv{font-family:"IBM Plex Mono",monospace;font-size:18px;font-weight:700;line-height:1;margin-bottom:2px;}
+.k1 .kv{color:#15803d;}.k2 .kv{color:#0369a1;}.k3 .kv{color:#4338ca;}.k4 .kv{color:#b91c1c;}
+.ks{font-size:9px;color:var(--mut);}
+.cp{padding:10px 12px;border-bottom:1px solid var(--bdr);}
+.ch{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
 .ct{font-size:12px;font-weight:700;color:var(--txt);}
-.tag{font-size:9px;padding:2px 7px;border-radius:10px;font-weight:700;letter-spacing:0.5px;}
+.tag{font-size:9px;padding:2px 7px;border-radius:10px;font-weight:700;}
 .tg{background:#dcfce7;color:#15803d;}.tb{background:#e0f2fe;color:#0369a1;}
 .ty{background:#fef3c7;color:#92400e;}.to{background:#fff7ed;color:#c2410c;}
-.tw{background:#dbeafe;color:#1d4ed8;}
+.tw{background:#dbeafe;color:#1d4ed8;}.tp{background:#f3e8ff;color:#7c3aed;}
 canvas{max-height:140px;}
-.cbtns{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:9px;}
-.cbtn{padding:4px 8px;border-radius:6px;border:1px solid var(--bdr);background:var(--lift);
+.cbtns{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px;}
+.cbtn{padding:3px 8px;border-radius:6px;border:1px solid var(--bdr);background:var(--lift);
   color:var(--mut);font-size:10px;font-weight:600;cursor:pointer;transition:all 0.15s;}
-.cbtn.active{background:var(--grn);color:#fff;border-color:var(--grn);}
+.cbtn.on{background:var(--grn);color:#fff;border-color:var(--grn);}
 .ck3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--bdr);border-bottom:1px solid var(--bdr);}
-.ck{background:var(--panel);padding:9px 11px;}
-.ckv{font-family:"IBM Plex Mono",monospace;font-size:16px;font-weight:700;}
+.ck{background:var(--panel);padding:8px 10px;}
+.ckv{font-family:"IBM Plex Mono",monospace;font-size:15px;font-weight:700;}
 .ckl{font-size:9px;color:var(--mut);letter-spacing:0.5px;margin-top:2px;font-weight:600;}
 .ctbl{width:100%;border-collapse:collapse;}
 .ctbl thead th{font-size:9px;font-weight:700;color:var(--mut);letter-spacing:1px;text-transform:uppercase;
-  padding:7px 9px;text-align:left;border-bottom:2px solid var(--bdr);background:var(--lift);}
+  padding:6px 8px;text-align:left;border-bottom:2px solid var(--bdr);background:var(--lift);}
 .ctbl tbody tr{border-bottom:1px solid var(--bdr);cursor:pointer;transition:background 0.1s;}
 .ctbl tbody tr:hover{background:var(--grn2);}
-.ctbl tbody td{padding:6px 9px;font-size:11px;}
+.ctbl tbody td{padding:5px 8px;font-size:11px;}
 .tdm{font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:600;}
 .badge{display:inline-block;padding:2px 7px;border-radius:10px;font-size:9px;font-weight:700;}
-
-/* DISTRICT/TEHSIL VIEW */
-.dvhdr{padding:9px 13px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:8px;background:var(--lift);flex-wrap:wrap;}
-.back-btn{background:var(--lift);border:1px solid var(--bdr);color:var(--grn);font-size:11px;
-  font-weight:600;padding:4px 10px;border-radius:6px;cursor:pointer;}
-.back-btn:hover{background:var(--grn2);border-color:var(--grn3);}
-.dvcrumb{font-size:11px;color:var(--mut);font-weight:500;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+/* DISTRICT VIEW */
+.dvh{padding:8px 12px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:7px;background:var(--lift);flex-wrap:wrap;}
+.bb{background:var(--lift);border:1px solid var(--bdr);color:var(--grn);font-size:11px;
+  font-weight:600;padding:4px 10px;border-radius:6px;cursor:pointer;white-space:nowrap;}
+.bb:hover{background:var(--grn2);border-color:var(--grn3);}
+.dvcr{font-size:11px;color:var(--mut);font-weight:500;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .abtns{display:flex;gap:5px;margin-left:auto;}
-.rptbtn{background:var(--grn);border:none;color:#fff;font-size:11px;font-weight:600;padding:4px 10px;border-radius:6px;cursor:pointer;}
-.ndvibtn{background:var(--blue);border:none;color:#fff;font-size:11px;font-weight:600;padding:4px 10px;border-radius:6px;cursor:pointer;}
-.dvnrow{padding:11px 13px;border-bottom:1px solid var(--bdr);}
-.dvname{font-size:14px;font-weight:700;color:var(--txt);}
-.dvmeta{font-size:10px;color:var(--mut);font-weight:500;margin-top:3px;}
-.dv2kpi{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--bdr);border-bottom:1px solid var(--bdr);}
-.dvkpi{background:var(--panel);padding:11px 13px;}
-.crop3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;padding:10px;border-bottom:1px solid var(--bdr);}
+.rptb{background:var(--grn);border:none;color:#fff;font-size:11px;font-weight:600;padding:4px 9px;border-radius:6px;cursor:pointer;}
+.ndvb{background:var(--blue);border:none;color:#fff;font-size:11px;font-weight:600;padding:4px 9px;border-radius:6px;cursor:pointer;}
+.dvnr{padding:10px 12px;border-bottom:1px solid var(--bdr);}
+.dvnm{font-size:14px;font-weight:700;}
+.dvmt{font-size:10px;color:var(--mut);margin-top:3px;}
+.dv2k{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--bdr);border-bottom:1px solid var(--bdr);}
+.dvkp{background:var(--panel);padding:10px 12px;}
+.prow3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--bdr);border-bottom:1px solid var(--bdr);}
+.pr{background:var(--panel);padding:8px 10px;}
+.prv{font-family:"IBM Plex Mono",monospace;font-size:14px;font-weight:700;}
+.prl{font-size:9px;color:var(--mut);margin-top:2px;font-weight:600;}
+.c3g{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;padding:9px;border-bottom:1px solid var(--bdr);}
 .c3{background:var(--card);border-radius:8px;padding:8px 6px;text-align:center;border:1px solid var(--bdr);box-shadow:var(--sh);}
-.c3i{font-size:15px;margin-bottom:3px;}.c3v{font-family:"IBM Plex Mono",monospace;font-size:14px;font-weight:700;}
+.c3i{font-size:15px;margin-bottom:3px;}.c3v{font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:700;}
 .c3l{font-size:8px;color:var(--mut);margin-top:2px;font-weight:600;letter-spacing:0.5px;}
-.htrack{height:9px;background:var(--lift);border-radius:5px;overflow:hidden;border:1px solid var(--bdr);}
-.hfill{height:100%;border-radius:5px;transition:width 0.6s;}
-
-/* LSWI indicator */
-.lswi-box{display:flex;align-items:center;gap:10px;padding:9px 13px;border-bottom:1px solid var(--bdr);background:var(--card);}
-.lswi-icon{font-size:18px;flex-shrink:0;}
-.lswi-info{flex:1;}
-.lswi-title{font-size:11px;font-weight:700;color:var(--txt);margin-bottom:2px;}
-.lswi-val{font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600;}
-.lswi-track{height:7px;background:var(--lift);border-radius:4px;overflow:hidden;margin-top:4px;border:1px solid var(--bdr);}
-.lswi-fill{height:100%;border-radius:4px;transition:width 0.6s;}
-
-/* TEHSIL SELECTOR (MP only) */
-.teh-selector{padding:10px 13px;border-bottom:1px solid var(--bdr);background:#f0f9ff;}
-.teh-sel-title{font-size:10px;font-weight:700;color:#0369a1;letter-spacing:1px;text-transform:uppercase;margin-bottom:7px;
-  display:flex;align-items:center;gap:6px;}
-.teh-sel-title::after{content:"MP ONLY";font-size:8px;background:#dbeafe;color:#1d4ed8;padding:1px 6px;border-radius:10px;}
-.teh-sel{width:100%;padding:6px 10px;border-radius:7px;border:1px solid #bfdbfe;background:#fff;
-  color:var(--txt);font-size:12px;outline:none;font-family:"Inter",sans-serif;}
-.teh-sel:focus{border-color:#1d4ed8;}
-
-/* TEHSIL BREAKDOWN TABLE */
-.teh-table-wrap{padding:0;}
-.teh-tbl{width:100%;border-collapse:collapse;font-size:11px;}
-.teh-tbl thead th{font-size:9px;font-weight:700;color:#0369a1;letter-spacing:1px;text-transform:uppercase;
-  padding:6px 9px;text-align:left;border-bottom:2px solid #bfdbfe;background:#eff6ff;}
-.teh-tbl tbody tr{border-bottom:1px solid #e2e8f0;cursor:pointer;transition:background 0.1s;}
-.teh-tbl tbody tr:hover{background:#dbeafe;}
-.teh-tbl tbody td{padding:5px 9px;font-size:11px;}
-.teh-status{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px;}
+.ht{height:9px;background:var(--lift);border-radius:5px;overflow:hidden;border:1px solid var(--bdr);}
+.hf{height:100%;border-radius:5px;transition:width 0.5s;}
+/* LSWI */
+.lswib{display:flex;align-items:center;gap:10px;padding:9px 12px;border-bottom:1px solid var(--bdr);background:var(--card);}
+.lswiico{font-size:18px;flex-shrink:0;}
+.lswiin{flex:1;}
+.lswiname{font-size:10px;font-weight:700;margin-bottom:1px;}
+.lswisub{font-size:9px;color:var(--mut);}
+.lswiv{font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600;}
+.lswitr{height:7px;background:var(--lift);border-radius:4px;overflow:hidden;margin-top:4px;border:1px solid var(--bdr);}
+.lswifl{height:100%;border-radius:4px;transition:width 0.5s;}
+/* TABS */
+.ptabs{display:flex;border-bottom:2px solid var(--bdr);background:var(--lift);}
+.ptab{flex:1;padding:7px 4px;text-align:center;font-size:10px;font-weight:700;
+  color:var(--mut);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all 0.15s;}
+.ptab:hover{color:var(--txt);}
+.ptab.on{color:var(--grn);border-bottom-color:var(--grn);background:var(--panel);}
+.pane{display:none;}.pane.on{display:block;}
+/* TEHSIL */
+.tselw{padding:9px 12px;border-bottom:1px solid var(--bdr);background:#f0f9ff;}
+.tselt{font-size:10px;font-weight:700;color:#0369a1;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+.tsel{width:100%;padding:5px 9px;border-radius:7px;border:1px solid #bfdbfe;background:#fff;
+  color:var(--txt);font-size:12px;outline:none;}
+.tsel:focus{border-color:#1d4ed8;}
+.ttbl{width:100%;border-collapse:collapse;}
+.ttbl thead th{font-size:9px;font-weight:700;color:#0369a1;letter-spacing:1px;text-transform:uppercase;
+  padding:6px 8px;text-align:left;border-bottom:2px solid #bfdbfe;background:#eff6ff;}
+.ttbl tbody tr{border-bottom:1px solid #e2e8f0;cursor:pointer;transition:background 0.1s;}
+.ttbl tbody tr:hover{background:#dbeafe;}
+.ttbl tbody td{padding:5px 8px;font-size:11px;}
+.tst{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px;}
 </style>
 </head>
 <body>
 <div class="shell">
-
 <!-- TOPBAR -->
 <header class="topbar">
-  <div class="brand"><div class="brand-dot"></div>AGRI INTEL</div>
-  <div class="divider"></div>
-  <button class="nav-sel" onclick="gotoIndia()" style="cursor:pointer;">🇮🇳 India</button>
-  <span class="nav-arr">›</span>
-  <select class="nav-sel" id="state-sel" onchange="selectState(this.value)">
+  <div class="brand"><div class="bdot"></div>AGRI INTEL</div>
+  <div class="div"></div>
+  <button class="nsel" onclick="gotoIndia()" style="cursor:pointer;white-space:nowrap;">🇮🇳 India</button>
+  <span class="narr">›</span>
+  <select class="nsel" id="stsel" onchange="selectState(this.value)">
     <option value="">Select State</option>
     <option value="RJ">🏜️ Rajasthan</option>
     <option value="MP">🌿 Madhya Pradesh</option>
   </select>
-  <span class="nav-arr dim" id="dist-arr">›</span>
-  <select class="nav-sel" id="dist-sel" onchange="onDistSel(this.value)" disabled>
+  <span class="narr dim" id="da">›</span>
+  <select class="nsel" id="dsel" onchange="onDist(this.value)" disabled>
     <option value="">Select District</option>
   </select>
-  <span class="nav-arr dim" id="teh-arr">›</span>
-  <select class="nav-sel" id="teh-sel" onchange="onTehSel(this.value)" disabled style="display:none;">
+  <span class="narr dim" id="ta">›</span>
+  <select class="nsel" id="tsel" onchange="onTeh(this.value)" disabled style="display:none;">
     <option value="">All Tehsils</option>
   </select>
-  <span class="tehsil-chip" id="teh-chip">TEHSIL LEVEL</span>
-  <div class="top-right">
-    <select class="season-sel" id="season-sel" onchange="setSeason(this.value)">
+  <span class="tchip" id="tchip">TEHSIL</span>
+  <div class="tr">
+    <select class="ssel" id="ssel" onchange="setSeason(this.value)">
       <optgroup label="🌾 RABI">
-        <option value="rabi_2526" selected>Rabi 2025-26</option>
+        <option value="rabi_2526">Rabi 2025-26</option>
         <option value="rabi_2425">Rabi 2024-25</option>
         <option value="rabi_2324">Rabi 2023-24</option>
       </optgroup>
       <optgroup label="🌿 KHARIF">
         <option value="kharif_2025">Kharif 2025</option>
-        <option value="kharif_2024">Kharif 2024</option>
       </optgroup>
     </select>
-    <div class="live-chip"><div class="live-dot"></div>Sentinel-2</div>
+    <div class="lchip"><div class="ldot"></div>Sentinel-2</div>
   </div>
 </header>
-
 <!-- LEFT -->
 <aside class="left">
   <div class="phd"><span id="plbl">Districts</span><span class="pcnt" id="pcnt">—</span></div>
   <div class="sw"><input class="sinp" type="text" placeholder="🔍 Search..." oninput="filterList(this.value)"></div>
   <div class="dlist" id="dlist"></div>
   <div class="lstats">
-    <div class="lstat"><div class="lsval" id="ls-h">—</div><div class="lslbl">HIGH</div></div>
-    <div class="lstat"><div class="lsval" id="ls-l" style="color:#dc2626">—</div><div class="lslbl">STRESS</div></div>
-    <div class="lstat"><div class="lsval" id="ls-a" style="color:#d97706">—</div><div class="lslbl">AVG NDVI</div></div>
-    <div class="lstat"><div class="lsval" id="ls-y" style="color:#0891b2">—</div><div class="lslbl">AVG YIELD</div></div>
+    <div class="lstat"><div class="lsv" id="lsh">—</div><div class="lsl">HIGH VHI</div></div>
+    <div class="lstat"><div class="lsv" id="lsl" style="color:#dc2626">—</div><div class="lsl">STRESS</div></div>
+    <div class="lstat"><div class="lsv" id="lsa" style="color:#d97706">—</div><div class="lsl">AVG NDVI</div></div>
+    <div class="lstat"><div class="lsv" id="lsy" style="color:#0891b2">—</div><div class="lsl">AVG YIELD</div></div>
   </div>
 </aside>
-
 <!-- MAP -->
-<main class="map-wrap">
+<main class="mapw">
   <div id="map"></div>
   <div class="mbtns">
-    <button class="mbtn active" id="hb-h" onclick="gotoIndia()">🏠 Home</button>
-    <button class="mbtn" id="hb-s" onclick="gotoState()">📍 State</button>
-    <button class="mbtn" id="hb-d" id="hb-d">📌 District</button>
-    <button class="mbtn" id="hb-t" style="display:none;">🔍 Tehsil</button>
+    <button class="mb on" id="mbh" onclick="gotoIndia()">🏠 Home</button>
+    <button class="mb" id="mbs" onclick="gotoState()">📍 State</button>
+    <button class="mb" id="mbd">📌 District</button>
+    <button class="mb" id="mbt" style="display:none;">🔍 Tehsil</button>
   </div>
   <div class="minfo" id="minfo">
     <div class="mit">🌾 AGRI INTEL</div>
@@ -267,142 +258,182 @@ canvas{max-height:140px;}
   <div class="mleg"><div class="mlt">NDVI Scale</div><div class="mlb"></div>
     <div class="mll"><span>Low</span><span>Mid</span><span>High</span></div></div>
 </main>
-
 <!-- RIGHT -->
-<aside class="right" id="rpanel">
+<aside class="right">
   <!-- WELCOME -->
-  <div class="welcome" id="wview">
-    <div class="wicon">🌾</div>
-    <div class="wtitle">Agri Intelligence Platform</div>
-    <div class="wdesc">MP: 424 tehsils across 55 districts<br>RJ: 33 districts<br>Rabi 2025-26 · VCI-FASAL</div>
-    <div class="wcta">👆 Select State → District<br>MP: Tehsil-level data available!<br>RJ: District-level data</div>
-    <div style="font-size:10px;color:var(--mut);">Sentinel-2 · NDVI · LSWI · VCI-FASAL</div>
+  <div class="welcome" id="wv">
+    <div class="wi">🌾</div>
+    <div class="wt">Agri Intelligence Platform</div>
+    <div class="wd">MP: 424 tehsils · RJ: 33 districts<br>4 Seasons · NDVI+LSWI+VHI+VCI<br>Rainfall · Temperature · Insolation</div>
+    <div class="wcta">👆 Select State from dropdown<br>MP → Tehsil-level data!<br>RJ → District-level data</div>
+    <div style="font-size:10px;color:var(--mut);">Sentinel-2 · MODIS · CHIRPS · ERA5 · VCI-FASAL</div>
   </div>
-
   <!-- STATE VIEW -->
-  <div id="sview" style="display:none;">
-    <div class="kgrid">
-      <div class="kcard kc1"><div class="klbl">Districts</div><div class="kval" id="kv-d">—</div><div class="ksub" id="kv-sn">—</div></div>
-      <div class="kcard kc2"><div class="klbl">Avg NDVI</div><div class="kval" id="kv-n">—</div><div class="ksub">Season mean</div></div>
-      <div class="kcard kc3"><div class="klbl">Avg Yield</div><div class="kval" id="kv-y">—</div><div class="ksub">VCI-FASAL</div></div>
-      <div class="kcard kc4"><div class="klbl">Stress</div><div class="kval" id="kv-st">—</div><div class="ksub">LOW zones</div></div>
+  <div id="sv" style="display:none;">
+    <div class="kg">
+      <div class="kc k1"><div class="klbl">Districts</div><div class="kv" id="kvd">—</div><div class="ks" id="kvsn">—</div></div>
+      <div class="kc k2"><div class="klbl">Avg NDVI</div><div class="kv" id="kvn">—</div><div class="ks">Sentinel-2</div></div>
+      <div class="kc k3"><div class="klbl">VHI Score</div><div class="kv" id="kvh">—</div><div class="ks">VCI+TCI Kogan97</div></div>
+      <div class="kc k4"><div class="klbl">Stress</div><div class="kv" id="kvst">—</div><div class="ks">LOW VHI zones</div></div>
     </div>
-    <div class="cp">
-      <div class="ch"><div class="ct">NDVI Time Series</div><span class="tag tg">NDVI</span></div>
-      <canvas id="sc-ndvi"></canvas>
-    </div>
+    <div class="cp"><div class="ch"><div class="ct">NDVI Time Series</div><span class="tag tg">NDVI</span></div><canvas id="sndvi"></canvas></div>
     <div class="ck3">
-      <div class="ck" style="border-top:3px solid #16a34a"><div class="ckv" style="color:#16a34a" id="ck-w">—</div><div class="ckl">🌾 WHEAT AVG</div></div>
-      <div class="ck" style="border-top:3px solid #d97706"><div class="ckv" style="color:#d97706" id="ck-g">—</div><div class="ckl">🟡 GRAM AVG</div></div>
-      <div class="ck" style="border-top:3px solid #ea580c"><div class="ckv" style="color:#ea580c" id="ck-m">—</div><div class="ckl">🟠 MUSTARD AVG</div></div>
+      <div class="ck" style="border-top:3px solid #16a34a"><div class="ckv" style="color:#16a34a" id="ckc1">—</div><div class="ckl" id="ckl1">🌾 CROP 1</div></div>
+      <div class="ck" style="border-top:3px solid #d97706"><div class="ckv" style="color:#d97706" id="ckc2">—</div><div class="ckl" id="ckl2">🟡 CROP 2</div></div>
+      <div class="ck" style="border-top:3px solid #ea580c"><div class="ckv" style="color:#ea580c" id="ckc3">—</div><div class="ckl" id="ckl3">🟠 CROP 3</div></div>
     </div>
     <div class="cp">
-      <div class="ch"><div class="ct" id="ytitle">Top Districts Yield</div><span class="tag ty">YIELD</span></div>
+      <div class="ch"><div class="ct" id="ytit">Top Districts Yield</div><span class="tag ty">YIELD</span></div>
       <div class="cbtns">
-        <button class="cbtn active" onclick="setCrop('all',this)">All</button>
-        <button class="cbtn" onclick="setCrop('wheat',this)">🌾 Wheat</button>
-        <button class="cbtn" onclick="setCrop('gram',this)">🟡 Gram</button>
-        <button class="cbtn" onclick="setCrop('mustard',this)">🟠 Mustard</button>
+        <button class="cbtn on" onclick="setCrop('all',this)">All</button>
+        <button class="cbtn" id="cb1" onclick="setCrop('c1',this)">C1</button>
+        <button class="cbtn" id="cb2" onclick="setCrop('c2',this)">C2</button>
+        <button class="cbtn" id="cb3" onclick="setCrop('c3',this)">C3</button>
       </div>
-      <canvas id="sc-yield"></canvas>
+      <canvas id="syield"></canvas>
     </div>
-    <div class="cp"><div class="ch"><div class="ct">Crop Health</div><span class="tag tb">STATUS</span></div><canvas id="sc-status"></canvas></div>
+    <div class="cp"><div class="ch"><div class="ct">Crop Health</div><span class="tag tb">VHI</span></div><canvas id="sstatus"></canvas></div>
     <div class="cp">
-      <div class="ch"><div class="ct" id="tbl-title">All Districts</div></div>
-      <table class="ctbl">
-        <thead><tr><th>Name</th><th>Level</th><th style="color:#16a34a">NDVI</th><th style="color:#d97706">VCI</th><th style="color:#ea580c">Yield</th><th>Status</th></tr></thead>
-        <tbody id="stbl"></tbody>
-      </table>
+      <div class="ch"><div class="ct" id="tblt">All Districts</div></div>
+      <table class="ctbl"><thead><tr>
+        <th>Name</th><th>Lvl</th>
+        <th style="color:#16a34a">NDVI</th>
+        <th style="color:#6366f1">VHI</th>
+        <th style="color:#0891b2">LSWI</th>
+        <th>Status</th>
+      </tr></thead><tbody id="stbl"></tbody></table>
     </div>
   </div>
-
-  <!-- DISTRICT VIEW -->
-  <div id="dview" style="display:none;">
-    <div class="dvhdr">
-      <button class="back-btn" onclick="gotoState()">← State</button>
-      <span class="dvcrumb" id="dv-crumb">State › District</span>
+  <!-- DISTRICT/TEHSIL VIEW -->
+  <div id="dv" style="display:none;">
+    <div class="dvh">
+      <button class="bb" onclick="gotoState()">← State</button>
+      <span class="dvcr" id="dvcr">—</span>
       <div class="abtns">
-        <button class="ndvibtn" onclick="downloadNDVI()">⬇ NDVI</button>
-        <button class="rptbtn" onclick="generateReport()">📄 Report</button>
+        <button class="ndvb" onclick="dlNDVI()">⬇ CSV</button>
+        <button class="rptb" onclick="genReport()">📄 Report</button>
       </div>
     </div>
-    <div class="dvnrow">
+    <div class="dvnr">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
-        <div class="dvname" id="dv-name">—</div>
-        <span class="badge" id="dv-badge">—</span>
-        <span id="dv-level-badge" style="font-size:9px;padding:2px 7px;border-radius:10px;font-weight:700;"></span>
+        <div class="dvnm" id="dvnm">—</div>
+        <span class="badge" id="dvbg">—</span>
+        <span id="dvlv" style="font-size:9px;padding:2px 7px;border-radius:10px;font-weight:700;"></span>
       </div>
-      <div class="dvmeta" id="dv-meta">—</div>
+      <div class="dvmt" id="dvmt">—</div>
     </div>
-    <div class="dv2kpi">
-      <div class="dvkpi" style="border-top:3px solid #16a34a">
-        <div class="klbl">NDVI MEAN</div>
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:20px;font-weight:700;color:#15803d;" id="dv-ndvi">—</div>
-        <div class="ksub">Sentinel-2 10m</div>
+    <!-- TABS -->
+    <div class="ptabs">
+      <div class="ptab on" onclick="showP('veg',this)">🌿 VEG</div>
+      <div class="ptab" onclick="showP('water',this)">💧 WATER</div>
+      <div class="ptab" onclick="showP('climate',this)">🌡️ CLIMATE</div>
+      <div class="ptab" onclick="showP('yield',this)">🌾 YIELD</div>
+      <div class="ptab" onclick="showP('trend',this)">📈 TREND</div>
+    </div>
+    <!-- VEG -->
+    <div class="pane on" id="pv">
+      <div class="dv2k">
+        <div class="dvkp" style="border-top:3px solid #16a34a">
+          <div class="klbl">NDVI</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:700;color:#15803d;" id="dvndvi">—</div>
+          <div class="ks">Sentinel-2 10m</div>
+        </div>
+        <div class="dvkp" style="border-top:3px solid #6366f1">
+          <div class="klbl">VHI SCORE</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:700;" id="dvvhi">—</div>
+          <div class="ks">0.5×VCI + 0.5×TCI · Kogan 1997</div>
+        </div>
       </div>
-      <div class="dvkpi" style="border-top:3px solid #0891b2">
-        <div class="klbl">VCI SCORE</div>
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:20px;font-weight:700;color:#0369a1;" id="dv-vci">—</div>
-        <div class="ksub">FASAL baseline</div>
+      <div class="prow3">
+        <div class="pr" style="border-top:3px solid #0891b2"><div class="klbl">VCI</div><div class="prv" style="color:#0369a1;" id="dvvci">—</div><div class="prl">Veg Condition</div></div>
+        <div class="pr" style="border-top:3px solid #d97706"><div class="klbl">TCI</div><div class="prv" style="color:#92400e;" id="dvtci">—</div><div class="prl">Temp Condition</div></div>
+        <div class="pr" style="border-top:3px solid #16a34a"><div class="klbl">EVI</div><div class="prv" style="color:#15803d;" id="dvevi">—</div><div class="prl">Enhanced VI</div></div>
+      </div>
+      <div class="cp"><div class="ch"><div class="ct" id="ndvit">NDVI Time Series</div><span class="tag tg">NDVI</span></div><canvas id="dcndvi"></canvas></div>
+      <div class="cp">
+        <div class="ch"><div class="ct">NDVI Health</div></div>
+        <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--mut);margin-bottom:4px;font-weight:600;">
+          <span>0.0 Bare</span><span id="dvhbl" style="color:var(--grn);">—</span><span>0.7+ Dense</span>
+        </div>
+        <div class="ht"><div class="hf" id="dvhb"></div></div>
+        <div style="font-size:9px;color:var(--mut);margin-top:3px;">Hist: 0.1371 (min) — 0.6997 (max) · MODIS 2013-2024</div>
       </div>
     </div>
-
-    <!-- LSWI Water Stress Indicator -->
-    <div class="lswi-box">
-      <div class="lswi-icon" id="dv-lswi-icon">💧</div>
-      <div class="lswi-info">
-        <div class="lswi-title">LSWI — Leaf Water Content <span id="dv-ws-badge" style="font-size:9px;padding:2px 7px;border-radius:10px;font-weight:700;"></span></div>
-        <div class="lswi-val" id="dv-lswi">—</div>
-        <div class="lswi-track"><div class="lswi-fill" id="dv-lswi-bar"></div></div>
+    <!-- WATER -->
+    <div class="pane" id="pw">
+      <div class="lswib">
+        <div class="lswiico" id="lico">💧</div>
+        <div class="lswiin">
+          <div class="lswiname">LSWI — Land Surface Water Index <span id="wsbg" style="font-size:9px;padding:2px 7px;border-radius:10px;font-weight:700;margin-left:5px;"></span></div>
+          <div class="lswisub">(B8−B11)/(B8+B11) · Soil+Canopy water · NOT Leaf Water · Xiao 2004</div>
+          <div class="lswiv" id="dvlswi">—</div>
+          <div class="lswitr"><div class="lswifl" id="dlbar"></div></div>
+        </div>
+      </div>
+      <div class="prow3">
+        <div class="pr" style="border-top:3px solid #0891b2"><div class="klbl">LSWI</div><div class="prv" id="dvlswi2" style="color:#0369a1;">—</div><div class="prl">Current value</div></div>
+        <div class="pr" style="border-top:3px solid #d97706"><div class="klbl">LSWI-CI</div><div class="prv" id="dvlci" style="color:#92400e;">—</div><div class="prl">Condition Index</div></div>
+        <div class="pr" style="border-top:3px solid #16a34a"><div class="klbl">NDWI</div><div class="prv" id="dvndwi" style="color:#15803d;">—</div><div class="prl">Open Water</div></div>
+      </div>
+      <div class="cp" style="padding:12px;">
+        <table class="ctbl"><thead><tr><th>LSWI Range</th><th>Meaning</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td class="tdm" style="color:#0369a1;">&gt; 0.3</td><td>Well irrigated/Moist</td><td>✅ Excellent</td></tr>
+          <tr><td class="tdm" style="color:#16a34a;">0.1–0.3</td><td>Adequate moisture</td><td>✅ Good</td></tr>
+          <tr><td class="tdm" style="color:#d97706;">0.0–0.1</td><td>Mild stress</td><td>⚠️ Monitor</td></tr>
+          <tr><td class="tdm" style="color:#dc2626;">&lt; 0.0</td><td>Water stressed</td><td>❌ Stressed</td></tr>
+        </tbody></table>
       </div>
     </div>
-
-    <!-- Crop boxes -->
-    <div class="crop3">
-      <div class="c3" style="border-top:3px solid #16a34a"><div class="c3i">🌾</div><div class="c3v" style="color:#15803d" id="dv-w">—</div><div class="c3l">WHEAT T/ha</div></div>
-      <div class="c3" style="border-top:3px solid #d97706"><div class="c3i">🟡</div><div class="c3v" style="color:#92400e" id="dv-g">—</div><div class="c3l">GRAM T/ha</div></div>
-      <div class="c3" style="border-top:3px solid #ea580c"><div class="c3i">🟠</div><div class="c3v" style="color:#c2410c" id="dv-m">—</div><div class="c3l">MUSTARD T/ha</div></div>
-    </div>
-
-    <!-- TEHSIL SELECTOR (MP only) -->
-    <div class="teh-selector" id="teh-selector" style="display:none;">
-      <div class="teh-sel-title">Select Tehsil</div>
-      <select class="teh-sel" id="teh-inline-sel" onchange="onTehInlineSel(this.value)">
-        <option value="">All Tehsils (District Aggregate)</option>
-      </select>
-    </div>
-
-    <!-- NDVI Chart -->
-    <div class="cp"><div class="ch"><div class="ct" id="dv-ndvi-t">NDVI Time Series</div><span class="tag tg">NDVI</span></div><canvas id="dc-ndvi"></canvas></div>
-
-    <!-- Crop compare -->
-    <div class="cp"><div class="ch"><div class="ct">Crop Yield vs State Avg</div><span class="tag ty">COMPARE</span></div><canvas id="dc-crop"></canvas></div>
-
-    <!-- Pie -->
-    <div class="cp"><div class="ch"><div class="ct">Crop Share</div><span class="tag to">PIE</span></div><canvas id="dc-pie" style="max-height:155px;"></canvas></div>
-
-    <!-- NDVI Health bar -->
-    <div class="cp">
-      <div class="ch"><div class="ct">NDVI Health</div></div>
-      <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--mut);margin-bottom:4px;font-weight:600;">
-        <span>0.0 Bare</span><span id="dv-hbl" style="color:var(--grn);">—</span><span>0.7+ Dense</span>
+    <!-- CLIMATE -->
+    <div class="pane" id="pc">
+      <div class="prow3">
+        <div class="pr" style="border-top:3px solid #dc2626"><div class="klbl">LST °C</div><div class="prv" id="dvlst" style="color:#b91c1c;">—</div><div class="prl">MODIS 1km</div></div>
+        <div class="pr" style="border-top:3px solid #0891b2"><div class="klbl">RAINFALL</div><div class="prv" id="dvrain" style="color:#0369a1;">—</div><div class="prl">mm · CHIRPS</div></div>
+        <div class="pr" style="border-top:3px solid #d97706"><div class="klbl">ANOMALY</div><div class="prv" id="dvranom" style="color:#92400e;">—</div><div class="prl">vs 12yr normal</div></div>
       </div>
-      <div class="htrack"><div class="hfill" id="dv-hb"></div></div>
-    </div>
-
-    <!-- TEHSIL BREAKDOWN TABLE (MP only) -->
-    <div id="teh-table-section" style="display:none;">
-      <div class="cp" style="padding-bottom:4px;">
-        <div class="ch"><div class="ct" id="teh-tbl-title">Tehsils in District</div><span class="tag tw">TEHSIL</span></div>
+      <div class="prow3">
+        <div class="pr" style="border-top:3px solid #16a34a"><div class="klbl">INSOLATION</div><div class="prv" id="dvinsol" style="color:#15803d;">—</div><div class="prl">MJ/m² · ERA5</div></div>
+        <div class="pr" style="border-top:3px solid #6366f1"><div class="klbl">TCI</div><div class="prv" id="dvtci2" style="color:#4338ca;">—</div><div class="prl">Temp Condition</div></div>
+        <div class="pr" style="border-top:3px solid #dc2626"><div class="klbl">TEMP STRESS</div><div class="prv" id="dvts" style="font-size:13px;">—</div><div class="prl">&lt;5°C or &gt;35°C</div></div>
       </div>
-      <div class="teh-table-wrap">
-        <table class="teh-tbl">
+      <div class="cp" style="padding:11px 12px;font-size:10px;color:var(--mut);line-height:1.8;">
+        <b>Sources:</b> LST = MODIS MOD11A2 1km · Rainfall = CHIRPS Daily 5km<br>
+        Insolation = ERA5-Land 11km · Baseline = 2013-2024 (12 years)
+      </div>
+    </div>
+    <!-- YIELD -->
+    <div class="pane" id="py">
+      <div class="c3g">
+        <div class="c3" style="border-top:3px solid #16a34a"><div class="c3i" id="ci1">🌾</div><div class="c3v" style="color:#15803d" id="dc1">—</div><div class="c3l" id="cl1">CROP 1</div></div>
+        <div class="c3" style="border-top:3px solid #d97706"><div class="c3i" id="ci2">🟡</div><div class="c3v" style="color:#92400e" id="dc2">—</div><div class="c3l" id="cl2">CROP 2</div></div>
+        <div class="c3" style="border-top:3px solid #ea580c"><div class="c3i" id="ci3">🟠</div><div class="c3v" style="color:#c2410c" id="dc3">—</div><div class="c3l" id="cl3">CROP 3</div></div>
+      </div>
+      <div class="cp"><div class="ch"><div class="ct">Yield vs State Avg</div><span class="tag ty">COMPARE</span></div><canvas id="dccrop"></canvas></div>
+      <div class="cp"><div class="ch"><div class="ct">Crop Share</div><span class="tag to">PIE</span></div><canvas id="dcpie" style="max-height:155px;"></canvas></div>
+      <div class="cp" style="padding:11px 12px;font-size:10px;color:var(--mut);line-height:1.8;">
+        <b>VCI-FASAL:</b> Yield(kg/ha) = 28.5 × VCI + 1200 · R²=0.78<br>
+        Enhanced with rainfall factor (±25%) · ISRO/NRSC validated
+      </div>
+    </div>
+    <!-- TREND -->
+    <div class="pane" id="pt">
+      <div class="cp"><div class="ch"><div class="ct">Multi-Year NDVI</div><span class="tag tp">3 SEASONS</span></div><canvas id="dctrend"></canvas></div>
+      <div class="cp" id="tehselw" style="display:none;">
+        <div class="ch"><div class="ct">Select Tehsil</div><span class="tag tw">MP ONLY</span></div>
+        <select class="tsel" id="isel" onchange="onITeh(this.value)">
+          <option value="">All Tehsils (District Aggregate)</option>
+        </select>
+      </div>
+      <div id="tehtblw" style="display:none;">
+        <div class="cp" style="padding-bottom:4px;"><div class="ch"><div class="ct" id="tehtblt">Tehsils</div><span class="tag tw">TEHSIL</span></div></div>
+        <table class="ttbl">
           <thead><tr>
             <th>Tehsil</th><th style="color:#16a34a">NDVI</th>
-            <th style="color:#0891b2">LSWI</th><th style="color:#d97706">VCI</th>
+            <th style="color:#0891b2">LSWI</th><th style="color:#6366f1">VHI</th>
             <th style="color:#ea580c">Yield</th><th>Status</th>
           </tr></thead>
-          <tbody id="teh-tbl-body"></tbody>
+          <tbody id="tehtbl"></tbody>
         </table>
       </div>
     </div>
@@ -413,7 +444,6 @@ canvas{max-height:140px;}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <script>
-// ================================================================
 // ================================================================
 // AGRI INTEL — COMPLETE DATA v4
 // MP: 424 tehsils (55 districts) | RJ: 32 districts
@@ -538,659 +568,679 @@ const DATA = {
     ]}
 };
 
-var curState=null,curDist=null,curTehsil=null,curSeason="rabi_2526";
-var map=null,markers={};
-var sNC=null,yC=null,stC=null,dNC=null,dCC=null,dPC=null;
 
-// HELPERS
-function nc(v){return v>=0.55?"#15803d":v>=0.42?"#16a34a":v>=0.32?"#d97706":v>=0.22?"#ea580c":"#dc2626";}
-function sc(s){return s==="HIGH"?"#15803d":s==="MEDIUM"?"#92400e":"#b91c1c";}
-function sb(s){return s==="HIGH"?"bh":s==="MEDIUM"?"bm":"bl";}
+// ── GLOBALS ──
+var CS=null, CD=null, CT=null, CSN='rabi_2526';
+var map=null, markers={};
+var sNC=null, yC=null, stC=null, dNC=null, dCC=null, dPC=null, trC=null;
+
+// ── HELPERS ──
+function nc(v){return v>=0.55?'#15803d':v>=0.42?'#16a34a':v>=0.32?'#d97706':v>=0.22?'#ea580c':'#dc2626';}
+function vc(v){return v>=60?'#15803d':v>=35?'#d97706':'#dc2626';}
+function lc(v){return v>=0.2?'#0369a1':v>=0.0?'#0891b2':v>=-0.1?'#d97706':'#dc2626';}
+function ll(v){return v>=0.2?'Well hydrated':v>=0.0?'Adequate':v>=-0.1?'Mild stress':'Stressed';}
+function sc(s){return s==='HIGH'?'#15803d':s==='MEDIUM'?'#92400e':'#b91c1c';}
+function sb(s){return s==='HIGH'?'bh':s==='MEDIUM'?'bm':'bl';}
 function el(id){return document.getElementById(id);}
 function st(id,v){var e=el(id);if(e)e.textContent=v;}
 function sh(id,v){var e=el(id);if(e)e.innerHTML=v;}
-function show(id){var e=el(id);if(e)e.style.display="block";}
-function hide(id){var e=el(id);if(e)e.style.display="none";}
-function lswiColor(v){return v>=0.2?"#0369a1":v>=0.0?"#0891b2":v>=-0.1?"#d97706":"#dc2626";}
-function lswiLabel(v){return v>=0.2?"Well hydrated":v>=0.0?"Adequate water":v>=-0.1?"Mild stress":"Water stressed";}
+function show(id){var e=el(id);if(e){e.style.display='block';}}
+function hide(id){var e=el(id);if(e){e.style.display='none';}}
+function sf(v){try{return parseFloat(v)||0;}catch(e){return 0;}}
+function r2(v){return Math.round(v*100)/100;}
+function r4(v){return Math.round(v*10000)/10000;}
+
+function getSC(){return SC[CSN]||SC['rabi_2526'];}
+function getCrops(state){var c=getSC();return state==='MP'?(c.c_mp||['Wheat','Gram','Mustard']):(c.c_rj||['Wheat','Gram','Mustard']);}
+function cropIcon(n){var m={'Wheat':'🌾','Gram':'🟡','Mustard':'🟠','Soybean':'🟤','Maize':'🌽','Paddy':'🌾','Bajra':'🌾','Moong':'🟢'};return m[n]||'🌿';}
+function getMkey(){return CSN==='rabi_2526'?'r2526':CSN==='rabi_2425'?'r2425':CSN==='rabi_2324'?'r2324':'kh25';}
+function getMonArr(obj){var k=getMkey();var arr=obj[k];if(arr&&arr.some(function(v){return v>0;}))return arr;arr=obj['r2526'];if(arr&&arr.some(function(v){return v>0;}))return arr;return getSC().months.map(function(){return 0.4;});}
 
 function cOpts(yL,mn,mx){
   return{responsive:true,maintainAspectRatio:true,
-    plugins:{legend:{labels:{font:{family:"IBM Plex Mono",size:9},boxWidth:8,padding:5,color:"#64748b"}}},
-    scales:{
-      x:{ticks:{color:"#94a3b8",font:{family:"IBM Plex Mono",size:8}},grid:{color:"#f1f5f9"}},
-      y:{ticks:{color:"#94a3b8",font:{family:"IBM Plex Mono",size:8}},grid:{color:"#f1f5f9"},
-         min:mn,max:mx,title:{display:true,text:yL,color:"#94a3b8",font:{family:"IBM Plex Mono",size:8}}}
-    }};
+    plugins:{legend:{labels:{font:{family:'IBM Plex Mono',size:9},boxWidth:8,padding:5,color:'#64748b'}}},
+    scales:{x:{ticks:{color:'#94a3b8',font:{family:'IBM Plex Mono',size:8}},grid:{color:'#f1f5f9'}},
+      y:{ticks:{color:'#94a3b8',font:{family:'IBM Plex Mono',size:8}},grid:{color:'#f1f5f9'},
+         min:mn,max:mx,title:{display:true,text:yL,color:'#94a3b8',font:{family:'IBM Plex Mono',size:8}}}}};
 }
 
-// MAP
+// ── TAB ──
+function showP(p,tab){
+  document.querySelectorAll('.pane').forEach(function(x){x.classList.remove('on');});
+  document.querySelectorAll('.ptab').forEach(function(x){x.classList.remove('on');});
+  var pane=el('p'+p[0]);if(pane)pane.classList.add('on');
+  if(tab)tab.classList.add('on');
+}
+
+// ── MAP ──
 function initMap(){
-  map=L.map("map",{zoomControl:false,attributionControl:false}).setView([23,80],5);
-  L.tileLayer("https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png",{maxZoom:18}).addTo(map);
-  L.tileLayer("https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png",{maxZoom:18,pane:"shadowPane"}).addTo(map);
-  L.control.zoom({position:"topright"}).addTo(map);
-  fetch("https://raw.githubusercontent.com/geohacker/india/master/state/india_state.geojson")
+  map=L.map('map',{zoomControl:false,attributionControl:false}).setView([23,80],5);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',{maxZoom:18}).addTo(map);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png',{maxZoom:18,pane:'shadowPane'}).addTo(map);
+  L.control.zoom({position:'topright'}).addTo(map);
+  fetch('https://raw.githubusercontent.com/geohacker/india/master/state/india_state.geojson')
   .then(function(r){return r.json();})
   .then(function(d){
     L.geoJSON(d,{style:function(f){
-      var nm=f.properties.NAME_1||f.properties.ST_NM||"";
-      if(nm==="Rajasthan")return{color:"#16a34a",weight:2,fillColor:"rgba(22,163,74,0.07)",fillOpacity:1};
-      if(nm==="Madhya Pradesh")return{color:"#0891b2",weight:2,fillColor:"rgba(8,145,178,0.07)",fillOpacity:1};
-      return{color:"#cbd5e1",weight:0.6,fillColor:"rgba(0,0,0,0.01)",fillOpacity:1};
+      var nm=f.properties.NAME_1||'';
+      if(nm==='Rajasthan')return{color:'#16a34a',weight:2,fillColor:'rgba(22,163,74,0.07)',fillOpacity:1};
+      if(nm==='Madhya Pradesh')return{color:'#0891b2',weight:2,fillColor:'rgba(8,145,178,0.07)',fillOpacity:1};
+      return{color:'#cbd5e1',weight:0.6,fillColor:'rgba(0,0,0,0.01)',fillOpacity:1};
     }}).addTo(map);
   }).catch(function(){});
 }
 
 function renderMarkers(){
-  Object.values(markers).forEach(function(m){if(map)map.removeLayer(m);});
-  markers={};
-  if(!curState)return;
-  var sd=DATA[curState];
-  sd.districts.forEach(function(dist){
-    var col=nc(dist.ndvi);
-    var r=dist.status==="HIGH"?10:dist.status==="MEDIUM"?8:7;
-    var hasTeh=sd.hasTehsil&&dist.tehsils&&dist.tehsils.length>0;
-    var m=L.circleMarker([dist.lat,dist.lng],{
-      radius:r,color:hasTeh?"#1d4ed8":"#fff",weight:hasTeh?2:1.5,
-      fillColor:col,fillOpacity:0.88
-    }).addTo(map);
-    var tip="<div style=\"font-family:monospace;font-size:10px;background:#fff;color:#1e293b;"
-      +"padding:8px 11px;border:1px solid #e2e8f0;border-radius:8px;line-height:1.7;min-width:150px;\">"
-      +"<b style=\"color:"+col+";font-size:12px\">"+dist.n+"</b>"
-      +(hasTeh?"<span style=\"font-size:9px;background:#dbeafe;color:#1d4ed8;padding:1px 5px;border-radius:8px;margin-left:5px;\">"+dist.tehsils.length+" tehsils</span>":"")
-      +"<br>NDVI: <b>"+dist.ndvi+"</b> VCI: <b>"+dist.vci+"%</b>"
-      +"<br>LSWI: <b>"+dist.lswi+"</b>"
-      +"<br><span style=\"color:"+sc(dist.status)+";font-weight:700;\">"+dist.status+"</span>"
-      +"</div>";
-    m.bindTooltip(tip,{permanent:false,direction:"top",opacity:1});
-    m.on("click",function(){openDistrict(dist.n);});
-    markers[dist.n]=m;
+  Object.values(markers).forEach(function(m){map&&map.removeLayer(m);}); markers={};
+  if(!CS)return;
+  var sd=DATA[CS];
+  sd.districts.forEach(function(d){
+    if(!d.lat||!d.lng||d.lat===0)return;
+    var col=nc(d.ndvi); var hasTeh=sd.hasTehsil&&d.tehsils&&d.tehsils.length>0;
+    var r=d.status==='HIGH'?10:d.status==='MEDIUM'?8:7;
+    var m=L.circleMarker([d.lat,d.lng],{radius:r,
+      color:hasTeh?'#1d4ed8':'#fff',weight:hasTeh?2:1.5,
+      fillColor:col,fillOpacity:0.88}).addTo(map);
+    var tip='<div style="font-family:monospace;font-size:10px;background:#fff;color:#1e293b;'
+      +'padding:8px 11px;border:1px solid #e2e8f0;border-radius:8px;line-height:1.7;min-width:155px;">'
+      +'<b style="color:'+col+';font-size:12px">'+d.n+'</b>'
+      +(hasTeh?' <span style="font-size:9px;background:#dbeafe;color:#1d4ed8;padding:1px 5px;border-radius:8px;">'+d.tehsils.length+' teh</span>':'')
+      +'<br>NDVI:<b>'+d.ndvi+'</b> VHI:<b style="color:'+vc(d.vhi||0)+'">'+(d.vhi||0).toFixed(1)+'%</b>'
+      +'<br>LSWI:<b style="color:'+lc(d.lswi||0)+'">'+(d.lswi||0).toFixed(3)+'</b>'
+      +'<br><span style="color:'+sc(d.status)+';font-weight:700;">'+d.status+'</span>'
+      +'</div>';
+    m.bindTooltip(tip,{permanent:false,direction:'top',opacity:1});
+    m.on('click',function(){openDist(d.n);});
+    markers[d.n]=m;
   });
 }
 
-// NAVIGATION
+// ── NAV ──
 function gotoIndia(){
-  curState=null;curDist=null;curTehsil=null;
+  CS=null;CD=null;CT=null;
   if(map)map.setView([23,80],5);
-  Object.values(markers).forEach(function(m){if(map)map.removeLayer(m);});
-  markers={};
-  el("state-sel").value="";
-  el("dist-sel").value="";el("dist-sel").disabled=true;
-  el("teh-sel").value="";el("teh-sel").style.display="none";
-  el("dist-arr").classList.add("dim");el("teh-arr").classList.add("dim");
-  el("teh-chip").classList.remove("show");
-  el("hb-t").style.display="none";
-  ["hb-h","hb-s","hb-d"].forEach(function(id){var e=el(id);if(e)e.classList.remove("active");});
-  el("hb-h").classList.add("active");
-  hide("sview");hide("dview");show("wview");
-  el("dlist").innerHTML="";
-  ["ls-h","ls-l","ls-a","ls-y"].forEach(function(id){st(id,"—");});
-  sh("minfo","<div class=\"mit\">🌾 AGRI INTEL</div>"
-    +"<div class=\"mir\"><span class=\"mik\">Coverage</span><span>RJ+MP</span></div>"
-    +"<div style=\"margin-top:6px;font-size:10px;color:var(--grn);font-weight:600;\">Select State to begin</div>");
+  Object.values(markers).forEach(function(m){map&&map.removeLayer(m);}); markers={};
+  el('stsel').value=''; el('dsel').value=''; el('dsel').disabled=true;
+  el('tsel').value=''; el('tsel').style.display='none';
+  el('da').classList.add('dim'); el('ta').classList.add('dim');
+  el('tchip').classList.remove('on'); el('mbt').style.display='none';
+  ['mbh','mbs','mbd'].forEach(function(id){var e=el(id);if(e)e.classList.remove('on');});
+  el('mbh').classList.add('on');
+  hide('sv');hide('dv');show('wv');
+  el('dlist').innerHTML='';
+  ['lsh','lsl','lsa','lsy'].forEach(function(id){st(id,'—');});
+  sh('minfo','<div class="mit">🌾 AGRI INTEL</div>'
+    +'<div class="mir"><span class="mik">MP</span><span>424 tehsils</span></div>'
+    +'<div class="mir"><span class="mik">RJ</span><span>32 districts</span></div>'
+    +'<div style="margin-top:6px;font-size:10px;color:var(--grn);font-weight:600;">Select State to begin</div>');
 }
 
 function gotoState(){
-  curDist=null;curTehsil=null;
-  if(!curState)return;
-  var sd=DATA[curState];
-  if(map)map.setView(sd.center,sd.zoom);
-  el("dist-sel").value="";
-  el("teh-sel").value="";el("teh-sel").style.display="none";
-  el("teh-arr").classList.add("dim");
-  el("teh-chip").classList.remove("show");
-  el("hb-t").style.display="none";
-  el("hb-h").classList.add("active");el("hb-s").classList.add("active");
-  el("hb-d").classList.remove("active");
-  hide("wview");show("sview");hide("dview");
-  resetMarkers();
-  setMInfo(null);
-}
-
-function resetMarkers(){
-  if(!curState)return;
-  var sd=DATA[curState];
+  if(!CS)return; CD=null;CT=null;
+  var sd=DATA[CS]; if(map)map.setView(sd.center,sd.zoom);
+  el('dsel').value=''; el('tsel').value=''; el('tsel').style.display='none';
+  el('ta').classList.add('dim'); el('tchip').classList.remove('on'); el('mbt').style.display='none';
+  el('mbh').classList.add('on'); el('mbs').classList.add('on'); el('mbd').classList.remove('on');
+  hide('wv');show('sv');hide('dv');
+  // Reset markers
   Object.entries(markers).forEach(function(e){
     var n=e[0],m=e[1];
-    var dist=sd.districts.find(function(d){return d.n===n;});
-    var hasTeh=sd.hasTehsil&&dist&&dist.tehsils&&dist.tehsils.length>0;
-    if(dist)m.setStyle({radius:dist.status==="HIGH"?10:dist.status==="MEDIUM"?8:7,
-      fillOpacity:0.88,weight:hasTeh?2:1.5,color:hasTeh?"#1d4ed8":"#fff"});
+    var d=sd.districts.find(function(x){return x.n===n;});
+    if(d){var ht=sd.hasTehsil&&d.tehsils&&d.tehsils.length>0;
+      m.setStyle({radius:d.status==='HIGH'?10:d.status==='MEDIUM'?8:7,fillOpacity:0.88,
+        weight:ht?2:1.5,color:ht?'#1d4ed8':'#fff'});}
   });
-  document.querySelectorAll(".ditem").forEach(function(e){e.classList.remove("active");});
-}
-
-// SELECT STATE
-function selectState(code){
-  if(!code)return;
-  curState=code;curDist=null;curTehsil=null;
-  var sd=DATA[code];
-  // Populate district dropdown
-  var ds=el("dist-sel");
-  ds.innerHTML="<option value=\"\">Select District</option>";
-  sd.districts.slice().sort(function(a,b){return a.n.localeCompare(b.n);}).forEach(function(d){
-    var o=document.createElement("option");
-    o.value=d.n;
-    o.textContent=d.n+(sd.hasTehsil?" ("+d.tehsils.length+" teh)":"");
-    ds.appendChild(o);
-  });
-  ds.disabled=false;
-  el("dist-arr").classList.remove("dim");
-  if(map)map.setView(sd.center,sd.zoom);
-  renderMarkers();buildList();buildTable();updateKPIs();buildStateCharts();
-  hide("wview");show("sview");hide("dview");
-  el("hb-h").classList.add("active");el("hb-s").classList.add("active");el("hb-d").classList.remove("active");
-  st("plbl",sd.name+" Districts");st("pcnt",sd.districts.length);
+  document.querySelectorAll('.ditem').forEach(function(e){e.classList.remove('sel');});
   setMInfo(null);
 }
 
-function onDistSel(name){if(!name){gotoState();return;}openDistrict(name);}
-
-function onTehSel(name){
-  if(!name||!curDist){return;}
-  openTehsil(curDist,name);
+// ── SELECT STATE ──
+function selectState(code){
+  if(!code)return;
+  CS=code; CD=null; CT=null;
+  var sd=DATA[code];
+  // Populate district dropdown
+  var ds=el('dsel');
+  ds.innerHTML='<option value="">Select District</option>';
+  sd.districts.slice().sort(function(a,b){return a.n.localeCompare(b.n);}).forEach(function(d){
+    var o=document.createElement('option'); o.value=d.n;
+    o.textContent=d.n+(sd.hasTehsil?' ('+d.tehsils.length+'teh)':'');
+    ds.appendChild(o);
+  });
+  ds.disabled=false; el('da').classList.remove('dim');
+  if(map)map.setView(sd.center,sd.zoom);
+  renderMarkers(); buildList(); buildTable(); updateKPIs(); buildStateCharts(); updateCropUI();
+  hide('wv');show('sv');hide('dv');
+  el('mbh').classList.add('on'); el('mbs').classList.add('on'); el('mbd').classList.remove('on');
+  st('plbl',sd.name+' Districts'); st('pcnt',sd.districts.length);
+  setMInfo(null);
 }
 
-function onTehInlineSel(name){
-  if(!name){
-    // Back to district aggregate
-    curTehsil=null;
-    el("teh-chip").classList.remove("show");
-    el("hb-t").style.display="none";
-    el("teh-arr").classList.add("dim");
-    el("teh-sel").value="";
-    var sd=DATA[curState];
-    var dist=sd.districts.find(function(d){return d.n===curDist;});
-    if(dist)fillDistrictView(dist,false);
-    return;
-  }
-  openTehsil(curDist,name);
+function onDist(name){if(!name){gotoState();return;}openDist(name);}
+function onTeh(name){if(!name||!CD)return;openTeh(CD,name);}
+function onITeh(name){
+  if(!name){CT=null;el('tchip').classList.remove('on');el('mbt').style.display='none';
+    el('ta').classList.add('dim');el('tsel').value='';
+    var sd=DATA[CS];var d=sd.districts.find(function(x){return x.n===CD;});
+    if(d)fillView(d,false);return;}
+  openTeh(CD,name);
 }
 
-function setSeason(key){curSeason=key;if(curState){updateKPIs();buildStateCharts();}if(curDist){openDistrict(curDist);}}
+function setSeason(k){
+  CSN=k; updateCropUI();
+  if(CS){updateKPIs();buildStateCharts();buildTable();}
+  if(CD){CT?openTeh(CD,CT):openDist(CD);}
+}
 
-// OPEN DISTRICT
-function openDistrict(name){
-  if(!curState)return;
-  var sd=DATA[curState];
+// ── CROP UI ──
+function updateCropUI(){
+  var c=getSC(); var crops=getCrops(CS||'RJ');
+  var b1=el('cb1'),b2=el('cb2'),b3=el('cb3');
+  if(b1)b1.textContent=cropIcon(crops[0])+' '+crops[0];
+  if(b2)b2.textContent=cropIcon(crops[1])+' '+crops[1];
+  if(b3)b3.textContent=cropIcon(crops[2])+' '+crops[2];
+  st('ckl1',cropIcon(crops[0])+' '+crops[0].toUpperCase());
+  st('ckl2',cropIcon(crops[1])+' '+crops[1].toUpperCase());
+  st('ckl3',cropIcon(crops[2])+' '+crops[2].toUpperCase());
+  var di1=el('ci1'),di2=el('ci2'),di3=el('ci3');
+  var dl1=el('cl1'),dl2=el('cl2'),dl3=el('cl3');
+  if(di1)di1.textContent=cropIcon(crops[0]);if(dl1)dl1.textContent=crops[0]+' T/ha';
+  if(di2)di2.textContent=cropIcon(crops[1]);if(dl2)dl2.textContent=crops[1]+' T/ha';
+  if(di3)di3.textContent=cropIcon(crops[2]);if(dl3)dl3.textContent=crops[2]+' T/ha';
+  st('ytit','Top Districts — '+c.label);
+}
+
+// ── OPEN DISTRICT ──
+function openDist(name){
+  if(!CS)return;
+  var sd=DATA[CS];
   var dist=sd.districts.find(function(d){return d.n===name;});
-  if(!dist)return;
-  curDist=name;curTehsil=null;
-  el("dist-sel").value=name;
-  // Tehsil dropdown
+  if(!dist){console.log('District not found:',name);return;}
+  CD=name; CT=null;
+  el('dsel').value=name;
   var hasTeh=sd.hasTehsil&&dist.tehsils&&dist.tehsils.length>0;
   if(hasTeh){
-    el("teh-sel").style.display="inline-block";
-    el("teh-arr").classList.remove("dim");
-    var ts=el("teh-sel");
-    ts.innerHTML="<option value=\"\">All Tehsils</option>";
+    el('tsel').style.display='inline-block'; el('ta').classList.remove('dim');
+    var ts=el('tsel');
+    ts.innerHTML='<option value="">All Tehsils</option>';
     dist.tehsils.slice().sort(function(a,b){return a.n.localeCompare(b.n);}).forEach(function(t){
-      var o=document.createElement("option");
-      o.value=t.n;o.textContent=t.n+" ("+t.status.substring(0,3)+")";
+      var o=document.createElement('option'); o.value=t.n;
+      o.textContent=(t.status==='HIGH'?'🟢':t.status==='MEDIUM'?'🟡':'🔴')+' '+t.n;
       ts.appendChild(o);
     });
     ts.disabled=false;
-    // Also populate inline selector
-    var its=el("teh-inline-sel");
-    its.innerHTML="<option value=\"\">All Tehsils (District Aggregate)</option>";
-    dist.tehsils.slice().sort(function(a,b){return a.n.localeCompare(b.n);}).forEach(function(t){
-      var o=document.createElement("option");
-      o.value=t.n;
-      var col=t.status==="HIGH"?"🟢":t.status==="MEDIUM"?"🟡":"🔴";
-      o.textContent=col+" "+t.n+" — NDVI:"+t.ndvi;
-      its.appendChild(o);
-    });
-  } else {
-    el("teh-sel").style.display="none";
-    el("teh-arr").classList.add("dim");
-  }
-  el("teh-chip").classList.remove("show");
-  el("hb-t").style.display="none";
-  el("hb-h").classList.add("active");el("hb-s").classList.add("active");el("hb-d").classList.add("active");
-  hide("wview");hide("sview");show("dview");
-  if(map){map.setView([dist.lat,dist.lng],10);}
-  Object.entries(markers).forEach(function(e){
-    var n=e[0],m=e[1];
-    m.setStyle({radius:n===name?14:5,fillOpacity:n===name?1:0.15,
-      weight:n===name?2.5:1,color:n===name?"#15803d":"#fff"});
-  });
-  document.querySelectorAll(".ditem").forEach(function(e){e.classList.toggle("active",e.dataset.n===name);});
-  setMInfo(dist);
-  fillDistrictView(dist,false);
-}
-
-// FILL DISTRICT VIEW
-function fillDistrictView(dist,isTehsil){
-  var sd=DATA[curState];
-  var s=SEASONS[curSeason];
-  var ym=s.ym||1;
-  var hasTeh=sd.hasTehsil&&dist.tehsils&&dist.tehsils.length>0;
-  var level=isTehsil?"Tehsil":"District";
-  var col=nc(dist.ndvi);
-
-  // Header
-  st("dv-crumb",sd.shortName+" › "+(curDist||dist.n)+(isTehsil?" › "+dist.n:""));
-  st("dv-name","📍 "+dist.n);
-  var badge=el("dv-badge");
-  if(badge){badge.className="badge "+sb(dist.status);badge.textContent=dist.status;}
-  var lvbadge=el("dv-level-badge");
-  if(lvbadge){
-    lvbadge.style.background=isTehsil?"#dbeafe":"#dcfce7";
-    lvbadge.style.color=isTehsil?"#1d4ed8":"#15803d";
-    lvbadge.textContent=level;
-  }
-  st("dv-meta",sd.name+(isTehsil?" · Tehsil level":" · District level")+" · Rabi 2025-26 · VCI-FASAL · Sentinel-2");
-  st("dv-ndvi",(dist.ndvi*(s.nm||1)).toFixed(3));
-  st("dv-vci",dist.vci.toFixed(2)+"%");
-
-  // LSWI
-  var lswiVal=dist.lswi||0;
-  var lswiC=lswiColor(lswiVal);
-  st("dv-lswi",lswiVal.toFixed(4)+"  — "+lswiLabel(lswiVal));
-  el("dv-lswi").style.color=lswiC;
-  var lswiPct=Math.min(Math.max((lswiVal+0.5)/1.0*100,0),100);
-  var lswiFill=el("dv-lswi-bar");
-  if(lswiFill){lswiFill.style.width=lswiPct+"%";lswiFill.style.background=lswiC;}
-  var wsB=el("dv-ws-badge");
-  var ws=dist.ws||"NO";
-  if(wsB){wsB.style.background=ws==="YES"?"#fee2e2":"#dcfce7";
-    wsB.style.color=ws==="YES"?"#dc2626":"#15803d";
-    wsB.textContent=ws==="YES"?"⚠️ Stressed":"✅ Normal";}
-  el("dv-lswi-icon").textContent=ws==="YES"?"🏜️":"💧";
-
-  // Crops
-  st("dv-w",(dist.wheat*ym).toFixed(2)+"T");
-  st("dv-g",(dist.gram*ym).toFixed(2)+"T");
-  st("dv-m",(dist.mustard*ym).toFixed(2)+"T");
-
-  // NDVI bar
-  var pct=Math.min(Math.round(dist.ndvi/0.7*100),100);
-  var hb=el("dv-hb");if(hb){hb.style.width=pct+"%";hb.style.background=col;}
-  st("dv-hbl",(dist.ndvi*(s.nm||1)).toFixed(3));
-  st("dv-ndvi-t",dist.n+" — NDVI Time Series");
-
-  // Tehsil selector visibility
-  var tehSec=el("teh-selector");
-  if(tehSec)tehSec.style.display=(!isTehsil&&hasTeh)?"block":"none";
-
-  // Tehsil breakdown table
-  var tehTblSec=el("teh-table-section");
-  if(!isTehsil&&hasTeh&&dist.tehsils&&dist.tehsils.length>0){
-    if(tehTblSec)tehTblSec.style.display="block";
-    st("teh-tbl-title","Tehsils in "+dist.n+" ("+dist.tehsils.length+")");
-    var tbody=el("teh-tbl-body");
-    if(tbody){
-      tbody.innerHTML="";
-      dist.tehsils.slice().sort(function(a,b){return b.ndvi-a.ndvi;}).forEach(function(t){
-        var tc=nc(t.ndvi);
-        var tr=document.createElement("tr");
-        tr.innerHTML="<td><span class=\"teh-status\" style=\"background:"+tc+"\"></span>"
-          +"<b>"+t.n+"</b><br><span style=\"font-size:9px;color:#64748b;\">"+t.nh+"</span></td>"
-          +"<td class=\"tdm\" style=\"color:"+tc+"\">"+t.ndvi.toFixed(3)+"</td>"
-          +"<td class=\"tdm\" style=\"color:"+lswiColor(t.lswi||0)+"\">"+(t.lswi||0).toFixed(3)+"</td>"
-          +"<td class=\"tdm\" style=\"color:#0369a1\">"+t.vci.toFixed(1)+"%</td>"
-          +"<td class=\"tdm\" style=\"color:#92400e\">"+(t.yield*ym).toFixed(2)+"T</td>"
-          +"<td><span class=\"badge "+sb(t.status)+"\">"+t.status+"</span></td>";
-        tr.onclick=function(){openTehsil(curDist,t.n);};
-        tbody.appendChild(tr);
+    // Inline selector
+    var its=el('isel');
+    if(its){
+      its.innerHTML='<option value="">All Tehsils (District Aggregate)</option>';
+      dist.tehsils.slice().sort(function(a,b){return a.n.localeCompare(b.n);}).forEach(function(t){
+        var o=document.createElement('option'); o.value=t.n;
+        o.textContent=(t.status==='HIGH'?'🟢':t.status==='MEDIUM'?'🟡':'🔴')+' '+t.n+' NDVI:'+t.ndvi;
+        its.appendChild(o);
       });
     }
   } else {
-    if(tehTblSec)tehTblSec.style.display="none";
+    el('tsel').style.display='none'; el('ta').classList.add('dim');
   }
-
-  // Charts
-  var monthly=dist.monthly||[0.4,0.42,0.45,0.47,0.45,0.38,0.28];
-  var stAvg=DATA[curState].avgNDVI||[0.4]*7;
-  if(dNC)dNC.destroy();
-  dNC=new Chart(el("dc-ndvi"),{type:"line",
-    data:{labels:MONTHS,datasets:[
-      {label:dist.n,data:monthly,borderColor:col,backgroundColor:col+"18",fill:true,tension:0.4,pointRadius:4,pointBackgroundColor:col,borderWidth:2},
-      {label:"State Avg",data:stAvg,borderColor:"#cbd5e1",fill:false,tension:0.4,pointRadius:0,borderWidth:1.5,borderDash:[5,5]}
-    ]},options:cOpts("NDVI",0,0.75)});
-
-  var rjW=(sd.districts.reduce(function(t,d){return t+d.wheat;},0)/sd.districts.length).toFixed(2);
-  var rjG=(sd.districts.reduce(function(t,d){return t+d.gram;},0)/sd.districts.length).toFixed(2);
-  var rjM=(sd.districts.reduce(function(t,d){return t+d.mustard;},0)/sd.districts.length).toFixed(2);
-  if(dCC)dCC.destroy();
-  dCC=new Chart(el("dc-crop"),{type:"bar",
-    data:{labels:["🌾 Wheat","🟡 Gram","🟠 Mustard"],
-      datasets:[
-        {label:dist.n,data:[(dist.wheat*ym).toFixed(2),(dist.gram*ym).toFixed(2),(dist.mustard*ym).toFixed(2)],
-         backgroundColor:["rgba(22,163,74,0.85)","rgba(217,119,6,0.85)","rgba(234,88,12,0.85)"],borderRadius:3,borderWidth:0},
-        {label:"State Avg",data:[rjW,rjG,rjM],
-         backgroundColor:["rgba(22,163,74,0.15)","rgba(217,119,6,0.15)","rgba(234,88,12,0.15)"],
-         borderRadius:3,borderWidth:1.5,borderColor:["rgba(22,163,74,0.5)","rgba(217,119,6,0.5)","rgba(234,88,12,0.5)"]}
-      ]},options:cOpts("T/ha",0,4.0)});
-
-  var tot=dist.wheat+dist.gram+dist.mustard;
-  if(dPC)dPC.destroy();
-  dPC=new Chart(el("dc-pie"),{type:"pie",
-    data:{labels:["🌾 Wheat "+((dist.wheat/tot)*100).toFixed(0)+"%",
-                  "🟡 Gram "+((dist.gram/tot)*100).toFixed(0)+"%",
-                  "🟠 Mustard "+((dist.mustard/tot)*100).toFixed(0)+"%"],
-      datasets:[{data:[dist.wheat,dist.gram,dist.mustard],
-        backgroundColor:["rgba(22,163,74,0.85)","rgba(217,119,6,0.85)","rgba(234,88,12,0.85)"],
-        borderColor:["#15803d","#b45309","#c2410c"],borderWidth:1.5,hoverOffset:7}]},
-    options:{responsive:true,maintainAspectRatio:true,
-      plugins:{legend:{position:"right",labels:{font:{family:"IBM Plex Mono",size:9},boxWidth:9,padding:8}}}}});
+  el('tchip').classList.remove('on'); el('mbt').style.display='none';
+  el('mbh').classList.add('on'); el('mbs').classList.add('on'); el('mbd').classList.add('on');
+  hide('wv');hide('sv');show('dv');
+  if(map)map.setView([dist.lat,dist.lng],10);
+  Object.entries(markers).forEach(function(e){
+    var n=e[0],m=e[1];
+    m.setStyle({radius:n===name?14:5,fillOpacity:n===name?1:0.15,
+      weight:n===name?2.5:1,color:n===name?'#15803d':'#fff'});
+  });
+  document.querySelectorAll('.ditem').forEach(function(e){
+    e.classList.toggle('sel',e.dataset.n===name&&!e.classList.contains('ti'));
+  });
+  setMInfo(dist); fillView(dist,false);
 }
 
-// OPEN TEHSIL
-function openTehsil(distName,tehName){
-  if(!curState||!distName)return;
-  var sd=DATA[curState];
+// ── OPEN TEHSIL ──
+function openTeh(distName,tehName){
+  if(!CS||!distName)return;
+  var sd=DATA[CS];
   var dist=sd.districts.find(function(d){return d.n===distName;});
   if(!dist)return;
   var teh=dist.tehsils&&dist.tehsils.find(function(t){return t.n===tehName;});
   if(!teh)return;
-  curTehsil=tehName;
-  el("teh-sel").value=tehName;
-  var its=el("teh-inline-sel");if(its)its.value=tehName;
-  el("teh-chip").classList.add("show");
-  el("hb-t").style.display="flex";
-  el("hb-t").classList.add("active");
-  // Zoom to tehsil approx (use district center + small offset)
+  CT=tehName;
+  el('tsel').value=tehName;
+  var its=el('isel'); if(its)its.value=tehName;
+  el('tchip').classList.add('on'); el('mbt').style.display='flex'; el('mbt').classList.add('on');
   if(map)map.setView([dist.lat+0.05,dist.lng+0.05],12);
-  // Fill view with tehsil data
-  fillDistrictView(teh,true);
-  document.querySelectorAll(".ditem").forEach(function(e){
-    e.classList.toggle("active",e.dataset.n===tehName&&e.classList.contains("tehsil-item"));
-  });
+  document.querySelectorAll('.ditem.ti').forEach(function(e){e.classList.toggle('sel',e.dataset.n===tehName);});
+  fillView(teh,true);
 }
 
-// MAP INFO
-function setMInfo(dist){
-  if(!dist){
-    var sd=curState?DATA[curState]:null;
-    sh("minfo","<div class=\"mit\">"+(sd?sd.name.toUpperCase():"🌾 AGRI INTEL")+"</div>"
-      +"<div class=\"mir\"><span class=\"mik\">Districts</span><span>"+(sd?sd.districts.length:"88")+"</span></div>"
-      +"<div class=\"mir\"><span class=\"mik\">Season</span><span>"+SEASONS[curSeason].label+"</span></div>"
-      +"<div style=\"margin-top:5px;font-size:10px;color:var(--grn);font-weight:600;\">Click marker → detail</div>");
+// ── FILL VIEW ──
+function fillView(obj,isTeh){
+  var sd=DATA[CS]; var s=getSC(); var ym=s.ym||1; var nm=s.nm||1;
+  var hasTeh=!isTeh&&sd.hasTehsil&&obj.tehsils&&obj.tehsils.length>0;
+  var col=nc(obj.ndvi); var vhiVal=sf(obj.vhi); var lswiVal=sf(obj.lswi);
+  var crops=getCrops(CS);
+
+  // Header
+  st('dvcr',sd.shortName+' › '+(isTeh?(CD+' › '+obj.n):obj.n));
+  st('dvnm','📍 '+obj.n);
+  var bg=el('dvbg'); if(bg){bg.className='badge '+sb(obj.status);bg.textContent=obj.status;}
+  var lvbg=el('dvlv'); if(lvbg){
+    lvbg.style.background=isTeh?'#dbeafe':'#dcfce7';
+    lvbg.style.color=isTeh?'#1d4ed8':'#15803d';
+    lvbg.textContent=isTeh?'Tehsil':'District';
+  }
+  st('dvmt',sd.name+(isTeh?' · '+(obj.nh||obj.n):'')
+    +' · '+s.label+' · '+crops.join('/'));
+
+  // VEG
+  st('dvndvi',(obj.ndvi*nm).toFixed(3));
+  var vhiEl=el('dvvhi'); if(vhiEl){vhiEl.textContent=vhiVal.toFixed(1)+'%';vhiEl.style.color=vc(vhiVal);}
+  st('dvvci',(sf(obj.vci)).toFixed(1)+'%');
+  st('dvtci',(sf(obj.tci)).toFixed(1)+'%');
+  st('dvevi',(sf(obj.evi)||0).toFixed(3));
+  var pct=Math.min(Math.round(obj.ndvi/0.7*100),100);
+  var hb=el('dvhb'); if(hb){hb.style.width=pct+'%';hb.style.background=col;}
+  st('dvhbl',(obj.ndvi*nm).toFixed(3));
+  st('ndvit',obj.n+' — NDVI Time Series');
+
+  // WATER
+  var lwCol=lc(lswiVal);
+  var wsbg=el('wsbg'); if(wsbg){
+    wsbg.style.background=(obj.ws==='YES')?'#fee2e2':'#dcfce7';
+    wsbg.style.color=(obj.ws==='YES')?'#dc2626':'#15803d';
+    wsbg.textContent=(obj.ws==='YES')?'⚠️ Stressed':'✅ Normal';
+  }
+  el('lico').textContent=lswiVal<0?'🏜️':lswiVal<0.1?'⚠️':'💧';
+  var lswiEl=el('dvlswi'); if(lswiEl){lswiEl.textContent=lswiVal.toFixed(4)+' — '+ll(lswiVal);lswiEl.style.color=lwCol;}
+  var dlbar=el('dlbar'); if(dlbar){dlbar.style.width=Math.min(Math.max((lswiVal+0.5)*100,0),100)+'%';dlbar.style.background=lwCol;}
+  var lswi2=el('dvlswi2'); if(lswi2){lswi2.textContent=lswiVal.toFixed(4);lswi2.style.color=lwCol;}
+  st('dvlci',(sf(obj.lswici)||0).toFixed(1)+'%');
+  st('dvndwi',(sf(obj.ndwi)||0).toFixed(3));
+
+  // CLIMATE
+  var lstEl=el('dvlst'); if(lstEl){lstEl.textContent=(sf(obj.lst)).toFixed(1)+'°C';lstEl.style.color=sf(obj.lst)>30?'#dc2626':'#b91c1c';}
+  st('dvrain',(sf(obj.rain)).toFixed(0)+'mm');
+  var ranom=sf(obj.ranom); var rnEl=el('dvranom');
+  if(rnEl){rnEl.textContent=(ranom>=0?'+':'')+ranom.toFixed(1)+'mm';rnEl.style.color=ranom>=0?'#0369a1':'#dc2626';}
+  st('dvinsol',(sf(obj.insol)).toFixed(1)+' MJ/m²');
+  var tci2=el('dvtci2'); if(tci2){tci2.textContent=(sf(obj.tci)).toFixed(1)+'%';tci2.style.color=vc(sf(obj.tci));}
+  var tsEl=el('dvts'); if(tsEl){tsEl.textContent=obj.ts==='YES'?'⚠️ YES':'✅ NO';tsEl.style.color=obj.ts==='YES'?'#dc2626':'#15803d';}
+
+  // YIELD
+  var yld=sf(obj.yield)*ym; var w=sf(obj.wheat)*ym; var g=sf(obj.gram)*ym; var mu=sf(obj.mustard)*ym;
+  st('dc1',w.toFixed(2)+'T'); st('dc2',g.toFixed(2)+'T'); st('dc3',mu.toFixed(2)+'T');
+
+  // Tehsil selector in trend tab
+  var tehselw=el('tehselw'); if(tehselw)tehselw.style.display=(!isTeh&&hasTeh)?'block':'none';
+  var tehtblw=el('tehtblw');
+  if(!isTeh&&hasTeh&&obj.tehsils.length>0){
+    if(tehtblw)tehtblw.style.display='block';
+    st('tehtblt','Tehsils in '+obj.n+' ('+obj.tehsils.length+')');
+    var tbody=el('tehtbl'); if(tbody){
+      tbody.innerHTML='';
+      obj.tehsils.slice().sort(function(a,b){return b.ndvi-a.ndvi;}).forEach(function(t){
+        var tc=nc(t.ndvi); var tr2=document.createElement('tr');
+        tr2.innerHTML='<td><span class="tst" style="background:'+tc+'"></span>'
+          +'<b>'+t.n+'</b><br><span style="font-size:9px;color:#64748b;">'+(t.nh||'')+'</span></td>'
+          +'<td class="tdm" style="color:'+tc+'">'+t.ndvi.toFixed(3)+'</td>'
+          +'<td class="tdm" style="color:'+lc(sf(t.lswi))+'">'+(sf(t.lswi)).toFixed(3)+'</td>'
+          +'<td class="tdm" style="color:'+vc(sf(t.vhi))+'">'+(sf(t.vhi)).toFixed(1)+'%</td>'
+          +'<td class="tdm" style="color:#92400e;">'+(sf(t.yield)*ym).toFixed(2)+'T</td>'
+          +'<td><span class="badge '+sb(t.status)+'">'+t.status+'</span></td>';
+        tr2.onclick=function(){openTeh(CD,t.n);}; tbody.appendChild(tr2);
+      });
+    }
+  } else { if(tehtblw)tehtblw.style.display='none'; }
+
+  // CHARTS
+  var monthly=getMonArr(obj); var months=s.months||[];
+  var stAvg=SA[CS][CSN]||SA[CS]['rabi_2526']||[];
+  if(dNC)dNC.destroy();
+  dNC=new Chart(el('dcndvi'),{type:'line',data:{labels:months,datasets:[
+    {label:obj.n,data:monthly,borderColor:col,backgroundColor:col+'18',fill:true,tension:0.4,pointRadius:4,pointBackgroundColor:col,borderWidth:2},
+    {label:'State Avg',data:stAvg,borderColor:'#cbd5e1',fill:false,tension:0.4,pointRadius:0,borderWidth:1.5,borderDash:[5,5]}
+  ]},options:cOpts('NDVI',0,0.75)});
+
+  var stDists=sd.districts;
+  var aW=r2(stDists.reduce(function(t,d){return t+sf(d.wheat);},0)/stDists.length);
+  var aG=r2(stDists.reduce(function(t,d){return t+sf(d.gram);},0)/stDists.length);
+  var aM=r2(stDists.reduce(function(t,d){return t+sf(d.mustard);},0)/stDists.length);
+  var cnames=crops.map(function(c){return cropIcon(c)+' '+c;});
+  if(dCC)dCC.destroy();
+  dCC=new Chart(el('dccrop'),{type:'bar',data:{labels:cnames,datasets:[
+    {label:obj.n,data:[w.toFixed(2),g.toFixed(2),mu.toFixed(2)],
+     backgroundColor:['rgba(22,163,74,0.85)','rgba(217,119,6,0.85)','rgba(234,88,12,0.85)'],borderRadius:3,borderWidth:0},
+    {label:'State Avg',data:[aW*ym,aG*ym,aM*ym],
+     backgroundColor:['rgba(22,163,74,0.15)','rgba(217,119,6,0.15)','rgba(234,88,12,0.15)'],
+     borderRadius:3,borderWidth:1.5,borderColor:['rgba(22,163,74,0.5)','rgba(217,119,6,0.5)','rgba(234,88,12,0.5)']}
+  ]},options:cOpts('T/ha',0,4.5)});
+
+  var tot=w+g+mu;
+  if(dPC)dPC.destroy();
+  dPC=new Chart(el('dcpie'),{type:'pie',data:{
+    labels:crops.map(function(c,i){var vals=[w,g,mu];return cropIcon(c)+' '+c+' '+(tot>0?((vals[i]/tot)*100).toFixed(0):0)+'%';}),
+    datasets:[{data:[w,g,mu],
+      backgroundColor:['rgba(22,163,74,0.85)','rgba(217,119,6,0.85)','rgba(234,88,12,0.85)'],
+      borderColor:['#15803d','#b45309','#c2410c'],borderWidth:1.5,hoverOffset:7}]
+  },options:{responsive:true,maintainAspectRatio:true,
+    plugins:{legend:{position:'right',labels:{font:{family:'IBM Plex Mono',size:9},boxWidth:9,padding:8}}}}});
+
+  // TREND
+  var datasets=[];
+  [{key:'r2324',months:SC.rabi_2324.months,label:'Rabi 23-24',col:'#d97706'},
+   {key:'r2425',months:SC.rabi_2425.months,label:'Rabi 24-25',col:'#0891b2'},
+   {key:'r2526',months:SC.rabi_2526.months,label:'Rabi 25-26 ★',col:'#16a34a'}
+  ].forEach(function(s2){
+    var arr=obj[s2.key];
+    if(!arr||!arr.some(function(v){return v>0;}))return;
+    datasets.push({label:s2.label,data:arr,borderColor:s2.col,backgroundColor:'transparent',
+      tension:0.4,pointRadius:3,borderWidth:s2.label.includes('★')?2.5:1.5,borderDash:s2.label.includes('★')?[]:[4,3]});
+  });
+  if(obj.kh25&&obj.kh25.some(function(v){return v>0;})){
+    datasets.push({label:'Kharif 2025',data:obj.kh25,borderColor:'#9333ea',
+      backgroundColor:'rgba(147,51,234,0.06)',fill:true,tension:0.4,pointRadius:3,borderWidth:1.5,borderDash:[2,3]});
+  }
+  if(trC)trC.destroy();
+  trC=new Chart(el('dctrend'),{type:'line',data:{
+    labels:['Oct','Nov','Dec','Jan','Feb','Mar','Apr'],datasets:datasets
+  },options:{responsive:true,maintainAspectRatio:true,
+    plugins:{legend:{labels:{font:{family:'IBM Plex Mono',size:9},boxWidth:10,padding:6,color:'#64748b'}}},
+    scales:{x:{ticks:{color:'#94a3b8',font:{size:8}},grid:{color:'#f1f5f9'}},
+      y:{ticks:{color:'#94a3b8',font:{size:8}},grid:{color:'#f1f5f9'},min:0,max:0.75,
+        title:{display:true,text:'NDVI',color:'#94a3b8',font:{size:8}}}}}});
+
+  setMInfo(obj);
+}
+
+// ── MAP INFO ──
+function setMInfo(obj){
+  if(!obj){
+    var sd=CS?DATA[CS]:null;
+    sh('minfo','<div class="mit">'+(sd?sd.name.toUpperCase():'🌾 AGRI INTEL')+'</div>'
+      +'<div class="mir"><span class="mik">Units</span><span>'+(sd?sd.districts.length:'RJ+MP')+'</span></div>'
+      +'<div class="mir"><span class="mik">Season</span><span>'+getSC().label+'</span></div>'
+      +'<div style="margin-top:5px;font-size:10px;color:var(--grn);font-weight:600;">Click marker → detail</div>');
   } else {
-    var col=nc(dist.ndvi);
-    sh("minfo","<div class=\"mit\" style=\"color:"+col+"\">"+dist.n.toUpperCase()+"</div>"
-      +"<div class=\"mir\"><span class=\"mik\">NDVI</span><b>"+dist.ndvi+"</b></div>"
-      +"<div class=\"mir\"><span class=\"mik\">VCI</span><b>"+dist.vci+"%</b></div>"
-      +"<div class=\"mir\"><span class=\"mik\">LSWI</span><b style=\"color:"+lswiColor(dist.lswi||0)+"\">"+(dist.lswi||0).toFixed(3)+"</b></div>"
-      +"<div class=\"mir\"><span class=\"mik\">Status</span><b style=\"color:"+sc(dist.status)+"\">"+dist.status+"</b></div>");
+    var c=nc(obj.ndvi); var vh=sf(obj.vhi); var ls=sf(obj.lswi);
+    sh('minfo','<div class="mit" style="color:'+c+'">'+obj.n.toUpperCase()+'</div>'
+      +'<div class="mir"><span class="mik">NDVI</span><b>'+obj.ndvi.toFixed(3)+'</b></div>'
+      +'<div class="mir"><span class="mik">VHI</span><b style="color:'+vc(vh)+'">'+vh.toFixed(1)+'%</b></div>'
+      +'<div class="mir"><span class="mik">LSWI</span><b style="color:'+lc(ls)+'">'+ls.toFixed(3)+'</b></div>'
+      +'<div class="mir"><span class="mik">Rain</span><b>'+(sf(obj.rain)).toFixed(0)+'mm</b></div>');
   }
 }
 
-// STATE KPIs
+// ── STATE KPIs ──
 function updateKPIs(){
-  var sd=DATA[curState];var ds=sd.districts;var s=SEASONS[curSeason];var ym=s.ym||1;
-  var aN=(ds.reduce(function(t,d){return t+d.ndvi;},0)/ds.length).toFixed(3);
-  var aY=(ds.reduce(function(t,d){return t+d.yield;},0)/ds.length*ym).toFixed(2);
-  st("kv-d",ds.length);st("kv-sn",sd.name);st("kv-n",aN);st("kv-y",aY+"T");
-  st("kv-st",ds.filter(function(d){return d.status==="LOW";}).length);
-  st("ck-w",(ds.reduce(function(t,d){return t+d.wheat;},0)/ds.length*ym).toFixed(2)+"T");
-  st("ck-g",(ds.reduce(function(t,d){return t+d.gram;},0)/ds.length*ym).toFixed(2)+"T");
-  st("ck-m",(ds.reduce(function(t,d){return t+d.mustard;},0)/ds.length*ym).toFixed(2)+"T");
-  st("ls-h",ds.filter(function(d){return d.status==="HIGH";}).length);
-  st("ls-l",ds.filter(function(d){return d.status==="LOW";}).length);
-  st("ls-a",aN);st("ls-y",aY+"T");
+  var sd=DATA[CS]; var ds=sd.districts; var s=getSC(); var ym=s.ym||1;
+  var aN=r4(ds.reduce(function(t,d){return t+d.ndvi;},0)/ds.length);
+  var aVHI=r2(ds.reduce(function(t,d){return t+sf(d.vhi);},0)/ds.length);
+  var aY=r2(ds.reduce(function(t,d){return t+sf(d.yield);},0)/ds.length*ym);
+  st('kvd',ds.length); st('kvsn',sd.name); st('kvn',aN);
+  var vhEl=el('kvh'); if(vhEl){vhEl.textContent=aVHI+'%';vhEl.style.color=vc(aVHI);}
+  st('kvst',ds.filter(function(d){return d.status==='LOW';}).length);
+  var crops=getCrops(CS);
+  st('ckc1',r2(ds.reduce(function(t,d){return t+sf(d.wheat);},0)/ds.length*ym)+'T');
+  st('ckc2',r2(ds.reduce(function(t,d){return t+sf(d.gram);},0)/ds.length*ym)+'T');
+  st('ckc3',r2(ds.reduce(function(t,d){return t+sf(d.mustard);},0)/ds.length*ym)+'T');
+  st('lsh',ds.filter(function(d){return d.status==='HIGH';}).length);
+  st('lsl',ds.filter(function(d){return d.status==='LOW';}).length);
+  st('lsa',aN); st('lsy',aY+'T');
 }
 
-// STATE CHARTS
+// ── STATE CHARTS ──
 function buildStateCharts(){
-  var sd=DATA[curState];var ds=sd.districts;var s=SEASONS[curSeason];var ym=s.ym||1;
-  var avg=sd.avgNDVI||[0.4]*7;
+  var sd=DATA[CS]; var ds=sd.districts; var s=getSC(); var ym=s.ym||1;
+  var avg=SA[CS][CSN]||SA[CS]['rabi_2526']||[]; var months=s.months||[];
   if(sNC)sNC.destroy();
-  sNC=new Chart(el("sc-ndvi"),{type:"line",
-    data:{labels:MONTHS,datasets:[{label:sd.name+" Avg",data:avg,
-      borderColor:"#16a34a",backgroundColor:"rgba(22,163,74,0.08)",
-      fill:true,tension:0.4,pointRadius:4,pointBackgroundColor:"#16a34a",borderWidth:2}]},
-    options:cOpts("NDVI",0,0.75)});
+  sNC=new Chart(el('sndvi'),{type:'line',data:{labels:months,datasets:[
+    {label:sd.name+' Avg',data:avg,borderColor:'#16a34a',backgroundColor:'rgba(22,163,74,0.08)',
+     fill:true,tension:0.4,pointRadius:4,pointBackgroundColor:'#16a34a',borderWidth:2}
+  ]},options:cOpts('NDVI',0,0.75)});
   var top=Math.min(10,ds.length);
-  var t10=ds.slice().sort(function(a,b){return b.yield-a.yield;}).slice(0,top);
+  var t10=ds.slice().sort(function(a,b){return sf(b.vhi)-sf(a.vhi);}).slice(0,top);
+  var crops=getCrops(CS);
   if(yC)yC.destroy();
-  yC=new Chart(el("sc-yield"),{type:"bar",
-    data:{labels:t10.map(function(d){return d.n.substring(0,7);}),
-      datasets:[
-        {label:"🌾 Wheat",data:t10.map(function(d){return +(d.wheat*ym).toFixed(2);}),backgroundColor:"rgba(22,163,74,0.82)",borderRadius:2,borderWidth:0},
-        {label:"🟡 Gram",data:t10.map(function(d){return +(d.gram*ym).toFixed(2);}),backgroundColor:"rgba(217,119,6,0.82)",borderRadius:2,borderWidth:0},
-        {label:"🟠 Mustard",data:t10.map(function(d){return +(d.mustard*ym).toFixed(2);}),backgroundColor:"rgba(234,88,12,0.82)",borderRadius:2,borderWidth:0}
-      ]},
+  yC=new Chart(el('syield'),{type:'bar',data:{
+    labels:t10.map(function(d){return d.n.substring(0,7);}),
+    datasets:[
+      {label:cropIcon(crops[0])+' '+crops[0],data:t10.map(function(d){return r2(sf(d.wheat)*ym);}),backgroundColor:'rgba(22,163,74,0.82)',borderRadius:2,borderWidth:0},
+      {label:cropIcon(crops[1])+' '+crops[1],data:t10.map(function(d){return r2(sf(d.gram)*ym);}),backgroundColor:'rgba(217,119,6,0.82)',borderRadius:2,borderWidth:0},
+      {label:cropIcon(crops[2])+' '+crops[2],data:t10.map(function(d){return r2(sf(d.mustard)*ym);}),backgroundColor:'rgba(234,88,12,0.82)',borderRadius:2,borderWidth:0}
+    ]},
     options:{responsive:true,maintainAspectRatio:true,
-      plugins:{legend:{labels:{font:{family:"IBM Plex Mono",size:8},boxWidth:8,padding:4,color:"#64748b"}}},
-      scales:{x:{ticks:{color:"#94a3b8",font:{family:"IBM Plex Mono",size:7}},grid:{display:false}},
-        y:{ticks:{color:"#94a3b8",font:{family:"IBM Plex Mono",size:8}},grid:{color:"#f1f5f9"},min:0,max:4.5}}}});
-  var high=ds.filter(function(d){return d.status==="HIGH";}).length;
-  var med=ds.filter(function(d){return d.status==="MEDIUM";}).length;
-  var low=ds.filter(function(d){return d.status==="LOW";}).length;
+      plugins:{legend:{labels:{font:{family:'IBM Plex Mono',size:8},boxWidth:8,padding:4,color:'#64748b'}}},
+      scales:{x:{ticks:{color:'#94a3b8',font:{size:7}},grid:{display:false}},
+        y:{ticks:{color:'#94a3b8',font:{size:8}},grid:{color:'#f1f5f9'},min:0,max:5}}}});
+  var h=ds.filter(function(d){return d.status==='HIGH';}).length;
+  var m=ds.filter(function(d){return d.status==='MEDIUM';}).length;
+  var l=ds.filter(function(d){return d.status==='LOW';}).length;
   if(stC)stC.destroy();
-  stC=new Chart(el("sc-status"),{type:"doughnut",
-    data:{labels:["HIGH ("+high+")","MEDIUM ("+med+")","LOW ("+low+")"],
-      datasets:[{data:[high,med,low],
-        backgroundColor:["rgba(22,163,74,0.85)","rgba(217,119,6,0.85)","rgba(220,38,38,0.85)"],
-        borderColor:["#15803d","#b45309","#b91c1c"],borderWidth:1.5,hoverOffset:5}]},
-    options:{responsive:true,maintainAspectRatio:true,cutout:"62%",
-      plugins:{legend:{position:"right",labels:{font:{family:"IBM Plex Mono",size:9},boxWidth:9,padding:8}}}}});
-  st("ytitle","Top Districts — "+SEASONS[curSeason].label);
+  stC=new Chart(el('sstatus'),{type:'doughnut',data:{
+    labels:['HIGH ('+h+')','MEDIUM ('+m+')','LOW ('+l+')'],
+    datasets:[{data:[h,m,l],
+      backgroundColor:['rgba(22,163,74,0.85)','rgba(217,119,6,0.85)','rgba(220,38,38,0.85)'],
+      borderColor:['#15803d','#b45309','#b91c1c'],borderWidth:1.5,hoverOffset:5}]
+  },options:{responsive:true,maintainAspectRatio:true,cutout:'62%',
+    plugins:{legend:{position:'right',labels:{font:{family:'IBM Plex Mono',size:9},boxWidth:9,padding:8}}}}});
 }
 
-// CROP TOGGLE
+// ── CROP TOGGLE ──
 function setCrop(crop,btn){
-  document.querySelectorAll(".cbtn").forEach(function(b){b.classList.remove("active");});
-  btn.classList.add("active");
-  if(!curState||!yC)return;
-  var sd=DATA[curState];var ds=sd.districts;var s=SEASONS[curSeason];var ym=s.ym||1;
-  var top=Math.min(10,ds.length);
+  document.querySelectorAll('.cbtn').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  if(!CS||!yC)return;
+  var sd=DATA[CS]; var ds=sd.districts; var s=getSC(); var ym=s.ym||1;
+  var top=Math.min(10,ds.length); var crops=getCrops(CS);
   var sorted,datasets;
-  if(crop==="wheat"){
-    sorted=ds.slice().sort(function(a,b){return b.wheat-a.wheat;}).slice(0,top);
-    datasets=[{label:"🌾 Wheat",data:sorted.map(function(d){return +(d.wheat*ym).toFixed(2);}),backgroundColor:"rgba(22,163,74,0.85)",borderRadius:2,borderWidth:0}];
-  } else if(crop==="gram"){
-    sorted=ds.slice().sort(function(a,b){return b.gram-a.gram;}).slice(0,top);
-    datasets=[{label:"🟡 Gram",data:sorted.map(function(d){return +(d.gram*ym).toFixed(2);}),backgroundColor:"rgba(217,119,6,0.85)",borderRadius:2,borderWidth:0}];
-  } else if(crop==="mustard"){
-    sorted=ds.slice().sort(function(a,b){return b.mustard-a.mustard;}).slice(0,top);
-    datasets=[{label:"🟠 Mustard",data:sorted.map(function(d){return +(d.mustard*ym).toFixed(2);}),backgroundColor:"rgba(234,88,12,0.85)",borderRadius:2,borderWidth:0}];
+  if(crop==='c1'||crop==='c2'||crop==='c3'){
+    var props={c1:'wheat',c2:'gram',c3:'mustard'}; var prop=props[crop];
+    var idxs={c1:0,c2:1,c3:2}; var idx=idxs[crop];
+    var clrs=['rgba(22,163,74,0.85)','rgba(217,119,6,0.85)','rgba(234,88,12,0.85)'];
+    sorted=ds.slice().sort(function(a,b){return sf(b[prop])-sf(a[prop]);}).slice(0,top);
+    datasets=[{label:cropIcon(crops[idx])+' '+crops[idx],
+      data:sorted.map(function(d){return r2(sf(d[prop])*ym);}),backgroundColor:clrs[idx],borderRadius:2,borderWidth:0}];
   } else {
-    sorted=ds.slice().sort(function(a,b){return b.yield-a.yield;}).slice(0,top);
+    sorted=ds.slice().sort(function(a,b){return sf(b.vhi)-sf(a.vhi);}).slice(0,top);
     datasets=[
-      {label:"🌾 Wheat",data:sorted.map(function(d){return +(d.wheat*ym).toFixed(2);}),backgroundColor:"rgba(22,163,74,0.82)",borderRadius:2,borderWidth:0},
-      {label:"🟡 Gram",data:sorted.map(function(d){return +(d.gram*ym).toFixed(2);}),backgroundColor:"rgba(217,119,6,0.82)",borderRadius:2,borderWidth:0},
-      {label:"🟠 Mustard",data:sorted.map(function(d){return +(d.mustard*ym).toFixed(2);}),backgroundColor:"rgba(234,88,12,0.82)",borderRadius:2,borderWidth:0}
+      {label:cropIcon(crops[0])+' '+crops[0],data:sorted.map(function(d){return r2(sf(d.wheat)*ym);}),backgroundColor:'rgba(22,163,74,0.82)',borderRadius:2,borderWidth:0},
+      {label:cropIcon(crops[1])+' '+crops[1],data:sorted.map(function(d){return r2(sf(d.gram)*ym);}),backgroundColor:'rgba(217,119,6,0.82)',borderRadius:2,borderWidth:0},
+      {label:cropIcon(crops[2])+' '+crops[2],data:sorted.map(function(d){return r2(sf(d.mustard)*ym);}),backgroundColor:'rgba(234,88,12,0.82)',borderRadius:2,borderWidth:0}
     ];
   }
   yC.data.labels=sorted.map(function(d){return d.n.substring(0,7);});
-  yC.data.datasets=datasets;yC.update();
+  yC.data.datasets=datasets; yC.update();
 }
 
-// BUILD LIST
+// ── BUILD LIST ──
 function buildList(){
-  var list=el("dlist");if(!list)return;
-  list.innerHTML="";
-  var sd=DATA[curState];if(!sd)return;
-  // Show districts
-  sd.districts.slice().sort(function(a,b){return b.ndvi-a.ndvi;}).forEach(function(d){
-    var col=nc(d.ndvi);var bc=sb(d.status);
+  var list=el('dlist'); if(!list)return; list.innerHTML='';
+  var sd=DATA[CS]; if(!sd)return;
+  sd.districts.slice().sort(function(a,b){return sf(b.vhi)-sf(a.vhi)||b.ndvi-a.ndvi;}).forEach(function(d){
+    var col=nc(d.ndvi); var bc=sb(d.status);
     var hasTeh=sd.hasTehsil&&d.tehsils&&d.tehsils.length>0;
-    var item=document.createElement("div");
-    item.className="ditem";item.dataset.n=d.n;
-    item.innerHTML="<div class=\"ddot\" style=\"background:"+col+"\"></div>"
-      +"<span class=\"dname\">"+d.n+"</span>"
-      +(hasTeh?"<span class=\"dlevel dist\">"+d.tehsils.length+"teh</span>":"")
-      +"<span class=\"dndvi\">"+d.ndvi.toFixed(2)+"</span>"
-      +"<span class=\"dbadge "+bc+"\">"+d.status.substring(0,3)+"</span>";
-    item.onclick=function(){openDistrict(d.n);};
+    var item=document.createElement('div'); item.className='ditem'; item.dataset.n=d.n;
+    item.innerHTML='<div class="ddot" style="background:'+col+'"></div>'
+      +'<span class="dn">'+d.n+'</span>'
+      +(hasTeh?'<span class="dlv d">'+d.tehsils.length+'</span>':'')
+      +'<span class="dndv">'+d.ndvi.toFixed(2)+'</span>'
+      +'<span class="dbg '+bc+'">'+d.status.substring(0,3)+'</span>';
+    item.onclick=function(){openDist(d.n);};
     list.appendChild(item);
-    // Show tehsils inline if MP
     if(hasTeh){
       d.tehsils.slice().sort(function(a,b){return b.ndvi-a.ndvi;}).forEach(function(t){
-        var tc=nc(t.ndvi);var tb=sb(t.status);
-        var titem=document.createElement("div");
-        titem.className="ditem tehsil-item";titem.dataset.n=t.n;titem.style.display="none";
-        titem.innerHTML="<div class=\"ddot\" style=\"background:"+tc+";width:6px;height:6px;\"></div>"
-          +"<span class=\"dname\" style=\"font-size:11px;\">"+t.n+"</span>"
-          +"<span class=\"dndvi\">"+t.ndvi.toFixed(2)+"</span>"
-          +"<span class=\"dbadge "+tb+"\">"+t.status.substring(0,3)+"</span>";
-        titem.dataset.dist=d.n;
-        titem.onclick=function(e){e.stopPropagation();openTehsil(d.n,t.n);};
-        list.appendChild(titem);
+        var tc=nc(t.ndvi); var tb=sb(t.status);
+        var ti=document.createElement('div'); ti.className='ditem ti'; ti.dataset.n=t.n; ti.style.display='none';
+        ti.innerHTML='<div class="ddot" style="background:'+tc+';width:6px;height:6px;"></div>'
+          +'<span class="dn" style="font-size:11px;">'+t.n+'</span>'
+          +'<span class="dndv">'+t.ndvi.toFixed(2)+'</span>'
+          +'<span class="dbg '+tb+'">'+t.status.substring(0,3)+'</span>';
+        ti.dataset.dist=d.n;
+        ti.onclick=function(e){e.stopPropagation();openTeh(d.n,t.n);};
+        list.appendChild(ti);
       });
     }
   });
 }
 
-// BUILD TABLE
+// ── BUILD TABLE ──
 function buildTable(){
-  var tb=el("stbl");if(!tb)return;
-  tb.innerHTML="";
-  var sd=DATA[curState];if(!sd)return;
-  var s=SEASONS[curSeason];var ym=s.ym||1;
-  sd.districts.slice().sort(function(a,b){return b.ndvi-a.ndvi;}).forEach(function(d){
-    var col=nc(d.ndvi);var bc=sb(d.status);
+  var tb=el('stbl'); if(!tb)return; tb.innerHTML='';
+  var sd=DATA[CS]; if(!sd)return; var s=getSC(); var ym=s.ym||1;
+  sd.districts.slice().sort(function(a,b){return sf(b.vhi)-sf(a.vhi);}).forEach(function(d){
+    var col=nc(d.ndvi); var bc=sb(d.status);
     var hasTeh=sd.hasTehsil&&d.tehsils&&d.tehsils.length>0;
-    var tr=document.createElement("tr");
-    tr.innerHTML="<td style=\"font-weight:600\">"+d.n+"</td>"
-      +"<td><span class=\"dlevel "+(hasTeh?"dist":"")+"\">"+(hasTeh?"Tehsil":"Dist")+"</span></td>"
-      +"<td class=\"tdm\" style=\"color:"+col+"\">"+d.ndvi.toFixed(3)+"</td>"
-      +"<td class=\"tdm\" style=\"color:#0369a1\">"+d.vci.toFixed(1)+"%</td>"
-      +"<td class=\"tdm\" style=\"color:#92400e\">"+(d.yield*ym).toFixed(2)+"T</td>"
-      +"<td><span class=\"badge "+bc+"\">"+d.status+"</span></td>";
-    tr.onclick=function(){openDistrict(d.n);};
-    tb.appendChild(tr);
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td style="font-weight:600">'+d.n+'</td>'
+      +'<td><span class="dlv '+(hasTeh?'t':'d')+'">'+(hasTeh?'Teh':'Dis')+'</span></td>'
+      +'<td class="tdm" style="color:'+col+'">'+d.ndvi.toFixed(3)+'</td>'
+      +'<td class="tdm" style="color:'+vc(sf(d.vhi))+'">'+(sf(d.vhi)).toFixed(1)+'%</td>'
+      +'<td class="tdm" style="color:'+lc(sf(d.lswi))+'">'+(sf(d.lswi)).toFixed(3)+'</td>'
+      +'<td><span class="badge '+bc+'">'+d.status+'</span></td>';
+    tr.onclick=function(){openDist(d.n);}; tb.appendChild(tr);
   });
 }
 
-// FILTER
+// ── FILTER ──
 function filterList(q){
   q=q.toLowerCase();
-  document.querySelectorAll(".ditem").forEach(function(e){
+  document.querySelectorAll('.ditem').forEach(function(e){
     var match=e.dataset.n&&e.dataset.n.toLowerCase().includes(q);
-    if(e.classList.contains("tehsil-item")){
-      e.style.display=match?"flex":"none";
-    } else {
-      e.style.display=match||!q?"flex":"none";
-    }
+    e.style.display=(match||!q)?'flex':'none';
   });
 }
 
-// NDVI DOWNLOAD
-function downloadNDVI(){
-  var name=curTehsil||curDist;
-  if(!name||!curState){alert("Pehle district select karo!");return;}
-  var sd=DATA[curState];
-  var dist=sd.districts.find(function(d){return d.n===(curDist||name);});
-  var obj=curTehsil?(dist&&dist.tehsils&&dist.tehsils.find(function(t){return t.n===curTehsil;})):dist;
+// ── DOWNLOAD CSV ──
+function dlNDVI(){
+  var name=CT||CD; if(!name||!CS){alert('Pehle select karo!');return;}
+  var sd=DATA[CS]; var dist=sd.districts.find(function(d){return d.n===(CD||name);});
+  var obj=CT?(dist&&dist.tehsils&&dist.tehsils.find(function(t){return t.n===CT;})):dist;
   if(!obj)return;
-  var s=SEASONS[curSeason];var ym=s.ym||1;
-  var monthly=obj.monthly||[0.4]*7;
-  var csv="Level,State,District,Tehsil,Season,Month,NDVI,VCI,Yield_kg_ha\n";
-  var level=curTehsil?"Tehsil":"District";
-  MONTHS.forEach(function(m,i){
+  var s=getSC(); var ym=s.ym||1; var monthly=getMonArr(obj);
+  var csv='Level,State,District,Tehsil,Season,Month,NDVI,VCI,VHI,LSWI,LST_C,Rainfall_mm,Yield_kg_ha\n';
+  s.months.forEach(function(mo,i){
     var v=monthly[i]||obj.ndvi;
-    var vci=((v-0.1371)/(0.5626))*100;
-    var yld=(28.5*vci+1200)*ym;
-    csv+=level+","+sd.name+","+(curDist||name)+","+(curTehsil||"N/A")+","
-      +s.label+","+m+","+v.toFixed(4)+","+vci.toFixed(2)+","+yld.toFixed(1)+"\n";
+    var vci=((v-0.1371)/0.5626)*100;
+    csv+=(CT?'Tehsil':'District')+','+sd.name+','+(CD||name)+','+(CT||'N/A')+','+s.label+','+mo+','
+      +v.toFixed(4)+','+vci.toFixed(2)+','+(sf(obj.vhi)).toFixed(2)+','+(sf(obj.lswi)).toFixed(4)+','
+      +(sf(obj.lst)).toFixed(2)+','+(sf(obj.rain)).toFixed(1)+','+((28.5*vci+1200)*ym).toFixed(1)+'\n';
   });
-  csv+="\nSummary\nNDVI,"+obj.ndvi+"\nLSWI,"+(obj.lswi||0)+"\nVCI,"+obj.vci+"\nStatus,"+obj.status+"\nAuthor,Nitesh Takarker\n";
-  var blob=new Blob([csv],{type:"text/csv"});
+  csv+='\nNDVI,'+obj.ndvi+'\nLSWI (Land Surface Water Index),'+sf(obj.lswi)
+    +'\nVCI,'+sf(obj.vci)+'\nTCI,'+sf(obj.tci)+'\nVHI,'+sf(obj.vhi)
+    +'\nLST_C,'+sf(obj.lst)+'\nRain_mm,'+sf(obj.rain)+'\nYield_T_ha,'+(sf(obj.yield)*ym)
+    +'\nLSWI_formula,(B8-B11)/(B8+B11) NOT Leaf Water Content'
+    +'\nLSWI_ref,Xiao et al. 2004\nAuthor,Nitesh Takarker\n';
+  var blob=new Blob([csv],{type:'text/csv'});
   var url=URL.createObjectURL(blob);
-  var a=document.createElement("a");a.href=url;
-  a.download="NDVI_"+(curTehsil||curDist)+"_"+s.label.replace(/\s/g,"_")+".csv";
+  var a=document.createElement('a'); a.href=url;
+  a.download='AgriData_'+(CT||CD)+'_'+s.label.replace(/\s/g,'_')+'.csv';
   document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
 }
 
-// REPORT
-function generateReport(){
-  var name=curTehsil||curDist;
-  if(!name||!curState){alert("Pehle district select karo!");return;}
-  var sd=DATA[curState];
-  var dist=sd.districts.find(function(d){return d.n===(curDist||name);});
-  var obj=curTehsil?(dist&&dist.tehsils&&dist.tehsils.find(function(t){return t.n===curTehsil;})):dist;
+// ── REPORT ──
+function genReport(){
+  var name=CT||CD; if(!name||!CS){alert('Pehle select karo!');return;}
+  var sd=DATA[CS]; var dist=sd.districts.find(function(d){return d.n===(CD||name);});
+  var obj=CT?(dist&&dist.tehsils&&dist.tehsils.find(function(t){return t.n===CT;})):dist;
   if(!obj)return;
-  var s=SEASONS[curSeason];var ym=s.ym||1;
-  var col=nc(obj.ndvi);
-  var date=new Date().toLocaleDateString("en-IN",{day:"2-digit",month:"long",year:"numeric"});
-  var wVal=(obj.wheat*ym).toFixed(2);var gVal=(obj.gram*ym).toFixed(2);var mVal=(obj.mustard*ym).toFixed(2);
-  var avgY=((parseFloat(wVal)+parseFloat(gVal)+parseFloat(mVal))/3).toFixed(2);
-  var lswiVal=(obj.lswi||0).toFixed(4);
-  var stBg=obj.status==="HIGH"?"#f0fdf4":obj.status==="MEDIUM"?"#fffbeb":"#fff1f2";
-  var stTx=obj.status==="HIGH"?"#15803d":obj.status==="MEDIUM"?"#92400e":"#be123c";
-  var monthly=obj.monthly||[0.4]*7;
-  var mthHdr=MONTHS.map(function(m){return "<th style=\"padding:7px;background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0;text-align:center;font-size:10px;\">"+m+"</th>";}).join("");
-  var mthVals=MONTHS.map(function(_,i){
-    var v=monthly[i]||0.4;var c=v>=0.45?"#15803d":v>=0.30?"#92400e":"#dc2626";
-    return "<td style=\"padding:7px;border:1px solid #e2e8f0;text-align:center;font-family:monospace;font-weight:700;color:"+c+";\">"+v.toFixed(3)+"</td>";
-  }).join("");
-  var levelLabel=curTehsil?"Tehsil":"District";
-  var html="<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>Report - "+name+"</title>"
-    +"<link href=\"https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap\" rel=\"stylesheet\">"
-    +"<style>*{margin:0;padding:0;box-sizing:border-box;}body{font-family:Inter,sans-serif;background:#fff;color:#1e293b;}"
-    +".pg{max-width:800px;margin:0 auto;padding:0;}"
-    +".hdr{background:linear-gradient(135deg,#064e3b,#047857);padding:28px 36px;color:#fff;}"
-    +".br{font-size:11px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,0.6);}"
-    +".ti{font-size:24px;font-weight:800;margin:4px 0;}"
-    +".su{font-size:12px;color:rgba(255,255,255,0.75);}"
-    +".mt{text-align:right;font-size:11px;color:rgba(255,255,255,0.7);line-height:1.8;}"
-    +".kr{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:18px;border-bottom:1px solid #e2e8f0;}"
-    +".kb{border-radius:8px;padding:12px;border:1px solid #e2e8f0;}"
-    +".kl{font-size:9px;font-weight:700;color:#64748b;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;}"
-    +".kv{font-size:20px;font-weight:700;font-family:monospace;}"
-    +".bd{background:#1e293b;color:#a7f3d0;border-radius:8px;padding:14px;font-family:monospace;font-size:12px;line-height:1.7;margin:12px 16px;}"
-    +".sh{font-size:13px;font-weight:700;margin:16px 16px 8px;padding-bottom:6px;border-bottom:2px solid #16a34a;}"
-    +"table{width:calc(100% - 32px);margin:0 16px 16px;border-collapse:collapse;font-size:12px;}"
-    +"th{background:#f0fdf4;color:#15803d;font-weight:700;padding:8px 10px;text-align:left;border:1px solid #bbf7d0;}"
-    +"td{padding:8px 10px;border:1px solid #e2e8f0;}tr:nth-child(even) td{background:#f9fafb;}"
-    +".nt{height:12px;background:#f1f5f9;border-radius:6px;overflow:hidden;margin:5px 0;}"
-    +".nf{height:100%;border-radius:6px;}"
-    +".me{font-size:11px;color:#475569;line-height:1.8;background:#f8fafc;padding:12px 14px;border-radius:7px;border-left:3px solid #16a34a;margin:0 16px 16px;}"
-    +".ft{background:#1e293b;color:rgba(255,255,255,0.5);padding:14px 36px;display:flex;justify-content:space-between;font-size:10px;}"
-    +"@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}</style></head><body>"
-    +"<div class=\"pg\">"
-    +"<div class=\"hdr\"><div style=\"display:flex;justify-content:space-between;\">"
-    +"<div><div class=\"br\">🌾 AGRI INTELLIGENCE PLATFORM · "+levelLabel.toUpperCase()+" REPORT</div>"
-    +"<div class=\"ti\">"+name+"</div>"
-    +"<div class=\"su\">"+sd.name+(curTehsil?" · "+curDist+" District":"")+(" · "+levelLabel+" Level")+" · "+s.label+"</div></div>"
-    +"<div class=\"mt\">"+date+"<br>Nitesh Takarker<br>Sentinel-2 SR<br>VCI-FASAL R²=0.78</div></div></div>"
-    +"<div class=\"kr\">"
-    +"<div class=\"kb\" style=\"background:#f0fdf4;border-color:#bbf7d0;\"><div class=\"kl\">NDVI</div><div class=\"kv\" style=\"color:#15803d;\">"+obj.ndvi.toFixed(3)+"</div></div>"
-    +"<div class=\"kb\" style=\"background:#eff6ff;border-color:#bfdbfe;\"><div class=\"kl\">VCI</div><div class=\"kv\" style=\"color:#1d4ed8;\">"+obj.vci.toFixed(1)+"%</div></div>"
-    +"<div class=\"kb\" style=\"background:#f0f9ff;border-color:#bae6fd;\"><div class=\"kl\">LSWI</div><div class=\"kv\" style=\"color:#0369a1;\">"+lswiVal+"</div></div>"
-    +"<div class=\"kb\" style=\"background:"+stBg+";\"><div class=\"kl\">Status</div><div class=\"kv\" style=\"color:"+stTx+";font-size:15px;\">"+obj.status+"</div></div>"
-    +"</div>"
-    +"<div class=\"sh\">NDVI Health + LSWI Water Status</div>"
-    +"<div style=\"padding:0 16px 12px;\">"
-    +"<div style=\"display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;\"><span>NDVI</span><b style=\"color:"+col+";\">"+obj.ndvi.toFixed(3)+"</b><span>Scale: 0→0.7</span></div>"
-    +"<div class=\"nt\"><div class=\"nf\" style=\"width:"+Math.min(Math.round(obj.ndvi/0.7*100),100)+"%;background:"+col+";\"></div></div>"
-    +"<div style=\"display:flex;justify-content:space-between;font-size:11px;margin-top:8px;margin-bottom:4px;\"><span>LSWI (Water)</span><b style=\"color:"+lswiColor(obj.lswi||0)+";\">"+lswiVal+" — "+lswiLabel(obj.lswi||0)+"</b></div>"
-    +"<div class=\"nt\"><div class=\"nf\" style=\"width:"+Math.min(Math.max(((obj.lswi||0)+0.5)*100,0),100)+"%;background:"+lswiColor(obj.lswi||0)+";\"></div></div>"
-    +"</div>"
-    +"<div class=\"sh\">Crop Yield Estimation</div>"
-    +"<table><thead><tr><th>Crop</th><th>Yield T/ha</th><th>vs Avg</th><th>Status</th></tr></thead><tbody>"
-    +"<tr><td><b>🌾 Wheat</b></td><td style=\"color:#15803d;font-weight:700;font-family:monospace;\">"+wVal+" T/ha</td><td>"+(parseFloat(wVal)>=2.2?"↑ Above":"↓ Below")+" avg</td><td><span style=\"padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;background:"+(parseFloat(wVal)>=2.5?"#dcfce7":"#fef3c7")+";color:"+(parseFloat(wVal)>=2.5?"#15803d":"#92400e")+";\">"+(parseFloat(wVal)>=2.5?"HIGH":"MEDIUM")+"</span></td></tr>"
-    +"<tr><td><b>🟡 Gram</b></td><td style=\"color:#92400e;font-weight:700;font-family:monospace;\">"+gVal+" T/ha</td><td>"+(parseFloat(gVal)>=1.5?"↑ Above":"↓ Below")+" avg</td><td><span style=\"padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;background:"+(parseFloat(gVal)>=1.6?"#dcfce7":"#fef3c7")+";color:"+(parseFloat(gVal)>=1.6?"#15803d":"#92400e")+";\">"+(parseFloat(gVal)>=1.6?"HIGH":"MEDIUM")+"</span></td></tr>"
-    +"<tr><td><b>🟠 Mustard</b></td><td style=\"color:#c2410c;font-weight:700;font-family:monospace;\">"+mVal+" T/ha</td><td>"+(parseFloat(mVal)>=2.0?"↑ Above":"↓ Below")+" avg</td><td><span style=\"padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;background:"+(parseFloat(mVal)>=2.0?"#dcfce7":"#fef3c7")+";color:"+(parseFloat(mVal)>=2.0?"#15803d":"#92400e")+";\">"+(parseFloat(mVal)>=2.0?"HIGH":"MEDIUM")+"</span></td></tr>"
-    +"</tbody></table>"
-    +"<div class=\"sh\">Monthly NDVI — "+s.label+"</div>"
-    +"<table><thead><tr>"+mthHdr+"</tr></thead><tbody><tr>"+mthVals+"</tr></tbody></table>"
-    +"<div class=\"sh\">Methodology</div>"
-    +"<div class=\"me\"><b>NDVI:</b> (B8-B4)/(B8+B4) · Sentinel-2 SR 10m · "+levelLabel+"-level median composite<br>"
-    +"<b>LSWI:</b> (B8-B11)/(B8+B11) · Leaf water content · B11=SWIR1 1610nm<br>"
-    +"<b>VCI:</b> (NDVI-0.1371)/(0.6997-0.1371)×100 · MODIS MOD13A2 baseline 2010-2023<br>"
-    +"<b>Yield:</b> 28.5×VCI+1200 kg/ha · VCI-FASAL · R²=0.78 · ISRO/NRSC validated</div>"
-    +"<div class=\"ft\"><span>🌾 Agri Intelligence Platform · nitesh1289.github.io · Nitesh Takarker</span><span>"+date+"</span></div>"
-    +"</div><script>window.onload=function(){setTimeout(function(){window.print();},500);};<\\/script>"
-    +"</body></html>";
-  var blob=new Blob([html],{type:"text/html"});
+  var s=getSC(); var ym=s.ym||1; var crops=getCrops(CS);
+  var date=new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'long',year:'numeric'});
+  var col=nc(obj.ndvi); var lswiVal=sf(obj.lswi); var vhiVal=sf(obj.vhi);
+  var lwCol=lc(lswiVal); var vhiC=vc(vhiVal);
+  var w=sf(obj.wheat)*ym; var g=sf(obj.gram)*ym; var mu=sf(obj.mustard)*ym;
+  var monthly=getMonArr(obj); var months=s.months||[];
+  var mthH=months.map(function(m){return '<th style="padding:7px;background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0;text-align:center;font-size:10px;">'+m+'</th>';}).join('');
+  var mthV=months.map(function(_,i){var v=monthly[i]||0.4;var c=v>=0.45?'#15803d':v>=0.30?'#92400e':'#dc2626';
+    return '<td style="padding:7px;border:1px solid #e2e8f0;text-align:center;font-family:monospace;font-weight:700;color:'+c+';">'+v.toFixed(3)+'</td>';}).join('');
+  var stBg=obj.status==='HIGH'?'#f0fdf4':obj.status==='MEDIUM'?'#fffbeb':'#fff1f2';
+  var stTx=obj.status==='HIGH'?'#15803d':obj.status==='MEDIUM'?'#92400e':'#be123c';
+  var levelLabel=CT?'Tehsil':'District';
+  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Report - '+name+'</title>'
+    +'<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">'
+    +'<style>*{margin:0;padding:0;box-sizing:border-box;}body{font-family:Inter,sans-serif;background:#fff;color:#1e293b;}'
+    +'.pg{max-width:800px;margin:0 auto;}'
+    +'.hdr{background:linear-gradient(135deg,#064e3b,#047857);padding:28px 36px;color:#fff;}'
+    +'.kr{display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1px solid #e2e8f0;}'
+    +'.kb{padding:12px 10px;border-right:1px solid #e2e8f0;}'
+    +'.kl{font-size:9px;font-weight:700;color:#64748b;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;}'
+    +'.kv2{font-size:18px;font-weight:700;font-family:monospace;}'
+    +'.sh{font-size:13px;font-weight:700;margin:14px 16px 8px;padding-bottom:6px;border-bottom:2px solid #16a34a;}'
+    +'table{width:calc(100%-32px);margin:0 16px 12px;border-collapse:collapse;font-size:12px;}'
+    +'th{background:#f0fdf4;color:#15803d;font-weight:700;padding:8px 10px;text-align:left;border:1px solid #bbf7d0;}'
+    +'td{padding:8px 10px;border:1px solid #e2e8f0;}tr:nth-child(even) td{background:#f9fafb;}'
+    +'.me{font-size:11px;color:#475569;line-height:1.8;background:#f8fafc;padding:12px 14px;border-radius:7px;border-left:3px solid #16a34a;margin:0 16px 12px;}'
+    +'.nt{height:12px;background:#f1f5f9;border-radius:6px;overflow:hidden;margin:4px 0;}'
+    +'.nf{height:100%;border-radius:6px;}'
+    +'.ft{background:#1e293b;color:rgba(255,255,255,0.5);padding:14px 36px;display:flex;justify-content:space-between;font-size:10px;}'
+    +'@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}</style></head><body>'
+    +'<div class="pg">'
+    +'<div class="hdr"><div style="display:flex;justify-content:space-between;">'
+    +'<div><div style="font-size:11px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,0.6);">🌾 AGRI INTELLIGENCE · '+levelLabel.toUpperCase()+' REPORT</div>'
+    +'<div style="font-size:24px;font-weight:800;margin:4px 0;">'+name+'</div>'
+    +'<div style="font-size:12px;color:rgba(255,255,255,0.75);">'+sd.name+(CT?' · '+CD+' District':'')+' · '+levelLabel+' · '+s.label+' · '+crops.join('/')+'</div></div>'
+    +'<div style="text-align:right;font-size:11px;color:rgba(255,255,255,0.7);">'+date+'<br>Nitesh Takarker<br>Sentinel-2+MODIS+CHIRPS+ERA5</div></div></div>'
+    +'<div class="kr">'
+    +'<div class="kb" style="background:#f0fdf4;"><div class="kl">NDVI</div><div class="kv2" style="color:#15803d;">'+obj.ndvi.toFixed(3)+'</div></div>'
+    +'<div class="kb" style="background:#f5f3ff;"><div class="kl">VHI</div><div class="kv2" style="color:'+vhiC+';">'+vhiVal.toFixed(1)+'%</div></div>'
+    +'<div class="kb" style="background:#f0f9ff;"><div class="kl">LSWI</div><div class="kv2" style="color:'+lwCol+';">'+lswiVal.toFixed(3)+'</div></div>'
+    +'<div class="kb" style="background:#fffbeb;"><div class="kl">Rain</div><div class="kv2" style="color:#92400e;">'+(sf(obj.rain)).toFixed(0)+'mm</div></div>'
+    +'<div class="kb" style="background:'+stBg+'"><div class="kl">Status</div><div class="kv2" style="color:'+stTx+';font-size:14px;">'+obj.status+'</div></div>'
+    +'</div>'
+    +'<div class="sh">Health Indicators</div>'
+    +'<div style="padding:0 16px 10px;">'
+    +'<div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;"><span>NDVI <b style="color:'+col+';">'+obj.ndvi.toFixed(3)+'</b></span><span>Sentinel-2 10m</span></div>'
+    +'<div class="nt"><div class="nf" style="width:'+Math.min(Math.round(obj.ndvi/0.7*100),100)+'%;background:'+col+';"></div></div>'
+    +'<div style="display:flex;justify-content:space-between;font-size:11px;margin-top:8px;margin-bottom:4px;"><span>LSWI — Land Surface Water Index <b style="color:'+lwCol+';">('+lswiVal.toFixed(3)+')</b></span><span>NOT Leaf Water</span></div>'
+    +'<div class="nt"><div class="nf" style="width:'+Math.min(Math.max((lswiVal+0.5)*100,0),100)+'%;background:'+lwCol+';"></div></div>'
+    +'<div style="font-size:9px;color:#94a3b8;margin-top:2px;">Formula: (B8-B11)/(B8+B11) · Xiao et al. 2004 · Soil+Canopy water</div>'
+    +'<div style="display:flex;justify-content:space-between;font-size:11px;margin-top:8px;margin-bottom:4px;"><span>VHI <b style="color:'+vhiC+';">'+vhiVal.toFixed(1)+'%</b></span><span>0.5×VCI + 0.5×TCI · Kogan 1997</span></div>'
+    +'<div class="nt"><div class="nf" style="width:'+Math.min(vhiVal,100)+'%;background:'+vhiC+';"></div></div>'
+    +'</div>'
+    +'<div class="sh">Crop Yields ('+s.label+')</div>'
+    +'<table><thead><tr><th>Crop</th><th>Yield T/ha</th><th>Trend</th></tr></thead><tbody>'
+    +crops.map(function(c,i){var vals=[w,g,mu];var v=vals[i].toFixed(2);
+      var ci=['🌾','🟡','🟠'];
+      return '<tr><td><b>'+ci[i]+' '+c+'</b></td>'
+        +'<td style="font-weight:700;font-family:monospace;color:#15803d;">'+v+' T/ha</td>'
+        +'<td>'+(parseFloat(v)>=2.0?'↑ Above avg':'↓ Below avg')+'</td></tr>';
+    }).join('')+'</tbody></table>'
+    +'<div class="sh">All Parameters</div>'
+    +'<table><thead><tr><th>Parameter</th><th>Value</th><th>Source</th></tr></thead><tbody>'
+    +'<tr><td>NDVI</td><td style="font-family:monospace;">'+obj.ndvi.toFixed(4)+'</td><td>Sentinel-2 SR 10m</td></tr>'
+    +'<tr><td><b>LSWI</b> (Land Surface Water Index)</td><td style="font-family:monospace;color:'+lwCol+';">'+lswiVal.toFixed(4)+'</td><td>Sentinel-2 B8,B11</td></tr>'
+    +'<tr><td>VCI</td><td style="font-family:monospace;">'+(sf(obj.vci)).toFixed(2)+'%</td><td>MODIS baseline 2013-24</td></tr>'
+    +'<tr><td>TCI</td><td style="font-family:monospace;">'+(sf(obj.tci)).toFixed(2)+'%</td><td>MODIS MOD11A2</td></tr>'
+    +'<tr><td>VHI</td><td style="font-family:monospace;color:'+vhiC+';">'+vhiVal.toFixed(2)+'%</td><td>0.5×VCI+0.5×TCI</td></tr>'
+    +'<tr><td>LST</td><td style="font-family:monospace;">'+(sf(obj.lst)).toFixed(1)+'°C</td><td>MODIS MOD11A2 1km</td></tr>'
+    +'<tr><td>Rainfall</td><td style="font-family:monospace;">'+(sf(obj.rain)).toFixed(1)+'mm</td><td>CHIRPS Daily 5km</td></tr>'
+    +'<tr><td>Rainfall Anomaly</td><td style="font-family:monospace;">'+(sf(obj.ranom)>=0?'+':'')+(sf(obj.ranom)).toFixed(1)+'mm</td><td>vs 2013-2024 baseline</td></tr>'
+    +'<tr><td>Insolation</td><td style="font-family:monospace;">'+(sf(obj.insol)).toFixed(2)+' MJ/m²</td><td>ERA5-Land ECMWF</td></tr>'
+    +'</tbody></table>'
+    +'<div class="sh">Monthly NDVI ('+s.label+')</div>'
+    +'<table><thead><tr>'+mthH+'</tr></thead><tbody><tr>'+mthV+'</tr></tbody></table>'
+    +'<div class="sh">Methodology</div>'
+    +'<div class="me">'
+    +'<b>NDVI:</b> (B8−B4)/(B8+B4) · Sentinel-2 SR 10m · Peak season median composite<br>'
+    +'<b>LSWI:</b> (B8−B11)/(B8+B11) · Land Surface Water Index · Soil+Canopy moisture · NOT Leaf Water Content · Xiao et al. (2004)<br>'
+    +'<b>VCI:</b> (NDVI−0.1371)/(0.6997−0.1371)×100 · MODIS MOD13A2 baseline 2013-2024<br>'
+    +'<b>TCI:</b> (LST_max−LST_curr)/(LST_max−LST_min)×100 · MODIS MOD11A2<br>'
+    +'<b>VHI:</b> 0.5×VCI + 0.5×TCI · Kogan F.N. (1997)<br>'
+    +'<b>Yield:</b> 28.5×VCI+1200 kg/ha · VCI-FASAL · R²=0.78 · ISRO/NRSC validated</div>'
+    +'<div class="ft"><span>🌾 Agri Intelligence Platform · nitesh1289.github.io · Nitesh Takarker</span><span>'+date+'</span></div>'
+    +'</div><scr'+'ipt>window.onload=function(){setTimeout(function(){window.print();},500);};<\/scr'+'ipt></body></html>';
+  var blob=new Blob([html],{type:'text/html'});
   var url=URL.createObjectURL(blob);
-  var a=document.createElement("a");a.href=url;
-  a.download="Report_"+name+"_"+s.label.replace(/\s/g,"_")+".html";
+  var a=document.createElement('a'); a.href=url;
+  a.download='Report_'+(CT||CD)+'_'+s.label.replace(/\s/g,'_')+'.html';
   document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
 }
 
-// INIT
-function init(){
-  if(typeof L==="undefined"||typeof Chart==="undefined"){setTimeout(init,150);return;}
+// ── INIT ──
+window.addEventListener('load',function init(){
+  if(typeof L==='undefined'||typeof Chart==='undefined'){setTimeout(init,150);return;}
   initMap();
-}
-window.addEventListener("load",init);
+});
 </script>
 </body>
 </html>
